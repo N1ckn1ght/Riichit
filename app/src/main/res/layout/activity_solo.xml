@@ -7,10 +7,16 @@
     android:layout_height="match_parent"
     tools:context=".SoloActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/hand"
-        android:layout_weight="1"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/hand"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 </LinearLayout>
