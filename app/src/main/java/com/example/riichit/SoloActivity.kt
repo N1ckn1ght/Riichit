@@ -8,24 +8,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class SoloActivity : AppCompatActivity() {
+    lateinit var hand: Array<Int>
+    lateinit var rhand: RecyclerView
+    lateinit var handAdapter: HandAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_solo)
 
-        val hand = makeHand()
-        var showHand = transform(hand)
+        // TODO: implement tsumo tile
+        hand = makeHand()
 
-        val rhand = findViewById<RecyclerView>(R.id.hand)
+        rhand = findViewById<RecyclerView>(R.id.hand)
         Log.d("stage", "rhand was found.")
-        val handAdapter = HandAdapter(LayoutInflater.from(this))
+        handAdapter = HandAdapter(LayoutInflater.from(this), this)
         Log.d("stage", "handAdapter was created.")
-        handAdapter.submitList(showHand)
-        Log.d("stage", "list of tiles was submitted.")
-        rhand.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        Log.d("stage", "linear layout manager has been accepted.")
-        rhand.adapter = handAdapter
-        Log.d("stage", "adapter has been passed successfully!")
+
+        adapterUpdate(transform(hand))
     }
 
     private fun makeHand() : Array<Int> {
@@ -50,5 +49,21 @@ class SoloActivity : AppCompatActivity() {
             }
         }
         return showHand
+    }
+
+    private fun adapterUpdate(showHand: MutableList<Int>) {
+        handAdapter.submitList(showHand)
+        Log.d("stage", "list of tiles was submitted.")
+        rhand.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        Log.d("stage", "linear layout manager has been accepted.")
+        rhand.adapter = handAdapter
+        Log.d("stage", "adapter has been passed successfully!")
+    }
+
+    internal fun discard(toRemove: Int) {
+        // TODO: implement actual mahjong wall's logic
+        hand[toRemove]--
+        hand[31]++
+        adapterUpdate(transform(hand))
     }
 }
