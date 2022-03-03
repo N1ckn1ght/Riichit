@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 
-class HandAdapter(private val inflater: LayoutInflater, private val context: Context) : ListAdapter<Int, HandViewHolder>(DIFF_CALLBACK) {
+class HandAdapter(private val inflater: LayoutInflater, private val context: Context, private val width: Int) : ListAdapter<Int, HandViewHolder>(DIFF_CALLBACK) {
     lateinit var tiles: MutableList<Int>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HandViewHolder {
@@ -23,6 +23,8 @@ class HandAdapter(private val inflater: LayoutInflater, private val context: Con
     }
 
     override fun onBindViewHolder(holder: HandViewHolder, position: Int) {
+        holder.iv.layoutParams.width = (width * 0.065).toInt()
+        holder.iv.layoutParams.height = (width * 0.26 / 3).toInt()
         holder.bindTo(tiles[getItem(position)], getItem(position))
     }
 
