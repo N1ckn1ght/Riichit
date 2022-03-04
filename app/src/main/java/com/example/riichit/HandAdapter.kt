@@ -19,6 +19,7 @@ class HandAdapter(private val inflater: LayoutInflater, private val context: Con
                 R.drawable.debug)
 
         val row: View = inflater.inflate(R.layout.tile, parent, false)
+        parent.setPadding((0.03 * width).toInt(), 0,  (0.015 * width).toInt(), (0.03 * width).toInt())
         return HandViewHolder(row, context, 34)
     }
 
