@@ -2,21 +2,31 @@ package com.example.riichit
 
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
+import java.util.Random
 
 class SoloActivity : AppCompatActivity() {
     lateinit var hand: Array<Int>
+    var tsumo: Int = 34
+
+    lateinit var wall: Array<Int>
+    var size: Int = 136
+
     lateinit var rhand: RecyclerView
     lateinit var handAdapter: HandAdapter
+    lateinit var rtsumo: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_solo)
+
+        rtsumo = findViewById<ImageView>(R.id.tsumo)
+        rhand = findViewById<RecyclerView>(R.id.hand)
 
         val displayMetrics = DisplayMetrics()
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
@@ -28,30 +38,40 @@ class SoloActivity : AppCompatActivity() {
             @Suppress("DEPRECATION")
             display.getMetrics(displayMetrics)
         }
+        val width = (displayMetrics.widthPixels * 0.065).toInt()
+        val height = (displayMetrics.widthPixels * 0.26 / 3).toInt()
+        val padding = (displayMetrics.widthPixels * 0.03).toInt()
 
-        // TODO: implement tsumo tile
-        hand = makeHand()
+        wall = Array(size){ i -> i / 4 }
+        makeHand()
 
-        rhand = findViewById<RecyclerView>(R.id.hand)
-        Log.d("stage", "rhand was found.")
-        handAdapter = HandAdapter(LayoutInflater.from(this), this, displayMetrics.widthPixels)
-        Log.d("stage", "handAdapter was created.")
-
+        rtsumo.layoutParams.width = width
+        rtsumo.layoutParams.height = height
+        rtsumo.setPadding(0, 0,  padding / 2, 0)
+        rtsumo.requestLayout()
+        handAdapter = HandAdapter(LayoutInflater.from(this), this, width, height, padding)
         adapterUpdate(transform(hand))
     }
 
-    private fun makeHand() : Array<Int> {
-        val hand = Array<Int>(34){0}
-        hand[0] = 3
-        hand[1] = 1
-        hand[2] = 1
-        hand[3] = 1
-        hand[4] = 1
-        hand[5] = 1
-        hand[6] = 1
-        hand[7] = 1
-        hand[8] = 3
-        return hand
+    private fun randomTile() : Int {
+        if (size == 0)
+        {
+            return 34
+        }
+        var rnd: Int = Random().nextInt(size)
+        size--
+        wall[size] = wall[rnd] + wall[size]
+        wall[rnd] = wall[size] - wall[rnd]
+        wall[size] = wall[size] - wall[rnd]
+        return wall[size]
+    }
+
+    private fun makeHand() {
+        hand = Array(34){0}
+        for (i in 1..13) {
+            hand[randomTile()]++
+        }
+        tsumo = randomTile()
     }
 
     private fun transform(hand: Array<Int>) : MutableList<Int> {
@@ -66,17 +86,18 @@ class SoloActivity : AppCompatActivity() {
 
     private fun adapterUpdate(showHand: MutableList<Int>) {
         handAdapter.submitList(showHand)
-        Log.d("stage", "list of tiles was submitted.")
         rhand.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        Log.d("stage", "linear layout manager has been accepted.")
         rhand.adapter = handAdapter
-        Log.d("stage", "adapter has been passed successfully!")
     }
 
     internal fun discard(toRemove: Int) {
-        // TODO: implement actual mahjong wall's logic
         hand[toRemove]--
-        hand[31]++
+        hand[tsumo]++
+        tsumo = randomTile()
         adapterUpdate(transform(hand))
+    }
+
+    fun onClickTsumo(view: View) {
+        tsumo = randomTile()
     }
 }
