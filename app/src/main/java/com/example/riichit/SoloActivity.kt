@@ -2,10 +2,12 @@ package com.example.riichit
 
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.util.Random
@@ -43,12 +45,13 @@ class SoloActivity : AppCompatActivity() {
         val padding = (displayMetrics.widthPixels * 0.03).toInt()
 
         wall = Array(size){ i -> i / 4 }
+        Log.d("log-wall", "size: ${size}, wall: ${wall.joinToString(" ")}")
         makeHand()
 
-        rtsumo.layoutParams.width = width
-        rtsumo.layoutParams.height = height
-        rtsumo.setPadding(0, 0,  padding / 2, 0)
-        rtsumo.requestLayout()
+        //rtsumo.layoutParams.width = width
+        //rtsumo.layoutParams.height = height
+        //rtsumo.setPadding(0, 0,  padding / 2, 0)
+        //rtsumo.layoutParams = ConstraintLayout.LayoutParams(width, height)
         handAdapter = HandAdapter(LayoutInflater.from(this), this, width, height, padding)
         adapterUpdate(transform(hand))
     }
@@ -95,9 +98,11 @@ class SoloActivity : AppCompatActivity() {
         hand[tsumo]++
         tsumo = randomTile()
         adapterUpdate(transform(hand))
+        Log.d("log-wall", "size: ${size}, wall: ${wall.joinToString(" ")}")
     }
 
     fun onClickTsumo(view: View) {
         tsumo = randomTile()
+        Log.d("log", "wall: ${wall.joinToString(" ")}")
     }
 }
