@@ -61,7 +61,6 @@ class SoloActivity : AppCompatActivity() {
         rtsumo.layoutParams.width = width
         rtsumo.layoutParams.height = height + padding
         rtsumo.setPadding(0, 0, 0, padding)
-        //rtsumo.layoutParams = ConstraintLayout.LayoutParams(width, height)
         handAdapter = HandAdapter(LayoutInflater.from(this), this, width, height, padding, tiles)
         adapterUpdate(transform(hand))
     }
