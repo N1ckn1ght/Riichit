@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import java.util.Random
 
 class SoloActivity : AppCompatActivity() {
+    lateinit var tiles: MutableList<Int>
+
     lateinit var hand: Array<Int>
     var tsumo: Int = 34
 
@@ -26,6 +28,13 @@ class SoloActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_solo)
+
+        tiles = mutableListOf(
+            R.drawable.man_1, R.drawable.man_2, R.drawable.man_3, R.drawable.man_4, R.drawable.man_5, R.drawable.man_6, R.drawable.man_7, R.drawable.man_8, R.drawable.man_9,
+            R.drawable.pin_1, R.drawable.pin_2, R.drawable.pin_3, R.drawable.pin_4, R.drawable.pin_5, R.drawable.pin_6, R.drawable.pin_7, R.drawable.pin_8, R.drawable.pin_9,
+            R.drawable.sou_1, R.drawable.sou_2, R.drawable.sou_3, R.drawable.sou_4, R.drawable.sou_5, R.drawable.sou_6, R.drawable.sou_7, R.drawable.sou_8, R.drawable.sou_9,
+            R.drawable.wind_east, R.drawable.wind_south, R.drawable.wind_north, R.drawable.wind_west, R.drawable.dragon_red, R.drawable.dragon_white, R.drawable.dragon_green,
+            R.drawable.debug)
 
         rtsumo = findViewById<ImageView>(R.id.tsumo)
         rhand = findViewById<RecyclerView>(R.id.hand)
@@ -47,12 +56,13 @@ class SoloActivity : AppCompatActivity() {
         wall = Array(size){ i -> i / 4 }
         Log.d("log-wall", "size: ${size}, wall: ${wall.joinToString(" ")}")
         makeHand()
+        rtsumo.performClick()
 
         //rtsumo.layoutParams.width = width
         //rtsumo.layoutParams.height = height
-        //rtsumo.setPadding(0, 0,  padding / 2, 0)
-        //rtsumo.layoutParams = ConstraintLayout.LayoutParams(width, height)
-        handAdapter = HandAdapter(LayoutInflater.from(this), this, width, height, padding)
+        rtsumo.setPadding(0, 0,  padding / 2, 0)
+        rtsumo.layoutParams = ConstraintLayout.LayoutParams(width, height)
+        handAdapter = HandAdapter(LayoutInflater.from(this), this, width, height, padding, tiles)
         adapterUpdate(transform(hand))
     }
 
@@ -73,8 +83,8 @@ class SoloActivity : AppCompatActivity() {
         hand = Array(34){0}
         for (i in 1..13) {
             hand[randomTile()]++
+            Log.d("log-wall", "size: ${size}, wall: ${wall.joinToString(" ")}")
         }
-        tsumo = randomTile()
     }
 
     private fun transform(hand: Array<Int>) : MutableList<Int> {
@@ -103,6 +113,7 @@ class SoloActivity : AppCompatActivity() {
 
     fun onClickTsumo(view: View) {
         tsumo = randomTile()
+        rtsumo.setImageResource(tiles[tsumo])
         Log.d("log", "wall: ${wall.joinToString(" ")}")
     }
 }

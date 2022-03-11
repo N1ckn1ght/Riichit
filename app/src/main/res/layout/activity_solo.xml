@@ -16,7 +16,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/hand"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             app:layout_constraintBottom_toBottomOf="parent"
