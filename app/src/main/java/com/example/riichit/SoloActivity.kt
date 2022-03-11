@@ -58,10 +58,10 @@ class SoloActivity : AppCompatActivity() {
         makeHand()
         rtsumo.performClick()
 
-        //rtsumo.layoutParams.width = width
-        //rtsumo.layoutParams.height = height
-        rtsumo.setPadding(0, 0,  padding / 2, 0)
-        rtsumo.layoutParams = ConstraintLayout.LayoutParams(width, height)
+        rtsumo.layoutParams.width = width
+        rtsumo.layoutParams.height = height + padding
+        rtsumo.setPadding(0, 0, 0, padding)
+        //rtsumo.layoutParams = ConstraintLayout.LayoutParams(width, height)
         handAdapter = HandAdapter(LayoutInflater.from(this), this, width, height, padding, tiles)
         adapterUpdate(transform(hand))
     }
@@ -73,14 +73,16 @@ class SoloActivity : AppCompatActivity() {
         }
         var rnd: Int = Random().nextInt(size)
         size--
-        wall[size] = wall[rnd] + wall[size]
-        wall[rnd] = wall[size] - wall[rnd]
-        wall[size] = wall[size] - wall[rnd]
+        if (size > rnd) {
+            wall[size] = wall[rnd] + wall[size]
+            wall[rnd] = wall[size] - wall[rnd]
+            wall[size] = wall[size] - wall[rnd]
+        }
         return wall[size]
     }
 
     private fun makeHand() {
-        hand = Array(34){0}
+        hand = Array(35){0}
         for (i in 1..13) {
             hand[randomTile()]++
             Log.d("log-wall", "size: ${size}, wall: ${wall.joinToString(" ")}")
@@ -106,14 +108,13 @@ class SoloActivity : AppCompatActivity() {
     internal fun discard(toRemove: Int) {
         hand[toRemove]--
         hand[tsumo]++
-        tsumo = randomTile()
+        rtsumo.performClick()
         adapterUpdate(transform(hand))
-        Log.d("log-wall", "size: ${size}, wall: ${wall.joinToString(" ")}")
     }
 
     fun onClickTsumo(view: View) {
         tsumo = randomTile()
         rtsumo.setImageResource(tiles[tsumo])
-        Log.d("log", "wall: ${wall.joinToString(" ")}")
+        Log.d("log-wall", "size: ${size}, wall: ${wall.joinToString(" ")}")
     }
 }

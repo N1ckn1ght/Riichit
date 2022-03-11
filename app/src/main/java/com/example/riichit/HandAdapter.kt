@@ -13,7 +13,7 @@ class HandAdapter(private val inflater: LayoutInflater, private val context: Con
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HandViewHolder {
         val row: View = inflater.inflate(R.layout.tile, parent, false)
-        parent.setPadding(padding, 0,  padding / 2, padding)
+        parent.setPadding(padding, 0,  padding, padding)
         return HandViewHolder(row, context, 34)
     }
 
