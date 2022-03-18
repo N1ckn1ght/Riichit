@@ -9,18 +9,18 @@ import androidx.recyclerview.widget.ListAdapter
 
 class HandAdapter(private val inflater: LayoutInflater, private val context: Context,
                   private val width: Int, private val height: Int, private val padding: Int,
-                  private val tiles: MutableList<Int>) : ListAdapter<Int, HandViewHolder>(DIFF_CALLBACK) {
+                  private val tiles: Array<Int>) : ListAdapter<Int, HandViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HandViewHolder {
         val row: View = inflater.inflate(R.layout.tile, parent, false)
         parent.setPadding(padding, 0,  padding, padding)
-        return HandViewHolder(row, context, 34)
+        return HandViewHolder(row, context, 136)
     }
 
     override fun onBindViewHolder(holder: HandViewHolder, position: Int) {
         holder.iv.layoutParams.width = width
         holder.iv.layoutParams.height = height
-        holder.bindTo(tiles[getItem(position)], getItem(position))
+        holder.bindTo(tiles[getItem(position) / 4], getItem(position))
     }
 
     companion object {
