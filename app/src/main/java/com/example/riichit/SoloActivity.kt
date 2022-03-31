@@ -7,21 +7,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.util.Random
 
 class SoloActivity : AppCompatActivity() {
-    private lateinit var tiles: Array<Int>
+    lateinit var tiles: Array<Int>
+
     private lateinit var wall: Array<Int>
-
-    private lateinit var rhand: RecyclerView
     private lateinit var rtsumo: ImageView
-    private lateinit var handAdapter: HandAdapter
+    private lateinit var rhand: RecyclerView
+    private lateinit var rdiscard: RecyclerView
 
-    private lateinit var hand: MutableList<Int>
+    private lateinit var handAdapter: HandAdapter
+    private lateinit var discardAdapter: DiscardAdapter
+
     private var size: Int = 136
-    private var tsumo: Int = 34
+    private var tsumo: Int = 136
+    private lateinit var hand: MutableList<Int>
+    private lateinit var discard: MutableList<Int>
 
     // this is for future yaku logic and stuff
     private lateinit var computableHand: Array<Int>
@@ -29,6 +35,7 @@ class SoloActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_solo)
+        supportActionBar?.hide()
 
         tiles = arrayOf(
             R.drawable.man_1, R.drawable.man_2, R.drawable.man_3, R.drawable.man_4, R.drawable.man_5, R.drawable.man_6, R.drawable.man_7, R.drawable.man_8, R.drawable.man_9,
@@ -39,6 +46,7 @@ class SoloActivity : AppCompatActivity() {
 
         rtsumo = findViewById(R.id.tsumo)
         rhand = findViewById(R.id.hand)
+        rdiscard = findViewById(R.id.discard)
 
         val displayMetrics = DisplayMetrics()
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
@@ -50,18 +58,65 @@ class SoloActivity : AppCompatActivity() {
             @Suppress("DEPRECATION")
             display.getMetrics(displayMetrics)
         }
-        val width = (displayMetrics.widthPixels * 0.065).toInt()
-        val height = (displayMetrics.widthPixels * 0.26 / 3).toInt()
-        val padding = (displayMetrics.widthPixels * 0.03).toInt()
-        rtsumo.layoutParams.width = width
-        rtsumo.layoutParams.height = height + padding
-        rtsumo.setPadding(0, 0, 0, padding)
+        val handTileWidth = (displayMetrics.widthPixels * 0.068).toInt()
+        val handTileHeight = (displayMetrics.widthPixels * 0.272 / 3).toInt()
+        val padding = (displayMetrics.widthPixels * 0.016).toInt()
+
+        // TODO: get real sizes
+        val discardTileHeight = (min((displayMetrics.heightPixels - handTileHeight * 2 - padding * 3), handTileHeight * 3) / 3.0).toInt()
+        val discardTileWidth = (min((displayMetrics.heightPixels - handTileHeight * 2 - padding * 3), handTileHeight * 3) / 4.0).toInt()
+        Log.d("d/screen", "display metrics: ${displayMetrics.widthPixels}x${displayMetrics.heightPixels}, hand tile sizes: ${handTileWidth}x${handTileHeight}, padding: ${padding}, discard tile sizes: ${discardTileWidth}x${discardTileHeight}")
+
+        rtsumo.layoutParams.width = handTileWidth
+        rtsumo.setMargin(0, 0, 0, padding)
+        rhand.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        handAdapter = HandAdapter(LayoutInflater.from(this), this, handTileWidth, handTileHeight, padding)
+        rdiscard.layoutManager = GridLayoutManager(this, 6, RecyclerView.VERTICAL, false)
+        discardAdapter = DiscardAdapter(LayoutInflater.from(this), this, discardTileWidth, discardTileHeight, padding)
 
         wall = Array(size){ i -> i }
         makeHand()
-        handAdapter = HandAdapter(LayoutInflater.from(this), this, width, height, padding, tiles)
-        adapterUpdate(hand)
+        discard = mutableListOf()
+        handAdapter.submitList(hand)
+        rhand.adapter = handAdapter
+        tsumo = randomTile()
+        rtsumo.setImageResource(tiles[tsumo / 4])
+    }
+
+    internal fun discard(toRemove: Int) {
+        var current = hand.indexOf(toRemove)
+        if (tsumo > hand[current]) {
+            do {
+                current++
+                if (current > 12) {
+                    break
+                }
+                hand[current - 1] = hand[current]
+            } while (tsumo > hand[current])
+            current--
+        } else {
+            do {
+                current--
+                if (current < 0) {
+                    break
+                }
+                hand[current + 1] = hand[current]
+            } while (tsumo < hand[current])
+            current++
+        }
+        hand[current] = tsumo
+        handAdapter.submitList(hand)
+        rhand.adapter = handAdapter
+        tsumo = toRemove
         rtsumo.performClick()
+    }
+
+    fun onClickTsumo(view: View) {
+        discard.add(tsumo)
+        discardAdapter.submitList(discard)
+        rdiscard.adapter = discardAdapter
+        tsumo = randomTile()
+        rtsumo.setImageResource(tiles[tsumo / 4])
     }
 
     private fun randomTile() : Int {
@@ -92,40 +147,14 @@ class SoloActivity : AppCompatActivity() {
         return arrayOf()
     }
 
-    private fun adapterUpdate(showHand: MutableList<Int>) {
-        handAdapter.submitList(showHand)
-        rhand.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        rhand.adapter = handAdapter
+    private fun View.setMargin(left: Int, top: Int, right: Int, bottom: Int) {
+        val p = this.layoutParams as ConstraintLayout.LayoutParams
+        p.setMargins(left, top, right, bottom)
+        this.layoutParams = p
     }
 
-    internal fun discard(toRemove: Int) {
-        var current = hand.indexOf(toRemove)
-        if (tsumo > hand[current]) {
-            do {
-                current++
-                if (current > 12) {
-                    break
-                }
-                hand[current - 1] = hand[current]
-            } while (tsumo > hand[current])
-            current--
-        } else {
-            do {
-                current--
-                if (current < 0) {
-                    break
-                }
-                hand[current + 1] = hand[current]
-            } while (tsumo < hand[current])
-            current++
-        }
-        hand[current] = tsumo
-        adapterUpdate(hand)
-        rtsumo.performClick()
-    }
-
-    fun onClickTsumo(view: View) {
-        tsumo = randomTile()
-        rtsumo.setImageResource(tiles[tsumo / 4])
+    private fun min(a: Int, b: Int) : Int {
+        if (a > b) return b
+        return a
     }
 }
