@@ -12,7 +12,7 @@ class DiscardAdapter(private val inflater: LayoutInflater, private val context: 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DiscardViewHolder {
         val row: View = inflater.inflate(R.layout.tile, parent, false)
-        parent.setPadding(padding, padding,  0, 0)
+        parent.setPadding(padding, padding,  padding, padding)
         return DiscardViewHolder(row, 136)
     }
 

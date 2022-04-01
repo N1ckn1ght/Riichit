@@ -29,7 +29,40 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <!-- TODO: Dora indicator and three buttons -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/dora_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <Button
+                android:id="@+id/call_kan"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:textSize="24dp"
+                android:text="@string/button_kan"
+                app:layout_constraintTop_toBottomOf="@+id/dora_indicator"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <Button
+                android:id="@+id/call_riichi"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:textSize="24dp"
+                android:text="@string/button_riichi"
+                app:layout_constraintTop_toBottomOf="@+id/call_kan"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <Button
+                android:id="@+id/call_tsumo"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:textSize="24dp"
+                android:text="@string/button_tsumo"
+                app:layout_constraintTop_toBottomOf="@+id/call_riichi"
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -53,7 +86,7 @@
             android:id="@+id/tsumo"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:src="@drawable/debug"
+            android:src="@drawable/closed"
             android:onClick="onClickTsumo"
             app:layout_constraintStart_toEndOf="@+id/hand"
             app:layout_constraintBottom_toBottomOf="parent"
