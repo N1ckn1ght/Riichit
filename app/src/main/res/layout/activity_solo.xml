@@ -41,8 +41,9 @@
                 android:id="@+id/call_kan"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
-                android:textSize="24dp"
+                android:textSize="24sp"
                 android:text="@string/button_kan"
+                android:background="@color/light_gray"
                 app:layout_constraintTop_toBottomOf="@+id/dora_indicator"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -50,8 +51,9 @@
                 android:id="@+id/call_riichi"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
-                android:textSize="24dp"
+                android:textSize="24sp"
                 android:text="@string/button_riichi"
+                android:background="@color/light_gray"
                 app:layout_constraintTop_toBottomOf="@+id/call_kan"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -59,8 +61,10 @@
                 android:id="@+id/call_tsumo"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
-                android:textSize="24dp"
+                android:textSize="24sp"
+                android:minWidth="0dp"
                 android:text="@string/button_tsumo"
+                android:background="@color/light_gray"
                 app:layout_constraintTop_toBottomOf="@+id/call_riichi"
                 app:layout_constraintEnd_toEndOf="parent" />
 
