@@ -43,7 +43,9 @@
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
                 android:text="@string/button_kan"
-                android:background="@color/light_gray"
+                android:textColor="@color/white"
+                android:background="@color/blue"
+                android:onClick="onCallKan"
                 app:layout_constraintTop_toBottomOf="@+id/dora_indicator"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -53,7 +55,9 @@
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
                 android:text="@string/button_riichi"
-                android:background="@color/light_gray"
+                android:textColor="@color/white"
+                android:background="@color/blue"
+                android:onClick="onCallRiichi"
                 app:layout_constraintTop_toBottomOf="@+id/call_kan"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -64,7 +68,9 @@
                 android:textSize="24sp"
                 android:minWidth="0dp"
                 android:text="@string/button_tsumo"
-                android:background="@color/light_gray"
+                android:textColor="@color/white"
+                android:background="@color/blue"
+                android:onClick="onCallTsumo"
                 app:layout_constraintTop_toBottomOf="@+id/call_riichi"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -92,9 +98,17 @@
             android:layout_height="0dp"
             android:src="@drawable/closed"
             android:onClick="onClickTsumo"
-            app:layout_constraintStart_toEndOf="@+id/hand"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/hand"
             app:layout_constraintDimensionRatio="H,3:4" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/calls"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tsumo" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
