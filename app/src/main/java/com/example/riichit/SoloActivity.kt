@@ -32,7 +32,7 @@ class SoloActivity : AppCompatActivity() {
     private lateinit var indicatorAdapter: DiscardAdapter
     private lateinit var callsAdapter: DiscardAdapter
     private var size: Int = 136
-    private var tilesLeft: Int = 64
+    private var tilesLeft: Int = 80
     private var tsumo: Int = 136
     private lateinit var hand: MutableList<Int>
     private lateinit var computableHand: Array<Int>
@@ -92,7 +92,7 @@ class SoloActivity : AppCompatActivity() {
         rindicator.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         indicatorAdapter = DiscardAdapter(LayoutInflater.from(this), this, handTileWidth, handTileHeight, padding)
         rcalls.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        callsAdapter = DiscardAdapter(LayoutInflater.from(this), this, handTileWidth, handTileHeight, padding)
+        callsAdapter = DiscardAdapter(LayoutInflater.from(this), this, handTileWidth, handTileHeight, 0)
 
         kanButton.setMargin(0, padding, padding, 0)
         riichiButton.setMargin(0, 1, padding, 0)
@@ -128,11 +128,23 @@ class SoloActivity : AppCompatActivity() {
             return
         }
         if (tilesLeft > 0) {
+            if (kanStatus > 0) {
+                var count = 0
+                for (it in hand) {
+                    if (it / 4 == toRemove / 4) {
+                        count++
+                    }
+                }
+                if (count < 4) {
+                    Toast.makeText(baseContext, baseContext.getString(R.string.illegal_kan), Toast.LENGTH_SHORT).show()
+                    return
+                }
+            }
             var current = hand.indexOf(toRemove)
             if (tsumo > hand[current]) {
                 do {
                     current++
-                    if (current > 12) {
+                    if (current == hand.size) {
                         break
                     }
                     hand[current - 1] = hand[current]
@@ -148,47 +160,50 @@ class SoloActivity : AppCompatActivity() {
                 } while (tsumo < hand[current])
                 current++
             }
-            // TODO: kan declaration (when all 4 in the hand!)
             hand[current] = tsumo
+            tsumo = toRemove
+            if (kanStatus > 0) {
+                hand = hand.filterNot {
+                    it / 4 == tsumo / 4
+                } as MutableList<Int>
+                getFromDead()
+            }
             handAdapter.submitList(hand)
             rhand.adapter = handAdapter
-            tsumo = toRemove
         }
         rtsumo.performClick()
     }
 
     fun onClickTsumo(view: View) {
         if (tilesLeft > 0) {
-            tilesLeft--
+            if (riichiStatus == 1) {
+                riichiStatus = 2
+                riichiButton.disable()
+            }
             if (kanStatus > 0) {
                 var handCopy = hand
                 handCopy = handCopy.filterNot {
                     it / 4 == tsumo / 4
                 } as MutableList<Int>
-                // TODO: check for Riichi
-                if (handCopy.size == 10) {
+                if (handCopy.size == hand.size - 3) {
+                    if (riichiStatus > 0) {
+                        // TODO: check for Riichi, if this ever possible
+                    }
                     hand = handCopy
                     handAdapter.submitList(hand)
                     rhand.adapter = handAdapter
-                    var temp = tsumo
-                    tsumo = indicator[0]
-                    indicator[0] = temp
-                    showableIndicator[openDoras] = indicator[5 + openDoras * 2]
-                    openDoras++
-                    indicatorAdapter.submitList(showableIndicator)
-                    rindicator.adapter = indicatorAdapter
+                    getFromDead()
                 } else {
                     Toast.makeText(baseContext, baseContext.getString(R.string.illegal_kan), Toast.LENGTH_SHORT).show()
+                    return
                 }
             } else {
-                // TODO: remove after debug
-                if (size > 118) {
-                    discard.add(tsumo)
-                    discardAdapter.submitList(discard)
-                    rdiscard.adapter = discardAdapter
-                }
+                discard.add(tsumo)
+                discardAdapter.submitList(discard)
+                rdiscard.adapter = discardAdapter
                 tsumo = randomTile()
             }
+            tilesLeft--
             rtsumo.setImageResource(tiles[tsumo / 4])
             return
         }
@@ -199,14 +214,14 @@ class SoloActivity : AppCompatActivity() {
     fun onCallKan(view: View) {
         if (kanStatus > 0) {
             kanStatus = 0
-            kanButton.text = getString(R.string.button_cancel)
+            kanButton.text = getString(R.string.button_kan)
             riichiButton.enable()
             tsumoButton.enable()
         } else {
             if (tilesLeft > 0) {
                 tilesLeft--
                 kanStatus = 1
-                kanButton.text = getString(R.string.button_kan)
+                kanButton.text = getString(R.string.button_cancel)
                 riichiButton.disable()
                 tsumoButton.disable()
             } else {
@@ -216,14 +231,15 @@ class SoloActivity : AppCompatActivity() {
     }
 
     fun onCallRiichi(view: View) {
-        if (riichiStatus > 1) {
-            // Nothing?
-        } else if (riichiStatus > 0) {
-            // TODO: option to revert if no tiles went to discard
+        // fix needed; 0 - no riichi, 1 - it's called (drop from anywhere), 2 - it's in progress.
+        if (riichiStatus > 0) {
+            riichiStatus = 0
+            riichiButton.text = getString(R.string.button_riichi)
         } else {
             if (tilesLeft > 0) {
-                // TODO: actual Riichi logic
-                // TODO: reaction with other buttons
+                riichiStatus = 1
+                riichiButton.text = getString(R.string.button_cancel)
+                // TODO: implement actual Riichi logic
             } else {
                 Toast.makeText(baseContext, baseContext.getString(R.string.no_tiles_left), Toast.LENGTH_SHORT).show()
             }
@@ -247,6 +263,21 @@ class SoloActivity : AppCompatActivity() {
             wall[size] = wall[size] - wall[rnd]
         }
         return wall[size]
+    }
+
+    private fun getFromDead() {
+        var temp = tsumo
+        tsumo = indicator[0]
+        indicator[0] = temp
+        showableIndicator[openDoras] = indicator[5 + openDoras * 2]
+        openDoras++
+        indicatorAdapter.submitList(showableIndicator)
+        rindicator.adapter = indicatorAdapter
+
+        kanStatus = 0
+        kanButton.text = getString(R.string.button_kan)
+        riichiButton.enable()
+        tsumoButton.enable()
     }
 
     private fun transform(hand: MutableList<Int>) : Array<Int> {
