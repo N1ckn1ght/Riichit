@@ -15,4 +15,8 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, SoloActivity::class.java)
         startActivity(intent)
     }
+
+    // TODO: mode with only one type of tiles
+    // TODO: RU translation
+    // TODO: help button with actual help
 }

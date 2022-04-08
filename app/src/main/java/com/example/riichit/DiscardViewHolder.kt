@@ -1,18 +1,11 @@
 package com.example.riichit
 
-import android.content.Context
 import android.view.View
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 
-class HandViewHolder(itemView: View, private val context: Context, private var tile: Int) : RecyclerView.ViewHolder(itemView) {
+class DiscardViewHolder(itemView: View, private var tile: Int) : RecyclerView.ViewHolder(itemView) {
     val iv: ImageView = itemView.findViewById(R.id.tile)
-
-    init {
-        itemView.setOnClickListener{
-            (context as SoloActivity).discard(tile)
-        }
-    }
 
     fun bindTo(drawable: Int, tile_: Int) {
         iv.setImageResource(drawable)

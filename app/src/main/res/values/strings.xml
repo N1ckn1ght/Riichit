@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">Riichi trainer</string>
+
     <string name="button_solo_mahjong">Solo mahjong</string>
+    <string name="button_solo_bamboo">Solo bamboo</string>
+
+    <string name="button_kan">Kan</string>
+    <string name="button_riichi">Riichi</string>
+    <string name="button_tsumo">Tsumo</string>
+    <string name="button_cancel">Cancel</string>
+
+    <string name="no_tiles_left">No tiles left!</string>
+    <string name="illegal_discard">You can discard only tsumo now</string>
+    <string name="illegal_kan_riichi">You can\'t declare kan if it breaks your riichi</string>
+    <string name="illegal_kan">Wrong kan call</string>
 </resources>
