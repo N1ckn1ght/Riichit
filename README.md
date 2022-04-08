@@ -15,3 +15,5 @@
 Скриншоты:
 
 <img src="https://i.imgur.com/L09BW0q.png">
+
+<img src="https://i.imgur.com/R5opJ7r.png">

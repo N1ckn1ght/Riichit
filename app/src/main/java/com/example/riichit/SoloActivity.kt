@@ -244,6 +244,7 @@ class SoloActivity : AppCompatActivity() {
                 kanButton.text = getString(R.string.button_cancel)
                 riichiButton.disable()
                 tsumoButton.disable()
+                // TODO: additional test may be necessary; need to implement an endgame condition for the last tile from dead wall.
             } else {
                 Toast.makeText(baseContext, baseContext.getString(R.string.no_tiles_left), Toast.LENGTH_SHORT).show()
             }
