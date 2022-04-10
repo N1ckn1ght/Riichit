@@ -39,37 +39,42 @@
 
             <Button
                 android:id="@+id/call_kan"
-                android:layout_width="160dp"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
                 android:text="@string/button_kan"
                 android:textColor="@color/white"
-                android:background="@color/blue"
+                android:backgroundTint="@color/blue"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
                 android:onClick="onCallKan"
                 app:layout_constraintTop_toBottomOf="@+id/dora_indicator"
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <Button
                 android:id="@+id/call_riichi"
-                android:layout_width="160dp"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
                 android:text="@string/button_riichi"
                 android:textColor="@color/white"
-                android:background="@color/blue"
+                android:backgroundTint="@color/blue"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
                 android:onClick="onCallRiichi"
                 app:layout_constraintTop_toBottomOf="@+id/call_kan"
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <Button
                 android:id="@+id/call_tsumo"
-                android:layout_width="160dp"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
-                android:minWidth="0dp"
                 android:text="@string/button_tsumo"
                 android:textColor="@color/white"
-                android:background="@color/blue"
+                android:backgroundTint="@color/blue"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
                 android:onClick="onCallTsumo"
                 app:layout_constraintTop_toBottomOf="@+id/call_riichi"
                 app:layout_constraintEnd_toEndOf="parent" />

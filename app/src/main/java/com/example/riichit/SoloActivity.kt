@@ -1,5 +1,6 @@
 package com.example.riichit
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
@@ -46,8 +47,6 @@ class SoloActivity : AppCompatActivity() {
     private lateinit var kanButton: Button
     private lateinit var riichiButton: Button
     private lateinit var tsumoButton: Button
-
-    private lateinit var computableHand: Array<Int>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -219,7 +218,9 @@ class SoloActivity : AppCompatActivity() {
                     tsumo = wall[tilesLeft]
                     rtsumo.setImageResource(tiles[tsumo / 4])
                 } else {
-                    tsumoButton.disable()
+                    kanButton.disable()
+                    riichiButton.disable(highlight = (riichiStatus == 2))
+                    tsumoButton.text = getString(R.string.game_over)
                     tsumo = 136
                     rtsumo.setImageResource(android.R.color.transparent)
                     onGameOver()
@@ -242,7 +243,9 @@ class SoloActivity : AppCompatActivity() {
             if (tilesLeft > openDoras - 1) {
                 kanStatus = 1
                 kanButton.text = getString(R.string.button_cancel)
-                riichiButton.disable()
+                if (riichiStatus < 1) {
+                    riichiButton.disable()
+                }
                 tsumoButton.disable()
                 // TODO: additional test may be necessary; need to implement an endgame condition for the last tile from dead wall.
             } else {
@@ -271,12 +274,30 @@ class SoloActivity : AppCompatActivity() {
     }
 
     fun onCallTsumo(view: View) {
-        tsumoStatus = 1
+        if (tilesLeft > openDoras - 1) {
+            tsumoStatus = 1
+        }
         onGameOver()
     }
 
     private fun onGameOver() {
+        var doras: MutableList<Int> = mutableListOf()
+        var kans: MutableList<Int> = mutableListOf()
+        for (i in 0 until openDoras) {
+            doras.add(indicator[5 + i * 2])
+            if (riichiStatus > 1) {
+                doras.add(indicator[4 + i * 2])
+            }
+        }
+        for (i in 0 until (calls.size / 4)) {
+            kans.add(calls[i * 4 + 1])
+        }
 
+
+
+        // pass hand, tsumo, kans, doras
+        // get calculations
+        // make fragment?
     }
 
     private fun randomTile() : Int {
@@ -317,28 +338,27 @@ class SoloActivity : AppCompatActivity() {
 
     private fun setRiichi() {
         riichiStatus = 2
-        riichiButton.disable()
+        riichiButton.disable(highlight = true)
         riichiButton.text = getString(R.string.button_riichi)
         kanButton.enable()
         tsumoButton.enable()
     }
 
-    private fun transform(hand: MutableList<Int>) : Array<Int> {
-        // this function should transform hand from view variation to computable
-        return arrayOf()
-    }
-
     private fun Button.enable() {
         this.isEnabled = true
         this.isClickable = true
-        this.setBackgroundColor(ContextCompat.getColor(baseContext, R.color.blue))
+        this.background.setTint(ContextCompat.getColor(baseContext, R.color.blue))
         this.setTextColor(ContextCompat.getColor(baseContext, R.color.white))
     }
 
-    private fun Button.disable() {
+    private fun Button.disable(highlight: Boolean = false) {
         this.isEnabled = false
         this.isClickable = false
-        this.setBackgroundColor(ContextCompat.getColor(baseContext, R.color.white))
-        this.setTextColor(ContextCompat.getColor(baseContext, R.color.gray))
+        if (highlight) {
+            this.background.setTint(ContextCompat.getColor(baseContext, R.color.orange))
+        } else {
+            this.background.setTint(ContextCompat.getColor(baseContext, R.color.light_gray))
+        }
+        this.setTextColor(ContextCompat.getColor(baseContext, R.color.white))
     }
 }
