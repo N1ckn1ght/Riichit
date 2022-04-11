@@ -20,9 +20,17 @@ android {
         ndk {
             abiFilters "armeabi-v7a"
         }
+
+        sourceSets{
+            main {
+                python.srcDir "src/main/python"
+            }
+        }
+
         python {
             pip {
                 install "mahjong==1.1.11"
+                install "numpy"
             }
         }
     }

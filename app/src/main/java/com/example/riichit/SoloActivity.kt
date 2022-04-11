@@ -1,6 +1,5 @@
 package com.example.riichit
 
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
@@ -14,6 +13,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.chaquo.python.Python
+import com.chaquo.python.android.AndroidPlatform
 import java.util.Random
 
 class SoloActivity : AppCompatActivity() {
@@ -30,9 +31,12 @@ class SoloActivity : AppCompatActivity() {
     private lateinit var callsAdapter: CallsAdapter
 
     private var kanStatus = 0
+    private var rinshan = 0
     private var riichiStatus = 0
     private var tsumoStatus = 0
     private var size: Int = 136
+    // TODO: get this in order to make additional modes by changing some constants here using Intent
+    private var tilesLeftInitial: Int = 18
     private var tilesLeft: Int = 18
     private var tsumo: Int = 136
     private var openDoras: Int = 1
@@ -191,8 +195,11 @@ class SoloActivity : AppCompatActivity() {
 
     fun onClickTsumo(view: View) {
         if (tilesLeft > openDoras - 1) {
+            rinshan = 0
             if (riichiStatus == 1) {
                 setRiichi()
+            } else if (riichiStatus == 2) {
+                riichiStatus++
             }
             if (kanStatus > 0) {
                 var handCopy = hand
@@ -201,7 +208,7 @@ class SoloActivity : AppCompatActivity() {
                 } as MutableList<Int>
                 if (handCopy.size == hand.size - 3) {
                     if (riichiStatus > 0) {
-                        // TODO: check for Riichi, if this ever possible
+                        // TODO: in future there must be a check on if it changes riichi waiting!
                     }
                     hand = handCopy
                     getFromDead(tsumo / 4)
@@ -281,19 +288,28 @@ class SoloActivity : AppCompatActivity() {
     }
 
     private fun onGameOver() {
-        var doras: MutableList<Int> = mutableListOf()
-        var kans: MutableList<Int> = mutableListOf()
-        for (i in 0 until openDoras) {
-            doras.add(indicator[5 + i * 2])
-            if (riichiStatus > 1) {
-                doras.add(indicator[4 + i * 2])
+        // TODO: scan for nagashi mangan
+        if (tsumo < 136) {
+            val doras: MutableList<Int> = mutableListOf()
+            val kans: MutableList<Int> = mutableListOf()
+            var booleans: MutableList<Boolean> = mutableListOf((riichiStatus > 1), (riichiStatus == 2), (tilesLeft == openDoras - 1), (rinshan > 0), (tilesLeft - openDoras == tilesLeftInitial - 1))
+            for (i in 0 until openDoras) {
+                doras.add(indicator[5 + i * 2])
+                if (riichiStatus > 1) {
+                    doras.add(indicator[4 + i * 2])
+                }
             }
-        }
-        for (i in 0 until (calls.size / 4)) {
-            kans.add(calls[i * 4 + 1])
-        }
+            for (i in 0 until (calls.size / 4)) {
+                kans.add(calls[i * 4 + 1] - 1)
+            }
 
-
+            val python = Python.getInstance()
+            val pythonFile = python.getModule("calc")
+            // java to py objects
+            // TODO: fix and make it works on .py side
+            val res = pythonFile.callAttr("calc", hand, tsumo, kans, doras, booleans)
+            Log.d("d/res", res.toString())
+        }
 
         // pass hand, tsumo, kans, doras
         // get calculations
@@ -334,6 +350,7 @@ class SoloActivity : AppCompatActivity() {
         callsAdapter.submitList(calls)
         rcalls.adapter = callsAdapter
         rtsumo.setImageResource(tiles[tsumo / 4])
+        rinshan = 1
     }
 
     private fun setRiichi() {
