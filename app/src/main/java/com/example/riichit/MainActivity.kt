@@ -18,5 +18,4 @@ class MainActivity : AppCompatActivity() {
 
     // TODO: mode with only one type of tiles
     // TODO: RU translation
-    // TODO: help button with actual help
 }
