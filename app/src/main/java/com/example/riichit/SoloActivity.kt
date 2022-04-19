@@ -296,13 +296,12 @@ class SoloActivity : AppCompatActivity() {
         if (tsumo < 136) {
             val doraIndicators: MutableList<Int> = mutableListOf()
             val kanTiles: MutableList<Int> = mutableListOf()
-            // riichi, doubleRiichi, ippatsu, rinshan, haitei, tenhou
-            var conditionalYakuList: MutableList<Boolean> = mutableListOf((riichiTile > 0),
-                    (riichiTile == 1),
-                    (riichiTile == tilesWall - tilesLeft + openDoras - 1),
-                    rinshan,
-                    (tilesLeft == openDoras - 1),
-                    (tilesLeft - openDoras == tilesWall - 1))
+            var yakuConditional = mapOf("riichi" to (riichiTile > 0),
+                    "double riichi" to (riichiTile == 1),
+                    "ippatsu" to (riichiTile == tilesWall - tilesLeft + openDoras - 1),
+                    "rinshan" to rinshan,
+                    "haitei" to (tilesLeft == openDoras - 1),
+                    "tenhou" to (tilesLeft - openDoras == tilesWall - 1))
             for (i in 0 until openDoras) {
                 doraIndicators.add(indicator[5 + i * 2])
                 if (riichiTile > 0) {
@@ -313,7 +312,7 @@ class SoloActivity : AppCompatActivity() {
                 kanTiles.add(calls[i * 4 + 1] - 1)
             }
 
-            val calc = Calc(hand, tsumo, doraIndicators, kanTiles, conditionalYakuList)
+            val calc = Calc(hand, tsumo, doraIndicators, kanTiles, yakuConditional)
             // TODO: calculate hand automatically
             // TODO: make fragment for manual calculations; compare on game over screen
         } else {

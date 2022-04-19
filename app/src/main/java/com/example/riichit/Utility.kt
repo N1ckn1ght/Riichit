@@ -13,3 +13,8 @@ internal fun min(a: Int, b: Int) : Int {
     if (a > b) return b
     return a
 }
+
+fun Boolean.toInt(): Int {
+    if (this) return 1
+    return 0
+}
