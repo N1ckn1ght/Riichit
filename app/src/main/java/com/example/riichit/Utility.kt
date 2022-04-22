@@ -14,7 +14,12 @@ internal fun min(a: Int, b: Int) : Int {
     return a
 }
 
-fun Boolean.toInt(): Int {
+internal fun max(a: Int, b: Int): Int {
+    if (a > b) return a
+    return b
+}
+
+internal fun Boolean.toInt(): Int {
     if (this) return 1
     return 0
 }
