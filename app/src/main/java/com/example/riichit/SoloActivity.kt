@@ -50,8 +50,7 @@ class SoloActivity : AppCompatActivity() {
     private lateinit var kanButton: Button
     private lateinit var riichiButton: Button
     private lateinit var tsumoButton: Button
-    // TODO: help button with the yaku list
-    // TODO: hint button with an actual help
+    // TODO: hint button with the best efficiency move based on shanted and uke-ire calculations
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -216,7 +215,7 @@ class SoloActivity : AppCompatActivity() {
                     it / 4 == tsumo / 4
                 } as MutableList<Int>
                 if (handCopy.size == hand.size - 3) {
-                        if (riichiTile > 0) {
+                    if (riichiTile > 0) {
                         // TODO: in future there must be a check on if it changes riichi waiting!
                     }
                     hand = handCopy
@@ -296,7 +295,7 @@ class SoloActivity : AppCompatActivity() {
         if (tsumo < 136) {
             val doraIndicators: MutableList<Int> = mutableListOf()
             val kanTiles: MutableList<Int> = mutableListOf()
-            var yakuConditional = mapOf("riichi" to (riichiTile > 0),
+            val yakuConditional = mapOf("riichi" to (riichiTile > 0),
                     "double riichi" to (riichiTile == 1),
                     "ippatsu" to (riichiTile == tilesWall - tilesLeft + openDoras - 1),
                     "rinshan" to rinshan,
@@ -312,13 +311,12 @@ class SoloActivity : AppCompatActivity() {
                 kanTiles.add(calls[i * 4 + 1] - 1)
             }
 
-            val calc = Calc(hand, tsumo, doraIndicators, kanTiles, yakuConditional)
-            // TODO: calculate hand automatically
+            val calc = Calc(hand, tsumo, doraIndicators, kanTiles, yakuConditional,
+                27, 27, yakuHanCost, yakumanHanCost)
+            calc.calc()
             // TODO: make fragment for manual calculations; compare on game over screen
         } else {
             // TODO: scan for nagashi mangan
-            // TODO: future plans: shanten and ukeire calculations
-            // TODO: for now simple game over screen
         }
     }
 
