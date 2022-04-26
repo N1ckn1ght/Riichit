@@ -11,11 +11,18 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
     }
 
-    fun onClickSolo(view: View) {
-        val intent = Intent(this, SoloActivity::class.java)
-        startActivity(intent)
+    fun onClickSoloMahjong(view: View) {
+        startGame(0)
     }
 
-    // TODO: mode with only one type of tiles
+    fun onClickSoloBamboo(view: View) {
+        startGame(1)
+    }
+
+    private fun startGame(mode: Int) {
+        val intent = Intent(this, SoloActivity::class.java)
+        intent.putExtra("mode", mode)
+        startActivity(intent)
+    }
     // TODO: RU translation
 }

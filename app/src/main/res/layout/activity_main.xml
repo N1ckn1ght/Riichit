@@ -1,17 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:text="@string/button_solo_mahjong"
-        android:onClick="onClickSolo" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-</LinearLayout>
+        <Button
+            android:id="@+id/btnSoloMahjong"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/blue"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:onClick="onClickSoloMahjong"
+            android:text="@string/button_solo_mahjong"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/blue"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:onClick="onClickSoloBamboo"
+            android:text="@string/button_solo_bamboo"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            app:layout_constraintTop_toBottomOf="@+id/btnSoloMahjong" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

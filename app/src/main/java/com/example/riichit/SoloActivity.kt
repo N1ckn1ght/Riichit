@@ -39,6 +39,7 @@ class SoloActivity : AppCompatActivity() {
     private var tilesLeft: Int = 0
     private var tsumo: Int = 0
     private var openDoras: Int = 1
+    private var mode: Int = 0
 
     private lateinit var all: Array<Int>
     private lateinit var wall: Array<Int>
@@ -50,9 +51,10 @@ class SoloActivity : AppCompatActivity() {
     private lateinit var kanButton: Button
     private lateinit var riichiButton: Button
     private lateinit var tsumoButton: Button
-    // TODO: hint button with the best efficiency move based on shanted and uke-ire calculations
+    // TODO: hint button with the best efficiency move based on shanten and uke-ire calculations
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        mode = intent.getIntExtra("mode", 0)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_solo)
         supportActionBar?.hide()
@@ -63,11 +65,21 @@ class SoloActivity : AppCompatActivity() {
             R.drawable.sou_1, R.drawable.sou_2, R.drawable.sou_3, R.drawable.sou_4, R.drawable.sou_5, R.drawable.sou_6, R.drawable.sou_7, R.drawable.sou_8, R.drawable.sou_9,
             R.drawable.wind_east, R.drawable.wind_south, R.drawable.wind_north, R.drawable.wind_west, R.drawable.dragon_red, R.drawable.dragon_white, R.drawable.dragon_green,
             R.drawable.closed)
-        size = 136
-        tsumo = 136
-        tilesWall = 18
-        tilesLeft = 18
 
+        when (mode) {
+            0 -> {
+                size = 136
+                tilesWall = 18
+                tilesLeft = 18
+            }
+            1 -> {
+                size = 36
+                tilesWall = 5
+                tilesLeft = 5
+            }
+        }
+
+        tsumo = 136
         rtsumo = findViewById(R.id.tsumo)
         rhand = findViewById(R.id.hand)
         rdiscard = findViewById(R.id.discard)
@@ -224,6 +236,7 @@ class SoloActivity : AppCompatActivity() {
                     Toast.makeText(baseContext, baseContext.getString(R.string.illegal_kan), Toast.LENGTH_SHORT).show()
                 }
             } else {
+                // TODO: rotate a riichi tile
                 discard.add(tsumo)
                 discardAdapter.submitList(discard)
                 rdiscard.adapter = discardAdapter
@@ -314,6 +327,13 @@ class SoloActivity : AppCompatActivity() {
             val calc = Calc(hand, tsumo, doraIndicators, kanTiles, yakuConditional,
                 27, 27, yakuHanCost, yakumanHanCost)
             calc.calc()
+
+            // this output is only for debug purposes!
+            val res = calc.getCost()
+            val showRes = res["han"].toString() + " " + res["fu"].toString() + " " + res["dealer"].toString()
+            Toast.makeText(baseContext, showRes, Toast.LENGTH_SHORT).show()
+            Log.d("d/yakuList", calc.getYaku().toString())
+            // TODO: use a coroutine
             // TODO: make fragment for manual calculations; compare on game over screen
         } else {
             // TODO: scan for nagashi mangan

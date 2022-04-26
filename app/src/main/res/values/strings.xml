@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Riichi trainer</string>
 
-    <string name="button_solo_mahjong">Solo mahjong</string>
-    <string name="button_solo_bamboo">Solo bamboo</string>
+    <string name="button_solo_mahjong">Play solo mahjong</string>
+    <string name="button_solo_bamboo">Play solo bamboo</string>
 
     <string name="button_kan">Kan</string>
     <string name="button_riichi">Riichi</string>
