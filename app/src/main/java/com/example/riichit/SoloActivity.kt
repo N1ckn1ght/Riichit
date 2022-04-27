@@ -13,7 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import java.util.Random
+import java.util.*
 
 class SoloActivity : AppCompatActivity() {
     internal lateinit var tiles: Array<Int>
@@ -29,12 +29,17 @@ class SoloActivity : AppCompatActivity() {
     private lateinit var callsAdapter: CallsAdapter
 
     private var kanStatus = 0
-    private var riichiStatus = 0
-    private var tsumoStatus = 0
-    private var size: Int = 136
-    private var tilesLeft: Int = 18
-    private var tsumo: Int = 136
+    private var rinshan = false
+    private var riichiStatus = false
+    private var riichiTile = 0
+    private var gameOver = false
+
+    private var size: Int = 0
+    private var tilesWall: Int = 0
+    private var tilesLeft: Int = 0
+    private var tsumo: Int = 0
     private var openDoras: Int = 1
+    private var mode: Int = 0
 
     private lateinit var all: Array<Int>
     private lateinit var wall: Array<Int>
@@ -46,10 +51,10 @@ class SoloActivity : AppCompatActivity() {
     private lateinit var kanButton: Button
     private lateinit var riichiButton: Button
     private lateinit var tsumoButton: Button
-
-    private lateinit var computableHand: Array<Int>
+    // TODO: hint button with the best efficiency move based on shanten and uke-ire calculations
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        mode = intent.getIntExtra("mode", 0)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_solo)
         supportActionBar?.hide()
@@ -58,9 +63,23 @@ class SoloActivity : AppCompatActivity() {
             R.drawable.man_1, R.drawable.man_2, R.drawable.man_3, R.drawable.man_4, R.drawable.man_5, R.drawable.man_6, R.drawable.man_7, R.drawable.man_8, R.drawable.man_9,
             R.drawable.pin_1, R.drawable.pin_2, R.drawable.pin_3, R.drawable.pin_4, R.drawable.pin_5, R.drawable.pin_6, R.drawable.pin_7, R.drawable.pin_8, R.drawable.pin_9,
             R.drawable.sou_1, R.drawable.sou_2, R.drawable.sou_3, R.drawable.sou_4, R.drawable.sou_5, R.drawable.sou_6, R.drawable.sou_7, R.drawable.sou_8, R.drawable.sou_9,
-            R.drawable.wind_east, R.drawable.wind_south, R.drawable.wind_north, R.drawable.wind_west, R.drawable.dragon_red, R.drawable.dragon_white, R.drawable.dragon_green,
+            R.drawable.wind_east, R.drawable.wind_south, R.drawable.wind_west, R.drawable.wind_north, R.drawable.dragon_red, R.drawable.dragon_white, R.drawable.dragon_green,
             R.drawable.closed)
 
+        when (mode) {
+            0 -> {
+                size = 136
+                tilesWall = 18
+                tilesLeft = 18
+            }
+            1 -> {
+                size = 36
+                tilesWall = 5
+                tilesLeft = 5
+            }
+        }
+
+        tsumo = 136
         rtsumo = findViewById(R.id.tsumo)
         rhand = findViewById(R.id.hand)
         rdiscard = findViewById(R.id.discard)
@@ -88,7 +107,7 @@ class SoloActivity : AppCompatActivity() {
         val discardTileWidth = (min((displayMetrics.heightPixels - handTileHeight - padding * 4), handTileHeight * 3) / 4.0).toInt()
         val kanTileWidth = (handTileWidth * 3 - padding) / 4
         val kanTileHeight = kanTileWidth * 4 / 3
-        Log.d("d/screen", "display metrics: ${displayMetrics.widthPixels}x${displayMetrics.heightPixels}, hand tile sizes: ${handTileWidth}x${handTileHeight}, padding: ${padding}, discard tile sizes: ${discardTileWidth}x${discardTileHeight}")
+        Log.d("d/logScreen", "display metrics: ${displayMetrics.widthPixels}x${displayMetrics.heightPixels}, hand tile sizes: ${handTileWidth}x${handTileHeight}, padding: ${padding}, discard tile sizes: ${discardTileWidth}x${discardTileHeight}")
 
         rtsumo.layoutParams.width = handTileWidth
         rtsumo.setMargin(0, 0, 0, padding)
@@ -106,7 +125,7 @@ class SoloActivity : AppCompatActivity() {
         tsumoButton.setMargin(0, 1, padding, 0)
 
         all = Array(size){ i -> i }
-        wall = Array(tilesLeft){ 136 }
+        wall = Array(tilesLeft - 1){ 136 }
         discard = mutableListOf()
         indicator = Array(14){size}
         calls = mutableListOf()
@@ -118,7 +137,7 @@ class SoloActivity : AppCompatActivity() {
         for (i in 0..12) {
             hand[i] = randomTile()
         }
-        for (i in 0 until tilesLeft) {
+        for (i in 0..tilesLeft - 2) {
             wall[i] = randomTile()
         }
         hand.sort()
@@ -128,18 +147,24 @@ class SoloActivity : AppCompatActivity() {
         rindicator.adapter = indicatorAdapter
         tsumo = randomTile()
         rtsumo.setImageResource(tiles[tsumo / 4])
+
+        Log.d("d/logTilesWall", "INI wall: ${wall.toIntArray().contentToString()}")
+        Log.d("d/logTilesDead", "INI dead: ${indicator.toIntArray().contentToString()}")
     }
 
     internal fun discard(toRemove: Int) {
+        if (gameOver) {
+            return
+        }
         if (kanStatus > 0 && tsumo / 4 == toRemove / 4) {
             rtsumo.performClick()
             return
         }
-        if (riichiStatus == 2) {
+        if (riichiTile > 0) {
             Toast.makeText(baseContext, baseContext.getString(R.string.illegal_discard), Toast.LENGTH_SHORT).show()
             return
         }
-        if (riichiStatus == 1) {
+        if (riichiStatus) {
             setRiichi()
         }
         if (tilesLeft > openDoras - 1) {
@@ -191,35 +216,42 @@ class SoloActivity : AppCompatActivity() {
     }
 
     fun onClickTsumo(view: View) {
+        if (gameOver) {
+            return
+        }
         if (tilesLeft > openDoras - 1) {
-            if (riichiStatus == 1) {
+            rinshan = false
+            if (riichiStatus) {
                 setRiichi()
             }
             if (kanStatus > 0) {
-                var handCopy = hand
+                var handCopy = hand.toMutableList()
                 handCopy = handCopy.filterNot {
                     it / 4 == tsumo / 4
                 } as MutableList<Int>
                 if (handCopy.size == hand.size - 3) {
-                    if (riichiStatus > 0) {
-                        // TODO: check for Riichi, if this ever possible
+                    if (riichiTile > 0) {
+                        // TODO: in future there must be a check on if it changes riichi waiting!
                     }
-                    hand = handCopy
+                    hand = handCopy.toMutableList()
                     getFromDead(tsumo / 4)
                 } else {
                     Toast.makeText(baseContext, baseContext.getString(R.string.illegal_kan), Toast.LENGTH_SHORT).show()
                 }
             } else {
+                // TODO: Make riichi tile rotated on 90
                 discard.add(tsumo)
                 discardAdapter.submitList(discard)
                 rdiscard.adapter = discardAdapter
                 tilesLeft--
 
                 if (tilesLeft > openDoras - 1) {
-                    tsumo = wall[tilesLeft]
+                    tsumo = wall[tilesLeft - 1]
                     rtsumo.setImageResource(tiles[tsumo / 4])
                 } else {
-                    tsumoButton.disable()
+                    kanButton.disable()
+                    riichiButton.disable(highlight = (riichiTile > 0))
+                    tsumoButton.text = getString(R.string.game_over)
                     tsumo = 136
                     rtsumo.setImageResource(android.R.color.transparent)
                     onGameOver()
@@ -234,7 +266,7 @@ class SoloActivity : AppCompatActivity() {
         if (kanStatus > 0) {
             kanStatus = 0
             kanButton.text = getString(R.string.button_kan)
-            if (riichiStatus < 1) {
+            if (riichiTile == 0) {
                 riichiButton.enable()
             }
             tsumoButton.enable()
@@ -242,9 +274,10 @@ class SoloActivity : AppCompatActivity() {
             if (tilesLeft > openDoras - 1) {
                 kanStatus = 1
                 kanButton.text = getString(R.string.button_cancel)
-                riichiButton.disable()
+                if (riichiTile == 0) {
+                    riichiButton.disable()
+                }
                 tsumoButton.disable()
-                // TODO: additional test may be necessary; need to implement an endgame condition for the last tile from dead wall.
             } else {
                 Toast.makeText(baseContext, baseContext.getString(R.string.no_tiles_left), Toast.LENGTH_SHORT).show()
             }
@@ -252,18 +285,17 @@ class SoloActivity : AppCompatActivity() {
     }
 
     fun onCallRiichi(view: View) {
-        if (riichiStatus > 0) {
-            riichiStatus = 0
+        if (riichiStatus) {
+            riichiStatus = false
             riichiButton.text = getString(R.string.button_riichi)
             kanButton.enable()
             tsumoButton.enable()
         } else {
             if (tilesLeft > openDoras - 1) {
-                riichiStatus = 1
+                riichiStatus = true
                 riichiButton.text = getString(R.string.button_cancel)
                 kanButton.disable()
                 tsumoButton.disable()
-                // TODO: implement actual Riichi logic
             } else {
                 Toast.makeText(baseContext, baseContext.getString(R.string.no_tiles_left), Toast.LENGTH_SHORT).show()
             }
@@ -271,12 +303,53 @@ class SoloActivity : AppCompatActivity() {
     }
 
     fun onCallTsumo(view: View) {
-        tsumoStatus = 1
         onGameOver()
     }
 
     private fun onGameOver() {
+        gameOver = true
+        if (tsumo < 136) {
+            val doraIndicators: MutableList<Int> = mutableListOf()
+            val kanTiles: MutableList<Int> = mutableListOf()
+            val yakuConditional = mapOf("riichi" to (riichiTile > 0),
+                    "double riichi" to (riichiTile == 1),
+                    "ippatsu" to (riichiTile == tilesWall - tilesLeft + openDoras - 1),
+                    "rinshan" to rinshan,
+                    "haitei" to (tilesLeft == openDoras - 1),
+                    "tenhou" to (tilesLeft - openDoras == tilesWall - 1))
+            for (i in 0 until openDoras) {
+                doraIndicators.add(indicator[5 + i * 2])
+                if (riichiTile > 0) {
+                    doraIndicators.add(indicator[4 + i * 2])
+                }
+            }
+            for (i in 0 until (calls.size / 4)) {
+                kanTiles.add(calls[i * 4 + 1] - 1)
+            }
 
+            val calc = Calc(hand, tsumo, doraIndicators, kanTiles, yakuConditional,
+                27, 27, yakuHanCost, yakumanHanCost)
+            calc.calc()
+
+            // this output is only for debug purposes!
+            val yakuList = calc.getYaku()
+            var refinedYakuList: MutableMap<String, Int> = mutableMapOf()
+            if (yakuList["menzenchin tsumohou"]!! > 0) {
+                for ((k, v) in yakuList) {
+                    if (v > 0) {
+                        refinedYakuList[k] = v
+                    }
+                }
+            } else {
+                refinedYakuList["chombo"] = 1
+            }
+            Log.d("d/logCalcOutput", refinedYakuList.toString())
+            Log.d("d/logCalcOutput", calc.getCost().toString())
+            Toast.makeText(baseContext, refinedYakuList.toString(), Toast.LENGTH_SHORT).show()
+            // TODO: make fragment for manual calculations; compare on game over screen
+        } else {
+            // TODO: scan for nagashi mangan
+        }
     }
 
     private fun randomTile() : Int {
@@ -295,7 +368,7 @@ class SoloActivity : AppCompatActivity() {
     }
 
     private fun getFromDead(kanItem: Int) {
-        tsumo = indicator[0]
+        tsumo = indicator[openDoras - 1]
         showableIndicator[openDoras] = indicator[5 + openDoras * 2]
         openDoras++
         indicatorAdapter.submitList(showableIndicator)
@@ -313,32 +386,33 @@ class SoloActivity : AppCompatActivity() {
         callsAdapter.submitList(calls)
         rcalls.adapter = callsAdapter
         rtsumo.setImageResource(tiles[tsumo / 4])
+        rinshan = true
     }
 
     private fun setRiichi() {
-        riichiStatus = 2
-        riichiButton.disable()
+        riichiStatus = false
+        riichiTile = tilesWall - tilesLeft + openDoras - 1
+        riichiButton.disable(highlight = true)
         riichiButton.text = getString(R.string.button_riichi)
         kanButton.enable()
         tsumoButton.enable()
     }
 
-    private fun transform(hand: MutableList<Int>) : Array<Int> {
-        // this function should transform hand from view variation to computable
-        return arrayOf()
-    }
-
     private fun Button.enable() {
         this.isEnabled = true
         this.isClickable = true
-        this.setBackgroundColor(ContextCompat.getColor(baseContext, R.color.blue))
+        this.background.setTint(ContextCompat.getColor(baseContext, R.color.blue))
         this.setTextColor(ContextCompat.getColor(baseContext, R.color.white))
     }
 
-    private fun Button.disable() {
+    private fun Button.disable(highlight: Boolean = false) {
         this.isEnabled = false
         this.isClickable = false
-        this.setBackgroundColor(ContextCompat.getColor(baseContext, R.color.white))
-        this.setTextColor(ContextCompat.getColor(baseContext, R.color.gray))
+        if (highlight) {
+            this.background.setTint(ContextCompat.getColor(baseContext, R.color.orange))
+        } else {
+            this.background.setTint(ContextCompat.getColor(baseContext, R.color.light_gray))
+        }
+        this.setTextColor(ContextCompat.getColor(baseContext, R.color.white))
     }
 }

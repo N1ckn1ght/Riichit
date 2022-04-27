@@ -9,14 +9,21 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        supportActionBar?.hide()
     }
 
-    fun onClickSolo(view: View) {
+    fun onClickSoloMahjong(view: View) {
+        startGame(0)
+    }
+
+    fun onClickSoloMan(view: View) {
+        startGame(1)
+    }
+
+    private fun startGame(mode: Int) {
         val intent = Intent(this, SoloActivity::class.java)
+        intent.putExtra("mode", mode)
         startActivity(intent)
     }
-
-    // TODO: mode with only one type of tiles
-    // TODO: RU translation
-    // TODO: help button with actual help
+    // TODO: add RU translation
 }

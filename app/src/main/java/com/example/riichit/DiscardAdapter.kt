@@ -19,7 +19,9 @@ class DiscardAdapter(private val inflater: LayoutInflater, private val context: 
     override fun onBindViewHolder(holder: DiscardViewHolder, position: Int) {
         holder.iv.layoutParams.width = width
         holder.iv.layoutParams.height = height
-        holder.bindTo((context as SoloActivity).tiles[getItem(position) / 4], getItem(position))
+
+        var x = getItem(position)
+        holder.bindTo((context as SoloActivity).tiles[x / 4], x)
     }
 
     companion object {
