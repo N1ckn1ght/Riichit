@@ -16,27 +16,27 @@
 
         <Button
             android:id="@+id/btnSoloMahjong"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/blue"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:onClick="onClickSoloMahjong"
             android:text="@string/button_solo_mahjong"
             android:textColor="@color/white"
             android:textSize="22sp"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <Button
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/blue"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:onClick="onClickSoloBamboo"
-            android:text="@string/button_solo_bamboo"
+            android:onClick="onClickSoloMan"
+            android:text="@string/button_solo_man"
             android:textColor="@color/white"
             android:textSize="22sp"
-            app:layout_constraintTop_toBottomOf="@+id/btnSoloMahjong" />
+            app:layout_constraintTop_toBottomOf="@+id/btnSoloMahjong"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

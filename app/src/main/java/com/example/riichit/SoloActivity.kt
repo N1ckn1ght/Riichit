@@ -13,7 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import java.util.Random
+import java.util.*
 
 class SoloActivity : AppCompatActivity() {
     internal lateinit var tiles: Array<Int>
@@ -63,7 +63,7 @@ class SoloActivity : AppCompatActivity() {
             R.drawable.man_1, R.drawable.man_2, R.drawable.man_3, R.drawable.man_4, R.drawable.man_5, R.drawable.man_6, R.drawable.man_7, R.drawable.man_8, R.drawable.man_9,
             R.drawable.pin_1, R.drawable.pin_2, R.drawable.pin_3, R.drawable.pin_4, R.drawable.pin_5, R.drawable.pin_6, R.drawable.pin_7, R.drawable.pin_8, R.drawable.pin_9,
             R.drawable.sou_1, R.drawable.sou_2, R.drawable.sou_3, R.drawable.sou_4, R.drawable.sou_5, R.drawable.sou_6, R.drawable.sou_7, R.drawable.sou_8, R.drawable.sou_9,
-            R.drawable.wind_east, R.drawable.wind_south, R.drawable.wind_north, R.drawable.wind_west, R.drawable.dragon_red, R.drawable.dragon_white, R.drawable.dragon_green,
+            R.drawable.wind_east, R.drawable.wind_south, R.drawable.wind_west, R.drawable.wind_north, R.drawable.dragon_red, R.drawable.dragon_white, R.drawable.dragon_green,
             R.drawable.closed)
 
         when (mode) {
@@ -107,7 +107,7 @@ class SoloActivity : AppCompatActivity() {
         val discardTileWidth = (min((displayMetrics.heightPixels - handTileHeight - padding * 4), handTileHeight * 3) / 4.0).toInt()
         val kanTileWidth = (handTileWidth * 3 - padding) / 4
         val kanTileHeight = kanTileWidth * 4 / 3
-        Log.d("d/screen", "display metrics: ${displayMetrics.widthPixels}x${displayMetrics.heightPixels}, hand tile sizes: ${handTileWidth}x${handTileHeight}, padding: ${padding}, discard tile sizes: ${discardTileWidth}x${discardTileHeight}")
+        Log.d("d/logScreen", "display metrics: ${displayMetrics.widthPixels}x${displayMetrics.heightPixels}, hand tile sizes: ${handTileWidth}x${handTileHeight}, padding: ${padding}, discard tile sizes: ${discardTileWidth}x${discardTileHeight}")
 
         rtsumo.layoutParams.width = handTileWidth
         rtsumo.setMargin(0, 0, 0, padding)
@@ -125,7 +125,7 @@ class SoloActivity : AppCompatActivity() {
         tsumoButton.setMargin(0, 1, padding, 0)
 
         all = Array(size){ i -> i }
-        wall = Array(tilesLeft){ 136 }
+        wall = Array(tilesLeft - 1){ 136 }
         discard = mutableListOf()
         indicator = Array(14){size}
         calls = mutableListOf()
@@ -137,7 +137,7 @@ class SoloActivity : AppCompatActivity() {
         for (i in 0..12) {
             hand[i] = randomTile()
         }
-        for (i in 0 until tilesLeft) {
+        for (i in 0..tilesLeft - 2) {
             wall[i] = randomTile()
         }
         hand.sort()
@@ -147,6 +147,9 @@ class SoloActivity : AppCompatActivity() {
         rindicator.adapter = indicatorAdapter
         tsumo = randomTile()
         rtsumo.setImageResource(tiles[tsumo / 4])
+
+        Log.d("d/logTilesWall", "INI wall: ${wall.toIntArray().contentToString()}")
+        Log.d("d/logTilesDead", "INI dead: ${indicator.toIntArray().contentToString()}")
     }
 
     internal fun discard(toRemove: Int) {
@@ -222,7 +225,7 @@ class SoloActivity : AppCompatActivity() {
                 setRiichi()
             }
             if (kanStatus > 0) {
-                var handCopy = hand
+                var handCopy = hand.toMutableList()
                 handCopy = handCopy.filterNot {
                     it / 4 == tsumo / 4
                 } as MutableList<Int>
@@ -230,20 +233,20 @@ class SoloActivity : AppCompatActivity() {
                     if (riichiTile > 0) {
                         // TODO: in future there must be a check on if it changes riichi waiting!
                     }
-                    hand = handCopy
+                    hand = handCopy.toMutableList()
                     getFromDead(tsumo / 4)
                 } else {
                     Toast.makeText(baseContext, baseContext.getString(R.string.illegal_kan), Toast.LENGTH_SHORT).show()
                 }
             } else {
-                // TODO: rotate a riichi tile
+                // TODO: Make riichi tile rotated on 90
                 discard.add(tsumo)
                 discardAdapter.submitList(discard)
                 rdiscard.adapter = discardAdapter
                 tilesLeft--
 
                 if (tilesLeft > openDoras - 1) {
-                    tsumo = wall[tilesLeft]
+                    tsumo = wall[tilesLeft - 1]
                     rtsumo.setImageResource(tiles[tsumo / 4])
                 } else {
                     kanButton.disable()
@@ -329,11 +332,20 @@ class SoloActivity : AppCompatActivity() {
             calc.calc()
 
             // this output is only for debug purposes!
-            val res = calc.getCost()
-            val showRes = res["han"].toString() + " " + res["fu"].toString() + " " + res["dealer"].toString()
-            Toast.makeText(baseContext, showRes, Toast.LENGTH_SHORT).show()
-            Log.d("d/yakuList", calc.getYaku().toString())
-            // TODO: use a coroutine
+            val yakuList = calc.getYaku()
+            var refinedYakuList: MutableMap<String, Int> = mutableMapOf()
+            if (yakuList["menzenchin tsumohou"]!! > 0) {
+                for ((k, v) in yakuList) {
+                    if (v > 0) {
+                        refinedYakuList[k] = v
+                    }
+                }
+            } else {
+                refinedYakuList["chombo"] = 1
+            }
+            Log.d("d/logCalcOutput", refinedYakuList.toString())
+            Log.d("d/logCalcOutput", calc.getCost().toString())
+            Toast.makeText(baseContext, refinedYakuList.toString(), Toast.LENGTH_SHORT).show()
             // TODO: make fragment for manual calculations; compare on game over screen
         } else {
             // TODO: scan for nagashi mangan
@@ -356,7 +368,7 @@ class SoloActivity : AppCompatActivity() {
     }
 
     private fun getFromDead(kanItem: Int) {
-        tsumo = indicator[0]
+        tsumo = indicator[openDoras - 1]
         showableIndicator[openDoras] = indicator[5 + openDoras * 2]
         openDoras++
         indicatorAdapter.submitList(showableIndicator)

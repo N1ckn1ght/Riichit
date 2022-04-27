@@ -2,7 +2,7 @@
     <string name="app_name">Riichi trainer</string>
 
     <string name="button_solo_mahjong">Play solo mahjong</string>
-    <string name="button_solo_bamboo">Play solo bamboo</string>
+    <string name="button_solo_man">Play solo man</string>
 
     <string name="button_kan">Kan</string>
     <string name="button_riichi">Riichi</string>

@@ -9,13 +9,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        supportActionBar?.hide()
     }
 
     fun onClickSoloMahjong(view: View) {
         startGame(0)
     }
 
-    fun onClickSoloBamboo(view: View) {
+    fun onClickSoloMan(view: View) {
         startGame(1)
     }
 
@@ -24,5 +25,5 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra("mode", mode)
         startActivity(intent)
     }
-    // TODO: RU translation
+    // TODO: add RU translation
 }
