@@ -12,8 +12,14 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
     }
 
-    fun onClickSoloMahjong(view: View) { startGame(0) }
-    fun onClickSoloMan(view: View) { startGame(1) }
+    fun onClickSoloMahjong(view: View) { 
+        startGame(0) 
+    }
+    
+    fun onClickSoloMan(view: View) { 
+        startGame(1) 
+    }
+    
     private fun startGame(mode: Int) {
         val intent = Intent(this, SoloActivity::class.java)
         intent.putExtra("mode", mode)
