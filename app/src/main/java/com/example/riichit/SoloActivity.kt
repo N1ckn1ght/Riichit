@@ -31,7 +31,7 @@ class SoloActivity : AppCompatActivity() {
     private var kanStatus = 0
     private var rinshan = false
     private var riichiStatus = false
-    private var riichiTile = -1
+    private var riichiTile = -2
     private var gameOver = false
 
     private var size: Int = 0
