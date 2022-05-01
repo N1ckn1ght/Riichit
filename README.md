@@ -30,7 +30,7 @@
 
 Скриншоты:
 
-<img src="https://i.imgur.com/5tlXxVQ.jpg">
+<img src="https://i.imgur.com/ynOtqb0.jpg">
 
 <img src="https://i.imgur.com/MticDZq.jpg">
 
