@@ -18,7 +18,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".SoloActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            android:launchMode="singleTop">
         </activity>
     </application>
 </manifest>

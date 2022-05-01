@@ -9,34 +9,55 @@
     tools:context=".MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
             android:id="@+id/btnSoloMahjong"
-            android:layout_width="400dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/blue"
             android:onClick="onClickSoloMahjong"
             android:text="@string/button_solo_mahjong"
             android:textColor="@color/white"
             android:textSize="22sp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:layout_width="400dp"
+            android:id="@+id/btnSoloMan"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/blue"
             android:onClick="onClickSoloMan"
             android:text="@string/button_solo_man"
             android:textColor="@color/white"
             android:textSize="22sp"
-            app:layout_constraintTop_toBottomOf="@+id/btnSoloMahjong"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/btnSoloMahjong" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/btnSoloMan">
+
+            <ToggleButton
+                android:id="@+id/tglEma"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:onClick="onClickEma"
+                android:textSize="18sp"
+                android:text="@string/toggle_ema_names"
+                android:textOn="@string/toggle_ema_names_on"
+                android:textOff="@string/toggle_ema_names_off"
+                android:checked="true"
+                android:backgroundTint="@color/blue"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.5" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,12 +1,16 @@
 package com.example.riichit
 
+import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.Window
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -17,6 +21,8 @@ import java.util.*
 
 class SoloActivity : AppCompatActivity() {
     internal lateinit var tiles: Array<Int>
+
+    private var context = this
 
     private lateinit var rtsumo: ImageView
     private lateinit var rhand: RecyclerView
@@ -40,6 +46,7 @@ class SoloActivity : AppCompatActivity() {
     private var tsumo: Int = 0
     private var openDoras: Int = 1
     private var mode: Int = 0
+    private var ema: Int = 0
 
     private lateinit var all: Array<Int>
     private lateinit var wall: Array<Int>
@@ -55,6 +62,7 @@ class SoloActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mode = intent.getIntExtra("mode", 0)
+        ema = intent.getIntExtra("ema", 0)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_solo)
         supportActionBar?.hide()
@@ -248,10 +256,7 @@ class SoloActivity : AppCompatActivity() {
                     tsumo = wall[tilesLeft - 1]
                     rtsumo.setImageResource(tiles[tsumo / 4])
                 } else {
-                    kanButton.disable()
-                    riichiButton.disable(highlight = (riichiTile > -1))
-                    tsumoButton.text = getString(R.string.game_over)
-                    tsumo = 136
+                    onGameOver()
                     rtsumo.setImageResource(android.R.color.transparent)
                     onGameOver()
                 }
@@ -302,19 +307,15 @@ class SoloActivity : AppCompatActivity() {
     }
 
     fun onCallTsumo(view: View) {
-        onGameOver()
-    }
-
-    private fun onGameOver() {
         gameOver = true
         if (tsumo < 136) {
             val doraIndicators: MutableList<Int> = mutableListOf()
             val kanTiles: MutableList<Int> = mutableListOf()
             val yakuConditional = mapOf("riichi" to (riichiTile > -1),
-                    "double riichi" to (riichiTile == 0),
+                    "double_riichi" to (riichiTile == 0),
                     "ippatsu" to (tilesLeft == openDoras + tilesWall - 2 - riichiTile),
                     "rinshan" to rinshan,
-                    "haitei" to (tilesLeft == openDoras),
+                    "haitei_raoyue" to (tilesLeft == openDoras),
                     "tenhou" to (tilesLeft == openDoras + tilesWall - 1))
             for (i in 0 until openDoras) {
                 doraIndicators.add(indicator[5 + i * 2])
@@ -327,28 +328,66 @@ class SoloActivity : AppCompatActivity() {
             }
 
             val calc = Calc(hand, tsumo, doraIndicators, kanTiles, yakuConditional,
-                27, 27, yakuHanCost, yakumanHanCost)
+                    27, 27, yakuHanCost, yakumanHanCost, yakuCountedCost)
             calc.calc()
 
             // this output is only for debug purposes!
             val yakuList = calc.getYaku()
-            var refinedYakuList: MutableMap<String, Int> = mutableMapOf()
-            if (yakuList["menzenchin tsumohou"]!! > 0) {
+            val handCost = calc.getCost()
+            var refinedYakuList: MutableList<String> = mutableListOf()
+
+            var postfix = ""
+            if (ema > 0) {
+                postfix = "_ema"
+            }
+
+            if (yakuList["menzenchin_tsumohou"]!! > 0) {
+                val yakumaned = handCost["yakumaned"]!! > 0
                 for ((k, v) in yakuList) {
-                    if (v > 0) {
-                        refinedYakuList[k] = v
+                    if (v > 0 && (!yakumaned || k in yakumanHanCost)) {
+                        Log.d("d/logYakuCall", "${k} | ${k + postfix} | search in strings...")
+                        var name = context.getString(context.resources.getIdentifier(
+                                k + postfix, "string", context.packageName))
+                        if (k in yakuCountedCost) {
+                            refinedYakuList.add("$name $v")
+                        } else {
+                            refinedYakuList.add(name)
+                        }
                     }
                 }
             } else {
-                refinedYakuList["chombo"] = 1
+                refinedYakuList.add("Chombo")
+                handCost["dealer"] = -12000
             }
+
+            var output = ""
+            for (i in refinedYakuList) {
+                output += "${i}, "
+            }
+            output = output.dropLast(2)
+            output += "\n\n"
+            handCost.remove("yakumaned")
+            for ((k, v) in handCost) {
+                output += "${k}: ${v}, "
+            }
+            output = output.dropLast(2)
+
             Log.d("d/logCalcOutput", refinedYakuList.toString())
             Log.d("d/logCalcOutput", calc.getCost().toString())
-            Toast.makeText(baseContext, refinedYakuList.toString(), Toast.LENGTH_SHORT).show()
+            showYakuList(output)
+            onGameOver()
             // TODO: make fragment for manual calculations; compare on game over screen
         } else {
             // TODO: scan for nagashi mangan
+            finish()
         }
+    }
+
+    private fun onGameOver() {
+        kanButton.disable()
+        riichiButton.disable(highlight = (riichiTile > -1))
+        tsumoButton.text = getString(R.string.game_over)
+        tsumo = 136
     }
 
     private fun randomTile() : Int {
@@ -413,5 +452,19 @@ class SoloActivity : AppCompatActivity() {
             this.background.setTint(ContextCompat.getColor(baseContext, R.color.light_gray))
         }
         this.setTextColor(ContextCompat.getColor(baseContext, R.color.white))
+    }
+
+    private fun showYakuList(output: String) {
+        val dialog = Dialog(context)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.dialog_debug_yaku_list)
+        val tvYakuList = dialog.findViewById<TextView>(R.id.tvYakuList)
+        val btnDismiss = dialog.findViewById<Button>(R.id.btnDismiss)
+        tvYakuList.text = output
+        btnDismiss.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 }

@@ -1,5 +1,6 @@
 package com.example.riichit
 
+import android.content.Context
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 
@@ -22,4 +23,9 @@ internal fun max(a: Int, b: Int): Int {
 internal fun Boolean.toInt(): Int {
     if (this) return 1
     return 0
+}
+
+internal operator fun Int.not(): Int {
+    if (this > 0) return 0
+    return 1
 }
