@@ -1,6 +1,6 @@
 # Riichit
 
-Статус проекта: полноценный макет прототипа!
+Статус проекта: приложение функционирует.
 
 Играть уже можно, но ещё требуется выполнить нижеописанные задачи.
 
@@ -10,7 +10,7 @@
 
 -- Режим игры в одиночный маджонг, но только на манах;
 
--- Калькулятор, подсчитывающий комбинации в руке и её стоимость 
+-- Калькулятор, подсчитывающий комбинации в руке и её стоимость;
 
 -- Полноценно реализованный интерфейс поля для игры.
 
@@ -20,35 +20,36 @@
 
 -- Реализовать ручной выбор ЯКУ в руке для сравнения с автоматическим подсчётом;
 
--- Интерфейс для экрана конца игры с полноценным выводом ЯКУ и стоимости руки
-(на текущий момент вывод лишь в виде дебага и тоаста, хоть и стоимость будет считаться корректно, яку будут смешаны с якуманами);
+-- Интерфейс для экрана конца игры (на текущий момент есть лишь в виде диалога);
 
--- Детализировать вывод ХАН и ФУ в руке для большей образовательной ценности;
+-- Детализовать вывод ХАН и ФУ в руке для большей образовательной ценности;
 
 -- Реализовать подсчёт ШАНТЕН и УКЕ-ИРЕ в незаконченной руке;
 
--- Прочие TODO улучшения, issue с риичи-тайлом и дебаг подсчёта очков ФУ в руке.
+-- Прочие TODO улучшения, issue с риичи-тайлом и полноценное тестирование всего приложения.
 
 Скриншоты:
 
-<img src="https://i.imgur.com/Qt3RQBN.jpg">
-
-<img src="https://i.imgur.com/UhUtjEC.jpg">
-
-<img src="https://i.imgur.com/QaI6Nsh.jpg">
-
-<img src="https://i.imgur.com/TYahYHy.jpg">
-
-<img src="https://i.imgur.com/5g12e2G.jpg">
-
-<img src="https://i.imgur.com/8rNeqOh.jpg">
-
-<img src="https://i.imgur.com/o5UkX1T.jpg">
-
-<img src="https://i.imgur.com/magWB8u.jpg">
-
-<img src="https://i.imgur.com/y8gGUzC.jpg">
-
-<img src="https://i.imgur.com/OmoGb7g.jpg">
-
 <img src="https://i.imgur.com/5tlXxVQ.jpg">
+
+<img src="https://i.imgur.com/MticDZq.jpg">
+
+<img src="https://i.imgur.com/1mRHgaO.jpg">
+
+<img src="https://i.imgur.com/CW7HqfN.jpg">
+
+<img src="https://i.imgur.com/UzaV5k3.jpg">
+
+<img src="https://i.imgur.com/ObQBfep.jpg">
+
+<img src="https://i.imgur.com/amVCHcg.jpg">
+
+<img src="https://i.imgur.com/7Lii8Gb.jpg">
+
+<img src="https://i.imgur.com/RAIqNR3.jpg">
+
+<img src="https://i.imgur.com/1BDcUWY.jpg">
+
+<img src="https://i.imgur.com/Id9D7pv.jpg">
+
+<img src="https://i.imgur.com/NQnzSfk.jpg">

@@ -12,11 +12,12 @@ class Calc (private val showableHand: MutableList<Int>,
             private val playerWind: Int,
             private val roundWind: Int,
             private val yakuHanCost: Map<String, Int>,
-            private val yakumanHanCost: Map<String, Int>) {
+            private val yakumanHanCost: Map<String, Int>,
+            private val yakuContedCost: Map<String, Int>) {
     class Meld (val type: Int, val tile: Int)
     // 0 - chii, 1 - pon, 2 - kan
 
-    private var yaku = (yakuHanCost + yakumanHanCost).toMutableMap()
+    private var yaku = (yakuHanCost + yakumanHanCost + yakuCountedCost).toMutableMap()
     private var cost = mutableMapOf("han" to 0, "fu" to 0, "dealer" to 0, "yakumaned" to 0)
     // TODO: Han and fu results should be detailed for education purposes
     private val hand = Array(34){0}
@@ -56,9 +57,9 @@ class Calc (private val showableHand: MutableList<Int>,
         applyYakuConditional(yaku, yakuConditional)
         applyYakuHanded(yaku, hand, tsumo, doraIndicators)
         if (yaku["chiitoitsu"]!! > 0 ||
-            yaku["kokushi musou"]!! > 0 ||
-            yaku["13-wait kokushi musou"]!! > 0) {
-            yaku["menzenchin tsumohou"] = 1
+            yaku["kokushi_musou"]!! > 0 ||
+            yaku["thirteen_wait_kokushi_musou"]!! > 0) {
+            yaku["menzenchin_tsumohou"] = 1
             cost = calculateHandCost(yaku, 25)
         }
 
@@ -88,7 +89,7 @@ class Calc (private val showableHand: MutableList<Int>,
                         for (honour in honourCombs) {
                             Log.d("d/logCalcMain", "\t\t\t${(man.size + pin.size + sou.size + honour.size)}")
                             if (man.size + pin.size + sou.size + honour.size == 4) {
-                                yaku["menzenchin tsumohou"] = 1
+                                yaku["menzenchin_tsumohou"] = 1
                                 val currentYaku = addYakuMelded(yaku,
                                     tsumo, pairIndex, man, pin, sou, honour, playerWind, roundWind)
                                 val currentFu = calculateFu(yaku,
@@ -205,13 +206,13 @@ class Calc (private val showableHand: MutableList<Int>,
     private fun applyYakuHanded(yaku: MutableMap<String, Int>,
                                 hand: Array<Int>, tsumo: Int,
                                 doraIndicators: MutableList<Int>) {
-        yaku["13-wait kokushi musou"] = is13waitKokushiMusou(hand, tsumo).toInt()
+        yaku["thirteen_wait_kokushi_musou"] = is13waitKokushiMusou(hand, tsumo).toInt()
         yaku["chinroutou"] = isChinroutou(hand).toInt()
-        yaku["chuuren poutou"] = isChuurenPoutou(hand, tsumo).toInt()
+        yaku["chuuren_poutou"] = isChuurenPoutou(hand, tsumo).toInt()
         yaku["daisangen"] = isDaisangen(hand).toInt()
         yaku["daisuushii"] = isDaisuushii(hand).toInt()
-        yaku["kokushi musou"] = isKokushiMusou(hand, tsumo).toInt()
-        yaku["pure chuuren poutou"] = isPureChuurenPoutou(hand, tsumo).toInt()
+        yaku["kokushi_musou"] = isKokushiMusou(hand, tsumo).toInt()
+        yaku["pure_chuuren_poutou"] = isPureChuurenPoutou(hand, tsumo).toInt()
         yaku["ryuuiisou"] = isRyuuiisou(hand).toInt()
         yaku["tsuuiisou"] = isTsuuiisou(hand).toInt()
 
@@ -240,25 +241,25 @@ class Calc (private val showableHand: MutableList<Int>,
                                 playerWind: Int, roundWind: Int) : MutableMap<String, Int> {
         val yakuCopy = yaku.toMutableMap()
         yakuCopy["suuankou"] = isSuuankou(man, pin, sou, honour, pair, tsumo).toInt()
-        yakuCopy["suuankou tanki"] = isSuuankouTanki(man, pin, sou, honour, pair, tsumo).toInt()
+        yakuCopy["suuankou_tanki"] = isSuuankouTanki(man, pin, sou, honour, pair, tsumo).toInt()
         yakuCopy["suukantsu"] = isSuukantsu(man, pin, sou, honour).toInt()
 
         yakuCopy["chantaiayo"] = isChantaiayo(man, pin, sou, honour, pair).toInt()
         yakuCopy["iipeikou"] = isIipeikou(man, pin, sou).toInt()
         yakuCopy["ittsu"] = isIttsu(man, pin, sou).toInt()
-        yakuCopy["junchan taiayo"] = isJunchanTaiayo(man, pin, sou, honour, pair).toInt()
+        yakuCopy["junchan_taiayo"] = isJunchanTaiayo(man, pin, sou, honour, pair).toInt()
         yakuCopy["pinfu"] = isPinfu(man, pin, sou, pair, tsumo).toInt()
         yakuCopy["ryanpeikou"] = isRyanpeikou(man, pin, sou).toInt()
         yakuCopy["sanankou"] = isSanankou(man, pin, sou, honour).toInt()
         yakuCopy["sankantsu"] = isSankantsu(man, pin, sou, honour).toInt()
-        yakuCopy["sanshoku doujun"] = isSanshokuDoujun(man, pin, sou).toInt()
-        yakuCopy["sanshoku doukou"] = isSanshokuDoukou(man, pin, sou).toInt()
+        yakuCopy["sanshoku_doujun"] = isSanshokuDoujun(man, pin, sou).toInt()
+        yakuCopy["sanshoku_doukou"] = isSanshokuDoukou(man, pin, sou).toInt()
 
-        if (yakuCopy["junchan taiayo"]!! > 0) {
+        if (yakuCopy["junchan_taiayo"]!! > 0) {
             yakuCopy["chantaiayo"] = 0
         }
         if (yakuCopy["honroutou"]!! > 0) {
-            yakuCopy["junchan taiayo"] = 0
+            yakuCopy["junchan_taiayo"] = 0
         }
         if (yakuCopy["ryanpeikou"]!! > 0) {
             yakuCopy["chiitoitsu"] = 0
@@ -280,6 +281,9 @@ class Calc (private val showableHand: MutableList<Int>,
             cost["fu"] = 0
         } else {
             for ((k, v) in yakuHanCost) {
+                cost["han"] = cost["han"]!! + yaku[k]!! * v
+            }
+            for ((k, v) in yakuContedCost) {
                 cost["han"] = cost["han"]!! + yaku[k]!! * v
             }
             when {
