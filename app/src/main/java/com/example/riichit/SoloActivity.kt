@@ -1,7 +1,6 @@
 package com.example.riichit
 
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
@@ -17,6 +16,11 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.riichit.Ruleset.yakuCountedCost
+import com.example.riichit.Ruleset.yakuHanCost
+import com.example.riichit.Ruleset.yakumanHanCost
+import com.example.riichit.Utility.setMargin
+import java.lang.Integer.min
 import java.util.*
 
 class SoloActivity : AppCompatActivity() {
@@ -68,11 +72,42 @@ class SoloActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         tiles = arrayOf(
-            R.drawable.man_1, R.drawable.man_2, R.drawable.man_3, R.drawable.man_4, R.drawable.man_5, R.drawable.man_6, R.drawable.man_7, R.drawable.man_8, R.drawable.man_9,
-            R.drawable.pin_1, R.drawable.pin_2, R.drawable.pin_3, R.drawable.pin_4, R.drawable.pin_5, R.drawable.pin_6, R.drawable.pin_7, R.drawable.pin_8, R.drawable.pin_9,
-            R.drawable.sou_1, R.drawable.sou_2, R.drawable.sou_3, R.drawable.sou_4, R.drawable.sou_5, R.drawable.sou_6, R.drawable.sou_7, R.drawable.sou_8, R.drawable.sou_9,
-            R.drawable.wind_east, R.drawable.wind_south, R.drawable.wind_west, R.drawable.wind_north, R.drawable.dragon_red, R.drawable.dragon_white, R.drawable.dragon_green,
-            R.drawable.closed)
+            R.drawable.man_1,
+            R.drawable.man_2,
+            R.drawable.man_3,
+            R.drawable.man_4,
+            R.drawable.man_5,
+            R.drawable.man_6,
+            R.drawable.man_7,
+            R.drawable.man_8,
+            R.drawable.man_9,
+            R.drawable.pin_1,
+            R.drawable.pin_2,
+            R.drawable.pin_3,
+            R.drawable.pin_4,
+            R.drawable.pin_5,
+            R.drawable.pin_6,
+            R.drawable.pin_7,
+            R.drawable.pin_8,
+            R.drawable.pin_9,
+            R.drawable.sou_1,
+            R.drawable.sou_2,
+            R.drawable.sou_3,
+            R.drawable.sou_4,
+            R.drawable.sou_5,
+            R.drawable.sou_6,
+            R.drawable.sou_7,
+            R.drawable.sou_8,
+            R.drawable.sou_9,
+            R.drawable.wind_east,
+            R.drawable.wind_south,
+            R.drawable.wind_west,
+            R.drawable.wind_north,
+            R.drawable.dragon_red,
+            R.drawable.dragon_white,
+            R.drawable.dragon_green,
+            R.drawable.closed
+        )
 
         when (mode) {
             0 -> {
@@ -110,37 +145,55 @@ class SoloActivity : AppCompatActivity() {
         val handTileWidth = (displayMetrics.widthPixels * 0.068).toInt()
         val handTileHeight = (displayMetrics.widthPixels * 0.272 / 3).toInt()
         val padding = (displayMetrics.widthPixels * 0.016).toInt()
-        val discardTileHeight = (min((displayMetrics.heightPixels - handTileHeight - padding * 4), handTileHeight * 3) / 3.0).toInt()
-        val discardTileWidth = (min((displayMetrics.heightPixels - handTileHeight - padding * 4), handTileHeight * 3) / 4.0).toInt()
+        val discardTileHeight = (min(
+            (displayMetrics.heightPixels - handTileHeight - padding * 4),
+            handTileHeight * 3
+        ) / 3.0).toInt()
+        val discardTileWidth = (min(
+            (displayMetrics.heightPixels - handTileHeight - padding * 4),
+            handTileHeight * 3
+        ) / 4.0).toInt()
         val kanTileWidth = (handTileWidth * 3 - padding) / 4
         val kanTileHeight = kanTileWidth * 4 / 3
-        Log.d("d/logScreen", "display metrics: ${displayMetrics.widthPixels}x${displayMetrics.heightPixels}, hand tile sizes: ${handTileWidth}x${handTileHeight}, padding: ${padding}, discard tile sizes: ${discardTileWidth}x${discardTileHeight}")
+        Log.d(
+            "d/logScreen",
+            "display metrics: ${displayMetrics.widthPixels}x${displayMetrics.heightPixels}, hand tile sizes: ${handTileWidth}x${handTileHeight}, padding: ${padding}, discard tile sizes: ${discardTileWidth}x${discardTileHeight}"
+        )
 
         rtsumo.layoutParams.width = handTileWidth
         rtsumo.setMargin(0, 0, 0, padding)
         rhand.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        handAdapter = HandAdapter(LayoutInflater.from(this), this, handTileWidth, handTileHeight, padding)
+        handAdapter =
+            HandAdapter(LayoutInflater.from(this), this, handTileWidth, handTileHeight, padding)
         rdiscard.layoutManager = GridLayoutManager(this, 6, RecyclerView.VERTICAL, false)
-        discardAdapter = DiscardAdapter(LayoutInflater.from(this), this, discardTileWidth, discardTileHeight, padding)
+        discardAdapter = DiscardAdapter(
+            LayoutInflater.from(this),
+            this,
+            discardTileWidth,
+            discardTileHeight,
+            padding
+        )
         rindicator.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        indicatorAdapter = DiscardAdapter(LayoutInflater.from(this), this, handTileWidth, handTileHeight, padding)
+        indicatorAdapter =
+            DiscardAdapter(LayoutInflater.from(this), this, handTileWidth, handTileHeight, padding)
         rcalls.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        callsAdapter = CallsAdapter(LayoutInflater.from(this), this, kanTileWidth, kanTileHeight, padding)
+        callsAdapter =
+            CallsAdapter(LayoutInflater.from(this), this, kanTileWidth, kanTileHeight, padding)
 
         kanButton.setMargin(0, padding, padding, 0)
         riichiButton.setMargin(0, 1, padding, 0)
         tsumoButton.setMargin(0, 1, padding, 0)
 
-        all = Array(size){ i -> i }
-        wall = Array(tilesLeft - 1){ 136 }
+        all = Array(size) { i -> i }
+        wall = Array(tilesLeft - 1) { 136 }
         discard = mutableListOf()
-        indicator = Array(14){size}
+        indicator = Array(14) { size }
         calls = mutableListOf()
         for (i in 0..13) {
             indicator[i] = randomTile()
         }
         showableIndicator = mutableListOf(indicator[5], 136, 136, 136, 136)
-        hand = MutableList(13){size}
+        hand = MutableList(13) { size }
         for (i in 0..12) {
             hand[i] = randomTile()
         }
@@ -168,7 +221,11 @@ class SoloActivity : AppCompatActivity() {
             return
         }
         if (riichiTile > -1) {
-            Toast.makeText(baseContext, baseContext.getString(R.string.illegal_discard), Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                baseContext,
+                baseContext.getString(R.string.illegal_discard),
+                Toast.LENGTH_SHORT
+            ).show()
             return
         }
         if (riichiStatus) {
@@ -183,7 +240,11 @@ class SoloActivity : AppCompatActivity() {
                     }
                 }
                 if (count < 4) {
-                    Toast.makeText(baseContext, baseContext.getString(R.string.illegal_kan), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        baseContext,
+                        baseContext.getString(R.string.illegal_kan),
+                        Toast.LENGTH_SHORT
+                    ).show()
                     return
                 }
             }
@@ -237,13 +298,18 @@ class SoloActivity : AppCompatActivity() {
                     it / 4 == tsumo / 4
                 } as MutableList<Int>
                 if (handCopy.size == hand.size - 3) {
+                    @Suppress("ControlFlowWithEmptyBody")
                     if (riichiTile > -1) {
                         // TODO: in future there must be a check on if it changes riichi waiting!
                     }
                     hand = handCopy.toMutableList()
                     getFromDead(tsumo / 4)
                 } else {
-                    Toast.makeText(baseContext, baseContext.getString(R.string.illegal_kan), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        baseContext,
+                        baseContext.getString(R.string.illegal_kan),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             } else {
                 // TODO: Make riichi tile rotated on 90
@@ -262,7 +328,11 @@ class SoloActivity : AppCompatActivity() {
                 }
             }
         } else {
-            Toast.makeText(baseContext, baseContext.getString(R.string.no_tiles_left), Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                baseContext,
+                baseContext.getString(R.string.no_tiles_left),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -283,7 +353,11 @@ class SoloActivity : AppCompatActivity() {
                 }
                 tsumoButton.disable()
             } else {
-                Toast.makeText(baseContext, baseContext.getString(R.string.no_tiles_left), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    baseContext,
+                    baseContext.getString(R.string.no_tiles_left),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -301,7 +375,11 @@ class SoloActivity : AppCompatActivity() {
                 kanButton.disable()
                 tsumoButton.disable()
             } else {
-                Toast.makeText(baseContext, baseContext.getString(R.string.no_tiles_left), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    baseContext,
+                    baseContext.getString(R.string.no_tiles_left),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -311,12 +389,14 @@ class SoloActivity : AppCompatActivity() {
         if (tsumo < 136) {
             val doraIndicators: MutableList<Int> = mutableListOf()
             val kanTiles: MutableList<Int> = mutableListOf()
-            val yakuConditional = mapOf("riichi" to (riichiTile > -1),
-                    "double_riichi" to (riichiTile == 0),
-                    "ippatsu" to (tilesLeft == openDoras + tilesWall - 2 - riichiTile),
-                    "rinshan" to rinshan,
-                    "haitei_raoyue" to (tilesLeft == openDoras),
-                    "tenhou" to (tilesLeft == openDoras + tilesWall - 1))
+            val yakuConditional = mapOf(
+                "riichi" to (riichiTile > -1),
+                "double_riichi" to (riichiTile == 0),
+                "ippatsu" to (tilesLeft == openDoras + tilesWall - 2 - riichiTile),
+                "rinshan" to rinshan,
+                "haitei_raoyue" to (tilesLeft == openDoras),
+                "tenhou" to (tilesLeft == openDoras + tilesWall - 1)
+            )
             for (i in 0 until openDoras) {
                 doraIndicators.add(indicator[5 + i * 2])
                 if (riichiTile > -1) {
@@ -327,14 +407,16 @@ class SoloActivity : AppCompatActivity() {
                 kanTiles.add(calls[i * 4 + 1] - 1)
             }
 
-            val calc = Calc(hand, tsumo, doraIndicators, kanTiles, yakuConditional,
-                    27, 27, yakuHanCost, yakumanHanCost, yakuCountedCost)
+            val calc = Calc(
+                hand, tsumo, doraIndicators, kanTiles, yakuConditional,
+                27, 27, yakuHanCost, yakumanHanCost, yakuCountedCost
+            )
             calc.calc()
 
             // this output is only for debug purposes!
             val yakuList = calc.getYaku()
             val handCost = calc.getCost()
-            var refinedYakuList: MutableList<String> = mutableListOf()
+            val refinedYakuList: MutableList<String> = mutableListOf()
 
             var postfix = ""
             if (ema > 0) {
@@ -345,9 +427,12 @@ class SoloActivity : AppCompatActivity() {
                 val yakumaned = handCost["yakumaned"]!! > 0
                 for ((k, v) in yakuList) {
                     if (v > 0 && (!yakumaned || k in yakumanHanCost)) {
-                        Log.d("d/logYakuCall", "${k} | ${k + postfix} | search in strings...")
-                        var name = context.getString(context.resources.getIdentifier(
-                                k + postfix, "string", context.packageName))
+                        Log.d("d/logYakuCall", "$k | ${k + postfix} | search in strings...")
+                        val name = context.getString(
+                            context.resources.getIdentifier(
+                                k + postfix, "string", context.packageName
+                            )
+                        )
                         if (k in yakuCountedCost) {
                             refinedYakuList.add("$name $v")
                         } else {
@@ -390,9 +475,8 @@ class SoloActivity : AppCompatActivity() {
         tsumo = 136
     }
 
-    private fun randomTile() : Int {
-        if (size == 0)
-        {
+    private fun randomTile(): Int {
+        if (size == 0) {
             return 136
         }
         val rnd: Int = Random().nextInt(size)
