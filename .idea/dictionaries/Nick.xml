@@ -2,6 +2,7 @@
   <dictionary name="Nick">
     <words>
       <w>chantaiayo</w>
+      <w>chii</w>
       <w>chiitoitsu</w>
       <w>chinitsu</w>
       <w>chinroutou</w>
@@ -9,6 +10,7 @@
       <w>chuuren</w>
       <w>daisangen</w>
       <w>daisuushii</w>
+      <w>doras</w>
       <w>doujun</w>
       <w>doukou</w>
       <w>haitei</w>
@@ -21,21 +23,31 @@
       <w>kaihou</w>
       <w>kokushi</w>
       <w>mahjong</w>
+      <w>mangan</w>
       <w>menzenchin</w>
       <w>musou</w>
+      <w>nagashi</w>
       <w>pinfu</w>
       <w>poutou</w>
       <w>raoyue</w>
+      <w>rcalls</w>
+      <w>rdiscard</w>
+      <w>rhand</w>
       <w>riichi</w>
       <w>riichit</w>
+      <w>rindicator</w>
       <w>rinshan</w>
+      <w>rtsumo</w>
+      <w>ruleset</w>
       <w>ryanpeikou</w>
       <w>ryuuiisou</w>
       <w>sanankou</w>
       <w>sankantsu</w>
       <w>sanshoku</w>
+      <w>shanten</w>
       <w>shousangen</w>
       <w>shousuushii</w>
+      <w>showable</w>
       <w>suuankou</w>
       <w>suukantsu</w>
       <w>taiayo</w>
@@ -48,6 +60,7 @@
       <w>yaku</w>
       <w>yakuhai</w>
       <w>yakuman</w>
+      <w>yakumaned</w>
     </words>
   </dictionary>
 </component>

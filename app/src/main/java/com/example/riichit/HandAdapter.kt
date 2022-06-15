@@ -7,29 +7,38 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 
-class HandAdapter(private val inflater: LayoutInflater, private val context: Context,
-                  private val width: Int, private val height: Int, private val padding: Int) : ListAdapter<Int, HandViewHolder>(DIFF_CALLBACK) {
+class HandAdapter(
+    private val inflater: LayoutInflater,
+    private val context: Context,
+    private val width: Int,
+    private val height: Int,
+    private val padding: Int
+) : ListAdapter<Int, HandViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HandViewHolder {
+        context as SoloActivity
         val row: View = inflater.inflate(R.layout.tile, parent, false)
-        parent.setPadding(padding, 0,  padding, padding)
-        return HandViewHolder(row, context, 136)
+        parent.setPadding(padding, 0, padding, padding)
+        return HandViewHolder(row, context::discard, 136)
     }
 
     override fun onBindViewHolder(holder: HandViewHolder, position: Int) {
+        context as SoloActivity
         holder.iv.layoutParams.width = width
         holder.iv.layoutParams.height = height
-        holder.bindTo((context as SoloActivity).tiles[getItem(position) / 4], getItem(position))
+        holder.bindTo(context.tiles[getItem(position) / 4], getItem(position))
     }
 
     companion object {
-        private val DIFF_CALLBACK: DiffUtil.ItemCallback<Int> = object : DiffUtil.ItemCallback<Int>() {
-            override fun areItemsTheSame(oldTile: Int, newTile: Int): Boolean {
-                return oldTile == newTile
+        private val DIFF_CALLBACK: DiffUtil.ItemCallback<Int> =
+            object : DiffUtil.ItemCallback<Int>() {
+                override fun areItemsTheSame(oldTile: Int, newTile: Int): Boolean {
+                    return oldTile == newTile
+                }
+
+                override fun areContentsTheSame(oldTile: Int, newTile: Int): Boolean {
+                    return areItemsTheSame(oldTile, newTile)
+                }
             }
-            override fun areContentsTheSame(oldTile: Int, newTile: Int): Boolean {
-                return areItemsTheSame(oldTile, newTile)
-            }
-        }
     }
 }

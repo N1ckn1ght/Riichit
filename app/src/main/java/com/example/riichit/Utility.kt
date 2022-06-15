@@ -1,31 +1,22 @@
 package com.example.riichit
 
-import android.content.Context
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 
-internal fun View.setMargin(left: Int, top: Int, right: Int, bottom: Int) {
-    val p = this.layoutParams as ConstraintLayout.LayoutParams
-    p.setMargins(left, top, right, bottom)
-    this.layoutParams = p
-}
+object Utility {
+    fun View.setMargin(left: Int, top: Int, right: Int, bottom: Int) {
+        val p = this.layoutParams as ConstraintLayout.LayoutParams
+        p.setMargins(left, top, right, bottom)
+        this.layoutParams = p
+    }
 
-internal fun min(a: Int, b: Int) : Int {
-    if (a > b) return b
-    return a
-}
+    fun Boolean.toInt(): Int {
+        if (this) return 1
+        return 0
+    }
 
-internal fun max(a: Int, b: Int): Int {
-    if (a > b) return a
-    return b
-}
-
-internal fun Boolean.toInt(): Int {
-    if (this) return 1
-    return 0
-}
-
-internal operator fun Int.not(): Int {
-    if (this > 0) return 0
-    return 1
+    operator fun Int.not(): Int {
+        if (this > 0) return 0
+        return 1
+    }
 }

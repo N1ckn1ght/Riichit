@@ -1,26 +1,32 @@
 package com.example.riichit
 
 import android.util.Log
+import com.example.riichit.Utility.toInt
+import java.lang.Integer.max
+import java.lang.Integer.min
 
 // TODO: Yaku should have their own classes as well, this will help future optional rules
 //  implementation and hand calculation in case of win by Ron instead of Tsumo
-class Calc (private val showableHand: MutableList<Int>,
-            private val showableTsumo: Int,
-            private val doraIndicators: MutableList<Int>,
-            private val kanTiles: MutableList<Int>,
-            private val yakuConditional: Map<String, Boolean>,
-            private val playerWind: Int,
-            private val roundWind: Int,
-            private val yakuHanCost: Map<String, Int>,
-            private val yakumanHanCost: Map<String, Int>,
-            private val yakuContedCost: Map<String, Int>) {
-    class Meld (val type: Int, val tile: Int)
+class Calc(
+    private val showableHand: MutableList<Int>,
+    private val showableTsumo: Int,
+    private val doraIndicators: MutableList<Int>,
+    private val kanTiles: MutableList<Int>,
+    private val yakuConditional: Map<String, Boolean>,
+    private val playerWind: Int,
+    private val roundWind: Int,
+    private val yakuHanCost: Map<String, Int>,
+    private val yakumanHanCost: Map<String, Int>,
+    private val yakuCountedCost: Map<String, Int>
+) {
+    class Meld(val type: Int, val tile: Int)
     // 0 - chii, 1 - pon, 2 - kan
 
     private var yaku = (yakuHanCost + yakumanHanCost + yakuCountedCost).toMutableMap()
     private var cost = mutableMapOf("han" to 0, "fu" to 0, "dealer" to 0, "yakumaned" to 0)
+
     // TODO: Han and fu results should be detailed for education purposes
-    private val hand = Array(34){0}
+    private val hand = Array(34) { 0 }
     private var tsumo = -1
 
     fun getYaku(): MutableMap<String, Int> {
@@ -58,7 +64,8 @@ class Calc (private val showableHand: MutableList<Int>,
         applyYakuHanded(yaku, hand, tsumo, doraIndicators)
         if (yaku["chiitoitsu"]!! > 0 ||
             yaku["kokushi_musou"]!! > 0 ||
-            yaku["thirteen_wait_kokushi_musou"]!! > 0) {
+            yaku["thirteen_wait_kokushi_musou"]!! > 0
+        ) {
             yaku["menzenchin_tsumohou"] = 1
             cost = calculateHandCost(yaku, 25)
         }
@@ -82,24 +89,37 @@ class Calc (private val showableHand: MutableList<Int>,
             val honourCombs = findHonours(handWithNoCalls, kanTiles)
 
             // find valid combination that costs more
-            Log.d("d/logCalcMain", "\t\tpair $pairIndex, comb sizes: ${manCombs.size}, ${pinCombs.size}, ${souCombs.size}, ${honourCombs.size}")
+            Log.d(
+                "d/logCalcMain",
+                "\t\tpair $pairIndex, comb sizes: ${manCombs.size}, ${pinCombs.size}, ${souCombs.size}, ${honourCombs.size}"
+            )
             for (man in manCombs) {
                 for (pin in pinCombs) {
                     for (sou in souCombs) {
                         for (honour in honourCombs) {
-                            Log.d("d/logCalcMain", "\t\t\t${(man.size + pin.size + sou.size + honour.size)}")
+                            Log.d(
+                                "d/logCalcMain",
+                                "\t\t\t${(man.size + pin.size + sou.size + honour.size)}"
+                            )
                             if (man.size + pin.size + sou.size + honour.size == 4) {
                                 yaku["menzenchin_tsumohou"] = 1
-                                val currentYaku = addYakuMelded(yaku,
-                                    tsumo, pairIndex, man, pin, sou, honour, playerWind, roundWind)
-                                val currentFu = calculateFu(yaku,
-                                    tsumo, pairIndex, man, pin, sou, honour, playerWind, roundWind)
+                                val currentYaku = addYakuMelded(
+                                    yaku,
+                                    tsumo, pairIndex, man, pin, sou, honour, playerWind, roundWind
+                                )
+                                val currentFu = calculateFu(
+                                    yaku,
+                                    tsumo, pairIndex, man, pin, sou, honour, playerWind, roundWind
+                                )
                                 val currentCost = calculateHandCost(currentYaku, currentFu)
                                 if (isFirstHandBetter(currentCost, cost)) {
                                     yaku = currentYaku
                                     cost = currentCost
                                 }
-                                Log.d("d/logCalcMain", "\t\t\taccurate! on $pairIndex pair, cost is $currentCost, and yaku is $currentYaku")
+                                Log.d(
+                                    "d/logCalcMain",
+                                    "\t\t\taccurate! on $pairIndex pair, cost is $currentCost, and yaku is $currentYaku"
+                                )
                             }
                         }
                     }
@@ -109,7 +129,11 @@ class Calc (private val showableHand: MutableList<Int>,
         }
     }
 
-    private fun findValidCombinations(hand: Array<Int>, kanTiles: MutableList<Int>, start: Int) : MutableList<MutableList<Meld>> {
+    private fun findValidCombinations(
+        hand: Array<Int>,
+        kanTiles: MutableList<Int>,
+        start: Int
+    ): MutableList<MutableList<Meld>> {
         val meldListList: MutableList<MutableList<Meld>> = mutableListOf()
 
         val ponIndices: MutableList<Int> = mutableListOf()
@@ -175,7 +199,10 @@ class Calc (private val showableHand: MutableList<Int>,
         return meldListList
     }
 
-    private fun findHonours(hand: Array<Int>, kanTiles: MutableList<Int>) : MutableList<MutableList<Meld>> {
+    private fun findHonours(
+        hand: Array<Int>,
+        kanTiles: MutableList<Int>
+    ): MutableList<MutableList<Meld>> {
         val meldListList: MutableList<MutableList<Meld>> = mutableListOf(mutableListOf())
 
         for (i in 27..33) {
@@ -196,16 +223,20 @@ class Calc (private val showableHand: MutableList<Int>,
         return meldListList
     }
 
-    private fun applyYakuConditional(yaku: MutableMap<String, Int>,
-                                     yakuConditional: Map<String, Boolean>) {
+    private fun applyYakuConditional(
+        yaku: MutableMap<String, Int>,
+        yakuConditional: Map<String, Boolean>
+    ) {
         for ((k, v) in yakuConditional) {
             yaku[k] = v.toInt()
         }
     }
 
-    private fun applyYakuHanded(yaku: MutableMap<String, Int>,
-                                hand: Array<Int>, tsumo: Int,
-                                doraIndicators: MutableList<Int>) {
+    private fun applyYakuHanded(
+        yaku: MutableMap<String, Int>,
+        hand: Array<Int>, tsumo: Int,
+        doraIndicators: MutableList<Int>
+    ) {
         yaku["thirteen_wait_kokushi_musou"] = is13waitKokushiMusou(hand, tsumo).toInt()
         yaku["chinroutou"] = isChinroutou(hand).toInt()
         yaku["chuuren_poutou"] = isChuurenPoutou(hand, tsumo).toInt()
@@ -232,13 +263,15 @@ class Calc (private val showableHand: MutableList<Int>,
     }
 
     // must be applied strictly after applyYakuHanded method!
-    private fun addYakuMelded(yaku: MutableMap<String, Int>,
-                                tsumo: Int, pair: Int,
-                                man: MutableList<Meld>,
-                                pin: MutableList<Meld>,
-                                sou: MutableList<Meld>,
-                                honour: MutableList<Meld>,
-                                playerWind: Int, roundWind: Int) : MutableMap<String, Int> {
+    private fun addYakuMelded(
+        yaku: MutableMap<String, Int>,
+        tsumo: Int, pair: Int,
+        man: MutableList<Meld>,
+        pin: MutableList<Meld>,
+        sou: MutableList<Meld>,
+        honour: MutableList<Meld>,
+        playerWind: Int, roundWind: Int
+    ): MutableMap<String, Int> {
         val yakuCopy = yaku.toMutableMap()
         yakuCopy["suuankou"] = isSuuankou(man, pin, sou, honour, pair, tsumo).toInt()
         yakuCopy["suuankou_tanki"] = isSuuankouTanki(man, pin, sou, honour, pair, tsumo).toInt()
@@ -270,7 +303,7 @@ class Calc (private val showableHand: MutableList<Int>,
         return yakuCopy
     }
 
-    private fun calculateHandCost(yaku: MutableMap<String, Int>, fu: Int) : MutableMap<String, Int> {
+    private fun calculateHandCost(yaku: MutableMap<String, Int>, fu: Int): MutableMap<String, Int> {
         val cost = mutableMapOf("han" to 0, "fu" to fu, "dealer" to 0, "yakumaned" to 0)
         for ((k, v) in yakumanHanCost) {
             cost["han"] = cost["han"]!! + yaku[k]!! * v
@@ -283,7 +316,7 @@ class Calc (private val showableHand: MutableList<Int>,
             for ((k, v) in yakuHanCost) {
                 cost["han"] = cost["han"]!! + yaku[k]!! * v
             }
-            for ((k, v) in yakuContedCost) {
+            for ((k, v) in yakuCountedCost) {
                 cost["han"] = cost["han"]!! + yaku[k]!! * v
             }
             when {
@@ -353,13 +386,15 @@ class Calc (private val showableHand: MutableList<Int>,
         return cost
     }
 
-    private fun calculateFu(yaku: MutableMap<String, Int>,
-                            tsumo: Int, pair: Int,
-                            man: MutableList<Meld>,
-                            pin: MutableList<Meld>,
-                            sou: MutableList<Meld>,
-                            honour: MutableList<Meld>,
-                            playerWind: Int, roundWind: Int) : Int {
+    private fun calculateFu(
+        yaku: MutableMap<String, Int>,
+        tsumo: Int, pair: Int,
+        man: MutableList<Meld>,
+        pin: MutableList<Meld>,
+        sou: MutableList<Meld>,
+        honour: MutableList<Meld>,
+        playerWind: Int, roundWind: Int
+    ): Int {
         if (yaku["pinfu"]!! > 0) {
             return 20
         }
@@ -372,8 +407,9 @@ class Calc (private val showableHand: MutableList<Int>,
                         continue
                     }
                     if ((tsumo == meld.tile + 1) ||
-                            ((tsumo == meld.tile + 2) && (meld.tile % 9 == 0)) ||
-                            ((tsumo == meld.tile) && (meld.tile % 9 == 6))) {
+                        ((tsumo == meld.tile + 2) && (meld.tile % 9 == 0)) ||
+                        ((tsumo == meld.tile) && (meld.tile % 9 == 6))
+                    ) {
                         wait = true
                         Log.d("d/logCalc", "\t\t\tfu: +2 wait true!")
                     }
@@ -403,8 +439,10 @@ class Calc (private val showableHand: MutableList<Int>,
         return count
     }
 
-    private fun isFirstHandBetter(costFirstHand: MutableMap<String, Int>,
-                                  costSecondHand: MutableMap<String, Int>) : Boolean{
+    private fun isFirstHandBetter(
+        costFirstHand: MutableMap<String, Int>,
+        costSecondHand: MutableMap<String, Int>
+    ): Boolean {
         if (costFirstHand["yakumaned"]!! > costSecondHand["yakumaned"]!!) {
             return true
         }
@@ -416,7 +454,7 @@ class Calc (private val showableHand: MutableList<Int>,
     }
 
     // yaku boolean functions, they have different input and don't have checks for hand validity
-    private fun is13waitKokushiMusou(hand: Array<Int>, tsumo: Int) : Boolean {
+    private fun is13waitKokushiMusou(hand: Array<Int>, tsumo: Int): Boolean {
         val pattern = arrayOf(0, 8, 9, 17, 18, 26, 27, 28, 29, 30, 31, 32, 33)
         for (i in pattern) {
             if (hand[i] == 0) {
@@ -426,11 +464,13 @@ class Calc (private val showableHand: MutableList<Int>,
         return (hand[tsumo] > 1)
     }
 
-    private fun isChantaiayo(man: MutableList<Meld>,
-                             pin: MutableList<Meld>,
-                             sou: MutableList<Meld>,
-                             honour: MutableList<Meld>,
-                             pair: Int) : Boolean {
+    private fun isChantaiayo(
+        man: MutableList<Meld>,
+        pin: MutableList<Meld>,
+        sou: MutableList<Meld>,
+        honour: MutableList<Meld>,
+        pair: Int
+    ): Boolean {
         val possibleTilesChii = arrayOf(0, 6, 9, 15, 18, 24)
         val possibleTilesNotChii = arrayOf(0, 8, 9, 17, 18, 26, 27, 28, 29, 30, 31, 32, 33)
         for (meldList in arrayOf(man, pin, sou, honour)) {
@@ -450,7 +490,7 @@ class Calc (private val showableHand: MutableList<Int>,
         return (pair in possibleTilesNotChii)
     }
 
-    private fun isChiitoitsu(hand: Array<Int>) : Boolean {
+    private fun isChiitoitsu(hand: Array<Int>): Boolean {
         var pairs = 0
         for (i in hand.indices) {
             if (hand[i] == 2) {
@@ -460,7 +500,7 @@ class Calc (private val showableHand: MutableList<Int>,
         return (pairs == 7)
     }
 
-    private fun isChinitsu(hand: Array<Int>) : Boolean {
+    private fun isChinitsu(hand: Array<Int>): Boolean {
         val rangeArray = arrayOf(0, 9, 17)
         for (start in rangeArray) {
             var count = 0
@@ -474,7 +514,7 @@ class Calc (private val showableHand: MutableList<Int>,
         return false
     }
 
-    private fun isChinroutou(hand: Array<Int>) : Boolean {
+    private fun isChinroutou(hand: Array<Int>): Boolean {
         val possibleTiles = arrayOf(0, 8, 9, 17, 18, 26)
         var tiles = 0
         for (i in possibleTiles) {
@@ -483,7 +523,7 @@ class Calc (private val showableHand: MutableList<Int>,
         return (tiles > 13)
     }
 
-    private fun isChuurenPoutou(hand: Array<Int>, tsumo: Int) : Boolean {
+    private fun isChuurenPoutou(hand: Array<Int>, tsumo: Int): Boolean {
         val pattern = arrayOf(3, 1, 1, 1, 1, 1, 1, 1, 3)
         for (start in arrayOf(0, 9, 17)) {
             var hasYaku = true
@@ -500,7 +540,7 @@ class Calc (private val showableHand: MutableList<Int>,
         return false
     }
 
-    private fun isDaisangen(hand: Array<Int>) : Boolean {
+    private fun isDaisangen(hand: Array<Int>): Boolean {
         for (i in 31..33) {
             if (hand[i] < 3) {
                 return false
@@ -509,7 +549,7 @@ class Calc (private val showableHand: MutableList<Int>,
         return true
     }
 
-    private fun isDaisuushii(hand: Array<Int>) : Boolean {
+    private fun isDaisuushii(hand: Array<Int>): Boolean {
         for (i in 27..30) {
             if (hand[i] < 3) {
                 return false
@@ -518,15 +558,18 @@ class Calc (private val showableHand: MutableList<Int>,
         return true
     }
 
-    private fun isIipeikou(man: MutableList<Meld>,
-                           pin: MutableList<Meld>,
-                           sou: MutableList<Meld>) : Boolean {
+    private fun isIipeikou(
+        man: MutableList<Meld>,
+        pin: MutableList<Meld>,
+        sou: MutableList<Meld>
+    ): Boolean {
         for (meldList in arrayOf(man, pin, sou)) {
             for (i in meldList.indices) {
                 for (j in i + 1 until meldList.size) {
                     if ((meldList[i].tile == meldList[j].tile) &&
-                            (meldList[i].type == 0 && meldList[j].type == 0)) {
-                                return true
+                        (meldList[i].type == 0 && meldList[j].type == 0)
+                    ) {
+                        return true
                     }
                 }
             }
@@ -534,9 +577,11 @@ class Calc (private val showableHand: MutableList<Int>,
         return false
     }
 
-    private fun isIttsu(man: MutableList<Meld>,
-                        pin: MutableList<Meld>,
-                        sou: MutableList<Meld>) : Boolean {
+    private fun isIttsu(
+        man: MutableList<Meld>,
+        pin: MutableList<Meld>,
+        sou: MutableList<Meld>
+    ): Boolean {
         var start = 0
         for (meldList in arrayOf(man, pin, sou)) {
             val booleanArray = arrayOf(false, false, false)
@@ -557,11 +602,13 @@ class Calc (private val showableHand: MutableList<Int>,
         return false
     }
 
-    private fun isJunchanTaiayo(man: MutableList<Meld>,
-                                pin: MutableList<Meld>,
-                                sou: MutableList<Meld>,
-                                honour: MutableList<Meld>,
-                                pair: Int) : Boolean {
+    private fun isJunchanTaiayo(
+        man: MutableList<Meld>,
+        pin: MutableList<Meld>,
+        sou: MutableList<Meld>,
+        honour: MutableList<Meld>,
+        pair: Int
+    ): Boolean {
         if (honour.size > 0) {
             return false
         }
@@ -584,7 +631,7 @@ class Calc (private val showableHand: MutableList<Int>,
         return (pair in possibleTilesNotChii)
     }
 
-    private fun isHonitsu(hand: Array<Int>) : Boolean {
+    private fun isHonitsu(hand: Array<Int>): Boolean {
         var found = false
         for (start in arrayOf(0, 9, 17)) {
             for (i in start until start + 9) {
@@ -601,7 +648,7 @@ class Calc (private val showableHand: MutableList<Int>,
         return true
     }
 
-    private fun isHonroutou(hand: Array<Int>) : Boolean {
+    private fun isHonroutou(hand: Array<Int>): Boolean {
         val possibleTiles = arrayOf(0, 8, 9, 17, 18, 26, 27, 28, 29, 30, 31, 32, 33)
         var tiles = 0
         for (i in possibleTiles) {
@@ -610,7 +657,7 @@ class Calc (private val showableHand: MutableList<Int>,
         return (tiles > 13)
     }
 
-    private fun isKokushiMusou(hand: Array<Int>, tsumo: Int) : Boolean {
+    private fun isKokushiMusou(hand: Array<Int>, tsumo: Int): Boolean {
         val pattern = arrayOf(0, 8, 9, 17, 18, 26, 27, 28, 29, 30, 31, 32, 33)
         for (i in pattern) {
             if (hand[i] == 0) {
@@ -620,11 +667,13 @@ class Calc (private val showableHand: MutableList<Int>,
         return (hand[tsumo] == 1)
     }
 
-    private fun isPinfu(man: MutableList<Meld>,
-                        pin: MutableList<Meld>,
-                        sou: MutableList<Meld>,
-                        pair: Int,
-                        tsumo: Int) : Boolean {
+    private fun isPinfu(
+        man: MutableList<Meld>,
+        pin: MutableList<Meld>,
+        sou: MutableList<Meld>,
+        pair: Int,
+        tsumo: Int
+    ): Boolean {
         if (man.size + pin.size + sou.size < 4) {
             return false
         }
@@ -634,7 +683,8 @@ class Calc (private val showableHand: MutableList<Int>,
                 if (meld.type > 0) {
                     return false
                 } else if ((tsumo == meld.tile && meld.tile % 9 != 6) ||
-                    (tsumo == meld.tile + 2 && meld.tile % 9 != 0)) {
+                    (tsumo == meld.tile + 2 && meld.tile % 9 != 0)
+                ) {
                     noTankiWaiting = true
                 }
             }
@@ -646,7 +696,7 @@ class Calc (private val showableHand: MutableList<Int>,
         return noTankiWaiting
     }
 
-    private fun isPureChuurenPoutou(hand: Array<Int>, tsumo: Int) : Boolean {
+    private fun isPureChuurenPoutou(hand: Array<Int>, tsumo: Int): Boolean {
         val pattern = arrayOf(3, 1, 1, 1, 1, 1, 1, 1, 3)
         for (start in arrayOf(0, 9, 17)) {
             var hasYaku = true
@@ -663,9 +713,11 @@ class Calc (private val showableHand: MutableList<Int>,
         return false
     }
 
-    private fun isRyanpeikou(man: MutableList<Meld>,
-                             pin: MutableList<Meld>,
-                             sou: MutableList<Meld>) : Boolean {
+    private fun isRyanpeikou(
+        man: MutableList<Meld>,
+        pin: MutableList<Meld>,
+        sou: MutableList<Meld>
+    ): Boolean {
         for (meldList in arrayOf(man, pin, sou)) {
             for (meld in meldList) {
                 if (meld.type > 0) {
@@ -676,7 +728,10 @@ class Calc (private val showableHand: MutableList<Int>,
         for (meldList in arrayOf(man, pin, sou)) {
             if (meldList.size == 4) {
                 Log.d("d/logCalcSpecific", "\t\t\tRyanpeikou, patch of size 4")
-                Log.d("d/logCalcSpecific", "\t\t\t(${meldList[0].type} ${meldList[0].tile}); (${meldList[1].type} ${meldList[1].tile}); (${meldList[2].type} ${meldList[2].tile}); (${meldList[3].type} ${meldList[3].tile})")
+                Log.d(
+                    "d/logCalcSpecific",
+                    "\t\t\t(${meldList[0].type} ${meldList[0].tile}); (${meldList[1].type} ${meldList[1].tile}); (${meldList[2].type} ${meldList[2].tile}); (${meldList[3].type} ${meldList[3].tile})"
+                )
                 return ((meldList[0].tile == meldList[1].tile) && (meldList[2].tile == meldList[3].tile))
             } else if (meldList.size == 2) {
                 Log.d("d/logCalcSpecific", "\t\t\tRyanpeikou, patch of size 2")
@@ -692,7 +747,7 @@ class Calc (private val showableHand: MutableList<Int>,
         return true
     }
 
-    private fun isRyuuiisou(hand: Array<Int>) : Boolean {
+    private fun isRyuuiisou(hand: Array<Int>): Boolean {
         val possibleTiles = arrayOf(19, 20, 21, 23, 25, 33)
         var count = 0
         for (i in possibleTiles) {
@@ -701,10 +756,12 @@ class Calc (private val showableHand: MutableList<Int>,
         return (count > 13)
     }
 
-    private fun isSanankou(man: MutableList<Meld>,
-                           pin: MutableList<Meld>,
-                           sou: MutableList<Meld>,
-                           honour: MutableList<Meld>) : Boolean {
+    private fun isSanankou(
+        man: MutableList<Meld>,
+        pin: MutableList<Meld>,
+        sou: MutableList<Meld>,
+        honour: MutableList<Meld>
+    ): Boolean {
         var count = 0
         for (meldList in arrayOf(man, pin, sou, honour)) {
             for (meld in meldList) {
@@ -716,10 +773,12 @@ class Calc (private val showableHand: MutableList<Int>,
         return (count == 3)
     }
 
-    private fun isSankantsu(man: MutableList<Meld>,
-                            pin: MutableList<Meld>,
-                            sou: MutableList<Meld>,
-                            honour: MutableList<Meld>) : Boolean {
+    private fun isSankantsu(
+        man: MutableList<Meld>,
+        pin: MutableList<Meld>,
+        sou: MutableList<Meld>,
+        honour: MutableList<Meld>
+    ): Boolean {
         var count = 0
         for (meldList in arrayOf(man, pin, sou, honour)) {
             for (meld in meldList) {
@@ -731,9 +790,11 @@ class Calc (private val showableHand: MutableList<Int>,
         return (count == 3)
     }
 
-    private fun isSanshokuDoujun(man: MutableList<Meld>,
-                                 pin: MutableList<Meld>,
-                                 sou: MutableList<Meld>) : Boolean {
+    private fun isSanshokuDoujun(
+        man: MutableList<Meld>,
+        pin: MutableList<Meld>,
+        sou: MutableList<Meld>
+    ): Boolean {
         for (manMeld in man) {
             for (pinMeld in pin) {
                 for (souMeld in sou) {
@@ -741,7 +802,8 @@ class Calc (private val showableHand: MutableList<Int>,
                         pinMeld.type == 0 &&
                         souMeld.type == 0 &&
                         manMeld.tile == pinMeld.tile - 9 &&
-                        manMeld.tile == souMeld.tile - 18) {
+                        manMeld.tile == souMeld.tile - 18
+                    ) {
                         return true
                     }
                 }
@@ -750,9 +812,11 @@ class Calc (private val showableHand: MutableList<Int>,
         return false
     }
 
-    private fun isSanshokuDoukou(man: MutableList<Meld>,
-                                 pin: MutableList<Meld>,
-                                 sou: MutableList<Meld>) : Boolean {
+    private fun isSanshokuDoukou(
+        man: MutableList<Meld>,
+        pin: MutableList<Meld>,
+        sou: MutableList<Meld>
+    ): Boolean {
         for (manMeld in man) {
             for (pinMeld in pin) {
                 for (souMeld in sou) {
@@ -760,7 +824,8 @@ class Calc (private val showableHand: MutableList<Int>,
                         pinMeld.type > 0 &&
                         souMeld.type > 0 &&
                         manMeld.tile == pinMeld.tile - 9 &&
-                        manMeld.tile == souMeld.tile - 18) {
+                        manMeld.tile == souMeld.tile - 18
+                    ) {
                         return true
                     }
                 }
@@ -769,7 +834,7 @@ class Calc (private val showableHand: MutableList<Int>,
         return false
     }
 
-    private fun isShousangen(hand: Array<Int>) : Boolean {
+    private fun isShousangen(hand: Array<Int>): Boolean {
         var count = 0
         for (i in 31..33) {
             count += min(hand[i], 3)
@@ -777,7 +842,7 @@ class Calc (private val showableHand: MutableList<Int>,
         return (count == 8)
     }
 
-    private fun isShousuushii(hand: Array<Int>) : Boolean {
+    private fun isShousuushii(hand: Array<Int>): Boolean {
         var count = 0
         for (i in 27..30) {
             count += min(hand[i], 3)
@@ -785,12 +850,14 @@ class Calc (private val showableHand: MutableList<Int>,
         return (count == 11)
     }
 
-    private fun isSuuankou(man: MutableList<Meld>,
-                           pin: MutableList<Meld>,
-                           sou: MutableList<Meld>,
-                           honour: MutableList<Meld>,
-                           pair: Int,
-                           tsumo: Int) : Boolean {
+    private fun isSuuankou(
+        man: MutableList<Meld>,
+        pin: MutableList<Meld>,
+        sou: MutableList<Meld>,
+        honour: MutableList<Meld>,
+        pair: Int,
+        tsumo: Int
+    ): Boolean {
         for (meldList in arrayOf(man, pin, sou, honour)) {
             for (meld in meldList) {
                 if (meld.type < 1) {
@@ -801,12 +868,14 @@ class Calc (private val showableHand: MutableList<Int>,
         return (pair != tsumo)
     }
 
-    private fun isSuuankouTanki(man: MutableList<Meld>,
-                           pin: MutableList<Meld>,
-                           sou: MutableList<Meld>,
-                           honour: MutableList<Meld>,
-                           pair: Int,
-                           tsumo: Int) : Boolean {
+    private fun isSuuankouTanki(
+        man: MutableList<Meld>,
+        pin: MutableList<Meld>,
+        sou: MutableList<Meld>,
+        honour: MutableList<Meld>,
+        pair: Int,
+        tsumo: Int
+    ): Boolean {
         for (meldList in arrayOf(man, pin, sou, honour)) {
             for (meld in meldList) {
                 if (meld.type < 1) {
@@ -817,10 +886,12 @@ class Calc (private val showableHand: MutableList<Int>,
         return (pair == tsumo)
     }
 
-    private fun isSuukantsu(man: MutableList<Meld>,
-                            pin: MutableList<Meld>,
-                            sou: MutableList<Meld>,
-                            honour: MutableList<Meld>) : Boolean {
+    private fun isSuukantsu(
+        man: MutableList<Meld>,
+        pin: MutableList<Meld>,
+        sou: MutableList<Meld>,
+        honour: MutableList<Meld>
+    ): Boolean {
         for (meldList in arrayOf(man, pin, sou, honour)) {
             for (meld in meldList) {
                 if (meld.type < 2) {
@@ -831,7 +902,7 @@ class Calc (private val showableHand: MutableList<Int>,
         return true
     }
 
-    private fun isTanyao(hand: Array<Int>) : Boolean {
+    private fun isTanyao(hand: Array<Int>): Boolean {
         for (i in arrayOf(0, 8, 9, 17, 18, 26, 27, 28, 29, 30, 31, 32, 33)) {
             if (hand[i] > 0) {
                 return false
@@ -840,7 +911,7 @@ class Calc (private val showableHand: MutableList<Int>,
         return true
     }
 
-    private fun isTsuuiisou(hand: Array<Int>) : Boolean {
+    private fun isTsuuiisou(hand: Array<Int>): Boolean {
         for (i in 0..26) {
             if (hand[i] > 0) {
                 return false
@@ -849,7 +920,7 @@ class Calc (private val showableHand: MutableList<Int>,
         return true
     }
 
-    private fun countDora(hand: Array<Int>, doraIndicators: MutableList<Int>) : Int {
+    private fun countDora(hand: Array<Int>, doraIndicators: MutableList<Int>): Int {
         var count = 0
         for (tile in hand.indices) {
             for (dora in doraIndicators) {
@@ -861,7 +932,7 @@ class Calc (private val showableHand: MutableList<Int>,
         return count
     }
 
-    private fun countYakuhai(honour: MutableList<Meld>, playerWind: Int, roundWind: Int) : Int {
+    private fun countYakuhai(honour: MutableList<Meld>, playerWind: Int, roundWind: Int): Int {
         var count = 0
         for (meld in honour) {
             if (meld.tile in 31..33 || meld.tile == playerWind || meld.tile == roundWind) {

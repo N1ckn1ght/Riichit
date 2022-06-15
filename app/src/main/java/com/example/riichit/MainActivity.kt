@@ -4,18 +4,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-
+import com.example.riichit.Utility.not
 
 class MainActivity : AppCompatActivity() {
     // TODO: add RU translation
-    var ema = 1
+    private var ema = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
     }
-    
+
     private fun startGame(mode: Int) {
         val intent = Intent(this, SoloActivity::class.java)
         intent.putExtra("mode", mode)
