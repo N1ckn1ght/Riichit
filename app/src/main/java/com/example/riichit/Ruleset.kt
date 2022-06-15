@@ -1,9 +1,13 @@
 package com.example.riichit
 
-val yakuCountedCost = mapOf("dora" to 1,
-        "yakuhai" to 1)
+object Ruleset {
+    val yakuCountedCost = mapOf(
+        "dora" to 1,
+        "yakuhai" to 1
+    )
 
-val yakuHanCost = mapOf("chantaiayo" to 2,
+    val yakuHanCost = mapOf(
+        "chantaiayo" to 2,
         "chiitoitsu" to 2,
         "chinitsu" to 6,
         "double_riichi" to 2,
@@ -24,9 +28,11 @@ val yakuHanCost = mapOf("chantaiayo" to 2,
         "sanshoku_doujun" to 2,
         "sanshoku_doukou" to 2,
         "shousangen" to 2,
-        "tanyao" to 1)
+        "tanyao" to 1
+    )
 
-val yakumanHanCost = mapOf("thirteen_wait_kokushi_musou" to 26,
+    val yakumanHanCost = mapOf(
+        "thirteen_wait_kokushi_musou" to 26,
         "chinroutou" to 13,
         "chuuren_poutou" to 13,
         "daisangen" to 13,
@@ -36,7 +42,9 @@ val yakumanHanCost = mapOf("thirteen_wait_kokushi_musou" to 26,
         "ryuuiisou" to 13,
         "shousuushii" to 13,
         "suuankou" to 13,
-        "suuankou tanki" to 26,
+        "suuankou_tanki" to 26,
         "suukantsu" to 13,
         "tenhou" to 13,
-        "tsuuiisou" to 13)
+        "tsuuiisou" to 13
+    )
+}
