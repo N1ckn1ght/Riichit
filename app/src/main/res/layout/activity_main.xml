@@ -16,26 +16,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/ivMainLogo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/main_logo"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
         <Button
             android:id="@+id/btnSoloMahjong"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/blue"
-            android:onClick="onClickSoloMahjong"
             android:text="@string/button_solo_mahjong"
             android:textColor="@color/white"
             android:textSize="22sp"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textAllCaps="false"
+            app:layout_constraintTop_toBottomOf="@+id/ivMainLogo" />
 
         <Button
             android:id="@+id/btnSoloMan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/blue"
-            android:onClick="onClickSoloMan"
             android:text="@string/button_solo_man"
             android:textColor="@color/white"
             android:textSize="22sp"
+            android:textAllCaps="false"
             app:layout_constraintTop_toBottomOf="@+id/btnSoloMahjong" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -43,21 +51,31 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/btnSoloMan">
 
-            <ToggleButton
-                android:id="@+id/tglEma"
+            <Button
+                android:id="@+id/btnSettings"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:onClick="onClickEma"
-                android:textSize="18sp"
-                android:text="@string/toggle_ema_names"
-                android:textOn="@string/toggle_ema_names_on"
-                android:textOff="@string/toggle_ema_names_off"
-                android:checked="true"
                 android:backgroundTint="@color/blue"
+                android:text="@string/button_settings"
                 android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textAllCaps="false"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_percent="0.5" />
+                app:layout_constraintWidth_percent="0.49" />
+
+            <Button
+                android:id="@+id/btnRecords"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/blue"
+                android:text="@string/button_records"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textAllCaps="false"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintWidth_percent="0.49" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

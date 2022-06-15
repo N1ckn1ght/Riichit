@@ -39,7 +39,7 @@
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <Button
-                android:id="@+id/call_kan"
+                android:id="@+id/btnKan"
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
@@ -48,12 +48,11 @@
                 android:backgroundTint="@color/blue"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
-                android:onClick="onCallKan"
                 app:layout_constraintTop_toBottomOf="@+id/dora_indicator"
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <Button
-                android:id="@+id/call_riichi"
+                android:id="@+id/btnRiichi"
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
@@ -62,12 +61,11 @@
                 android:backgroundTint="@color/blue"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
-                android:onClick="onCallRiichi"
-                app:layout_constraintTop_toBottomOf="@+id/call_kan"
+                app:layout_constraintTop_toBottomOf="@+id/btnKan"
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <Button
-                android:id="@+id/call_tsumo"
+                android:id="@+id/btnTsumo"
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
@@ -76,8 +74,7 @@
                 android:backgroundTint="@color/blue"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
-                android:onClick="onCallTsumo"
-                app:layout_constraintTop_toBottomOf="@+id/call_riichi"
+                app:layout_constraintTop_toBottomOf="@+id/btnRiichi"
                 app:layout_constraintEnd_toEndOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -117,10 +114,10 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:src="@drawable/closed"
-            android:onClick="onClickTsumo"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/calls"
-            app:layout_constraintDimensionRatio="H,3:4" />
+            app:layout_constraintDimensionRatio="H,3:4"
+            tools:ignore="ContentDescription" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,25 +1,30 @@
 <resources>
-    <string name="app_name">Riichi trainer</string>
-
-    <string name="button_solo_mahjong">Play solo mahjong</string>
-    <string name="button_solo_man">Play solo man</string>
-    <string name="toggle_ema_names">EMA names</string>
-    <string name="toggle_ema_names_on">EMA names ON</string>
-    <string name="toggle_ema_names_off">EMA names OFF</string>
-
+    <!-- General strings -->
+    <string name="app_name">Riichit</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="ok">OK</string>
+    <!-- Main activity buttons -->
+    <string name="button_solo_mahjong">Play Solo Mahjong</string>
+    <string name="button_solo_man">Play Solo Man</string>
+    <string name="button_settings">Settings</string>
+    <string name="button_records">Records</string>
+    <!-- Settings strings -->
+    <string name="prefs_general">General preferences</string>
+    <string name="prefs_ema_names">European yaku names</string>
+    <string name="prefs_tempai_training">Tempai training</string>
+    <string name="prefs_yaku_training">Yaku training</string>
+    <string name="prefs_score_saving">Save scores</string>
+    <!-- Solo activity strings -->
+    <string name="button_cancel">Cancel</string>
     <string name="button_kan">Kan</string>
     <string name="button_riichi">Riichi</string>
     <string name="button_tsumo">Tsumo</string>
-    <string name="button_cancel">Cancel</string>
-
-    <string name="ok">OK</string>
-
-    <string name="no_tiles_left">No tiles left!</string>
-    <string name="illegal_discard">You can discard only tsumo now</string>
-    <string name="illegal_kan_riichi">You can\'t declare kan if it breaks your riichi</string>
-    <string name="illegal_kan">Wrong kan call</string>
     <string name="game_over">Over</string>
-
+    <string name="illegal_discard">You can discard only tsumo now</string>
+    <string name="illegal_kan">Wrong kan call</string>
+    <string name="illegal_kan_riichi">You can\'t declare kan if it breaks your riichi</string>
+    <string name="no_tiles_left">No tiles left!</string>
+    <!-- Yaku names, default -->
     <string name="chantaiayo">Chanta</string>
     <string name="chiitoitsu">Chitoitsu</string>
     <string name="chinitsu">Chinitsu</string>
@@ -44,6 +49,7 @@
     <string name="shousangen">Shousangen</string>
     <string name="tanyao">Tanyao</string>
     <string name="yakuhai">Yakuhai</string>
+    <!-- Yakuman names, default -->
     <string name="chinroutou">Chinroutou</string>
     <string name="chuuren_poutou">Chuuren Poutou</string>
     <string name="daisangen">Daisangen</string>
@@ -58,7 +64,7 @@
     <string name="tenhou">Tenhou</string>
     <string name="thirteen_wait_kokushi_musou">13-wait Kokushi Musou</string>
     <string name="tsuuiisou">Tsuuiisou</string>
-
+    <!-- Yaku names, EMA rules -->
     <string name="chantaiayo_ema">Half Outside Hand</string>
     <string name="chiitoitsu_ema">Seven pairs</string>
     <string name="chinitsu_ema">Full Flush</string>
@@ -83,6 +89,7 @@
     <string name="shousangen_ema">Little Three Dragons</string>
     <string name="tanyao_ema">All Simples</string>
     <string name="yakuhai_ema">Yakuhai</string>
+    <!-- Yakuman names, EMA rules -->
     <!-- TODO: EMA rules are dividing yakuhai to Dragons, Seat Wind and Prevalent Wind -->
     <string name="chinroutou_ema">All Terminals</string>
     <string name="chuuren_poutou_ema">Nine Gates</string>
@@ -98,4 +105,13 @@
     <string name="tenhou_ema">Blessing of Heaven</string>
     <string name="thirteen_wait_kokushi_musou_ema">Thirteen-wait Thirteen Orphans</string>
     <string name="tsuuiisou_ema">All Honours</string>
+    <!-- Preferences default stuff -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 </resources>

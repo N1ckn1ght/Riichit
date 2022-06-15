@@ -1,16 +1,15 @@
 package com.example.riichit
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import com.example.riichit.Drawables.tiles
 import com.example.riichit.Utility.setMargin
 
 class CallsAdapter(
     private val inflater: LayoutInflater,
-    private val context: Context,
     private val width: Int,
     private val height: Int,
     private val padding: Int
@@ -23,7 +22,6 @@ class CallsAdapter(
     }
 
     override fun onBindViewHolder(holder: DiscardViewHolder, position: Int) {
-        context as SoloActivity
         holder.iv.layoutParams.width = width
         holder.iv.layoutParams.height = height
         if ((position + 1) % 4 == 0) {
@@ -31,7 +29,7 @@ class CallsAdapter(
         }
 
         val x = getItem(position)
-        holder.bindTo(context.tiles[x / 4], x)
+        holder.bindTo(tiles[x / 4], x)
     }
 
     companion object {

@@ -16,7 +16,7 @@
 
 Текущие задачи:
 
--- Полный перевод на русский язык, в том числе для ещё нереализованныйх экранов;
+-- Полный перевод на русский язык, в том числе для ещё нереализованных экранов;
 
 -- Реализовать ручной выбор ЯКУ в руке для сравнения с автоматическим подсчётом;
 
@@ -30,7 +30,7 @@
 
 Скриншоты:
 
-<img src="https://i.imgur.com/ynOtqb0.jpg">
+<img src="https://i.imgur.com/fh46z98.jpg">
 
 <img src="https://i.imgur.com/MticDZq.jpg">
 
@@ -53,3 +53,5 @@
 <img src="https://i.imgur.com/Id9D7pv.jpg">
 
 <img src="https://i.imgur.com/NQnzSfk.jpg">
+
+<img src="https://i.imgur.com/OZjYpMc.jpg">

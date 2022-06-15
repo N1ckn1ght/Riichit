@@ -1,32 +1,30 @@
 package com.example.riichit
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import com.example.riichit.Drawables.tiles
 
 class HandAdapter(
     private val inflater: LayoutInflater,
-    private val context: Context,
+    private val discard: (toDiscard: Int) -> Unit,
     private val width: Int,
     private val height: Int,
     private val padding: Int
 ) : ListAdapter<Int, HandViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HandViewHolder {
-        context as SoloActivity
         val row: View = inflater.inflate(R.layout.tile, parent, false)
         parent.setPadding(padding, 0, padding, padding)
-        return HandViewHolder(row, context::discard, 136)
+        return HandViewHolder(row, discard, 136)
     }
 
     override fun onBindViewHolder(holder: HandViewHolder, position: Int) {
-        context as SoloActivity
         holder.iv.layoutParams.width = width
         holder.iv.layoutParams.height = height
-        holder.bindTo(context.tiles[getItem(position) / 4], getItem(position))
+        holder.bindTo(tiles[getItem(position) / 4], getItem(position))
     }
 
     companion object {
