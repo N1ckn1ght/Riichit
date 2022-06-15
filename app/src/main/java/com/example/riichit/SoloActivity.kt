@@ -298,10 +298,10 @@ class SoloActivity : AppCompatActivity() {
                     it / 4 == tsumo / 4
                 } as MutableList<Int>
                 if (handCopy.size == hand.size - 3) {
-                    @Suppress("ControlFlowWithEmptyBody")
-                    if (riichiTile > -1) {
-                        // TODO: in future there must be a check on if it changes riichi waiting!
+                    if (riichiTile < 0) {
+                        riichiButton.enable()
                     }
+                    // TODO: else { check if kan call changes riichi waiting }
                     hand = handCopy.toMutableList()
                     getFromDead(tsumo / 4)
                 } else {
@@ -340,15 +340,15 @@ class SoloActivity : AppCompatActivity() {
         if (kanStatus > 0) {
             kanStatus = 0
             kanButton.text = getString(R.string.button_kan)
-            if (riichiTile == -1) {
+            if (riichiTile < 0) {
                 riichiButton.enable()
             }
             tsumoButton.enable()
         } else {
-            if (tilesLeft > openDoras - 1) {
+            if (tilesLeft > openDoras) {
                 kanStatus = 1
                 kanButton.text = getString(R.string.button_cancel)
-                if (riichiTile == -1) {
+                if (riichiTile < 0) {
                     riichiButton.disable()
                 }
                 tsumoButton.disable()
@@ -497,7 +497,6 @@ class SoloActivity : AppCompatActivity() {
         rindicator.adapter = indicatorAdapter
         kanStatus = 0
         kanButton.text = getString(R.string.button_kan)
-        riichiButton.enable()
         tsumoButton.enable()
         handAdapter.submitList(hand)
         rhand.adapter = handAdapter

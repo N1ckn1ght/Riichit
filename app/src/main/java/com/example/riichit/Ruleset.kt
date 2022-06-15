@@ -42,7 +42,7 @@ object Ruleset {
         "ryuuiisou" to 13,
         "shousuushii" to 13,
         "suuankou" to 13,
-        "suuankou tanki" to 26,
+        "suuankou_tanki" to 26,
         "suukantsu" to 13,
         "tenhou" to 13,
         "tsuuiisou" to 13
