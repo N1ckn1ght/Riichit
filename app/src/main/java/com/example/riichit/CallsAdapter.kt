@@ -22,13 +22,12 @@ class CallsAdapter(
     }
 
     override fun onBindViewHolder(holder: DiscardViewHolder, position: Int) {
+        val x = getItem(position)
         holder.iv.layoutParams.width = width
         holder.iv.layoutParams.height = height
         if ((position + 1) % 4 == 0) {
             holder.iv.setMargin(0, 0, padding, 0)
         }
-
-        val x = getItem(position)
         holder.bindTo(tiles[x / 4], x)
     }
 

@@ -19,4 +19,6 @@ object Utility {
         if (this > 0) return 0
         return 1
     }
+
+    const val logicIncrement = 256
 }

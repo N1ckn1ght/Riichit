@@ -22,9 +22,10 @@ class HandAdapter(
     }
 
     override fun onBindViewHolder(holder: HandViewHolder, position: Int) {
+        val x = getItem(position)
         holder.iv.layoutParams.width = width
         holder.iv.layoutParams.height = height
-        holder.bindTo(tiles[getItem(position) / 4], getItem(position))
+        holder.bindTo(tiles[x / 4], x)
     }
 
     companion object {

@@ -501,7 +501,7 @@ class Calc(
     }
 
     private fun isChinitsu(hand: Array<Int>): Boolean {
-        val rangeArray = arrayOf(0, 9, 17)
+        val rangeArray = arrayOf(0, 9, 18)
         for (start in rangeArray) {
             var count = 0
             for (i in start until start + 9) {
@@ -525,7 +525,7 @@ class Calc(
 
     private fun isChuurenPoutou(hand: Array<Int>, tsumo: Int): Boolean {
         val pattern = arrayOf(3, 1, 1, 1, 1, 1, 1, 1, 3)
-        for (start in arrayOf(0, 9, 17)) {
+        for (start in arrayOf(0, 9, 18)) {
             var hasYaku = true
             for (i in pattern.indices) {
                 if (hand[start + i] < pattern[i]) {
@@ -633,7 +633,7 @@ class Calc(
 
     private fun isHonitsu(hand: Array<Int>): Boolean {
         var found = false
-        for (start in arrayOf(0, 9, 17)) {
+        for (start in arrayOf(0, 9, 18)) {
             for (i in start until start + 9) {
                 if (hand[i] > 0) {
                     if (found) {
@@ -698,7 +698,7 @@ class Calc(
 
     private fun isPureChuurenPoutou(hand: Array<Int>, tsumo: Int): Boolean {
         val pattern = arrayOf(3, 1, 1, 1, 1, 1, 1, 1, 3)
-        for (start in arrayOf(0, 9, 17)) {
+        for (start in arrayOf(0, 9, 18)) {
             var hasYaku = true
             for (i in pattern.indices) {
                 if (hand[start + i] < pattern[i]) {

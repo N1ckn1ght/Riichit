@@ -16,7 +16,7 @@ object Ruleset {
         "ittsu" to 2,
         "junchan_taiayo" to 3,
         "haitei_raoyue" to 1,
-        "honitsu" to 0,
+        "honitsu" to 3,
         "honroutou" to 2,
         "menzenchin_tsumohou" to 1,
         "pinfu" to 1,
