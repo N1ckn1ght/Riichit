@@ -501,7 +501,7 @@ class Calc(
     }
 
     private fun isChinitsu(hand: Array<Int>): Boolean {
-        val rangeArray = arrayOf(0, 9, 17)
+        val rangeArray = arrayOf(0, 9, 18)
         for (start in rangeArray) {
             var count = 0
             for (i in start until start + 9) {
