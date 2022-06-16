@@ -6,11 +6,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.example.riichit.Drawables.tiles
+import com.example.riichit.Utility.logicIncrement
 
 class DiscardAdapter(
     private val inflater: LayoutInflater,
-    private val width: Int,
-    private val height: Int,
+    private var width: Int,
+    private var height: Int,
     private val padding: Int
 ) : ListAdapter<Int, DiscardViewHolder>(DIFF_CALLBACK) {
 
@@ -21,10 +22,14 @@ class DiscardAdapter(
     }
 
     override fun onBindViewHolder(holder: DiscardViewHolder, position: Int) {
+        var x = getItem(position)
         holder.iv.layoutParams.width = width
         holder.iv.layoutParams.height = height
-
-        val x = getItem(position)
+        if (x > logicIncrement - 1) {
+            // TODO: find a way of rotating tile without changing its size or breaking the grid
+            // holder.iv.rotation += 90F
+            x -= logicIncrement
+        }
         holder.bindTo(tiles[x / 4], x)
     }
 
