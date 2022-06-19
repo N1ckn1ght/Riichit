@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
         val buttonSoloMan = findViewById<Button>(R.id.btnSoloMan)
         val buttonSettings = findViewById<Button>(R.id.btnSettings)
         val buttonRecords = findViewById<Button>(R.id.btnRecords)
+        val buttonTutorial = findViewById<Button>(R.id.btnTutorial)
 
         buttonSoloMahjong.setOnClickListener {
             startGame(0)
@@ -32,6 +33,9 @@ class MainActivity : AppCompatActivity() {
         }
         buttonRecords.setOnClickListener {
             // TODO: show records (use ROOM database)
+        }
+        buttonTutorial.setOnClickListener {
+            // TODO: move to tutorial activity
         }
     }
 

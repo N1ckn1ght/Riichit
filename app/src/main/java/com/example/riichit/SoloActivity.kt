@@ -463,6 +463,9 @@ class SoloActivity : AppCompatActivity() {
         rindicator.adapter = indicatorAdapter
         kanStatus = 0
         buttonKan.text = getString(R.string.button_kan)
+        if (riichiTile < 0) {
+            buttonRiichi.enable()
+        }
         buttonTsumo.enable()
         handAdapter.submitList(hand)
         rhand.adapter = handAdapter
