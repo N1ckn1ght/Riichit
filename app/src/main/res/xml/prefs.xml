@@ -13,6 +13,12 @@
         <SwitchPreference
             android:defaultValue="false"
             android:enabled="false"
+            android:key="score_saving"
+            android:title="@string/prefs_score_saving"
+            android:icon="@android:drawable/ic_menu_preferences" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:enabled="false"
             android:key="tempai_training"
             android:title="@string/prefs_tempai_training"
             android:icon="@android:drawable/ic_menu_preferences" />
@@ -21,12 +27,6 @@
             android:enabled="false"
             android:key="yaku_training"
             android:title="@string/prefs_yaku_training"
-            android:icon="@android:drawable/ic_menu_preferences" />
-        <SwitchPreference
-            android:defaultValue="false"
-            android:enabled="false"
-            android:key="score_saving"
-            android:title="@string/prefs_score_saving"
             android:icon="@android:drawable/ic_menu_preferences" />
     </PreferenceCategory>
 </PreferenceScreen>

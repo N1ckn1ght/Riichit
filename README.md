@@ -6,7 +6,9 @@
 
 Скриншоты:
 
-<img src="https://i.imgur.com/Gv6oJfJ.jpg">
+<img src="https://i.imgur.com/aNFzYAB.jpg">
+
+<img src="https://i.imgur.com/3fNIr4D.jpg">
 
 <img src="https://i.imgur.com/MticDZq.jpg">
 
