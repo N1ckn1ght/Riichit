@@ -33,6 +33,10 @@
             android:name=".SoloActivity"
             android:launchMode="singleTop"
             android:screenOrientation="landscape" />
+        <activity
+            android:name=".TutorialActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="landscape" />
     </application>
 
 </manifest>

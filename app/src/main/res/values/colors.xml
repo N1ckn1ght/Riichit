@@ -11,4 +11,7 @@
     <color name="blue">#FF0000FF</color>
     <color name="light_gray">#FFC3C3C3</color>
     <color name="orange">#FFFFC300</color>
+
+    <color name="wt">#D0FFFFFF</color>
+    <color name="transparent">#00FFFFFF</color>
 </resources>
