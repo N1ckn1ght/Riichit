@@ -38,4 +38,22 @@ object Drawables {
         R.drawable.dragon_green,
         R.drawable.closed
     )
+
+    val tutorial = arrayOf(
+        R.drawable.tutorial_0,
+        R.drawable.tutorial_1,
+        R.drawable.tutorial_2,
+        R.drawable.tutorial_3,
+        R.drawable.tutorial_4,
+        R.drawable.tutorial_5,
+        R.drawable.tutorial_6,
+        R.drawable.tutorial_7,
+        R.drawable.tutorial_1w,
+        R.drawable.tutorial_2w,
+        R.drawable.tutorial_3w,
+        R.drawable.tutorial_4w,
+        R.drawable.tutorial_5w,
+        R.drawable.tutorial_6w,
+        R.drawable.tutorial_7w
+    )
 }

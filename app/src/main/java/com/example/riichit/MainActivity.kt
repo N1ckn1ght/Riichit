@@ -35,7 +35,8 @@ class MainActivity : AppCompatActivity() {
             // TODO: show records (use ROOM database)
         }
         buttonTutorial.setOnClickListener {
-            // TODO: move to tutorial activity
+            val intent = Intent(this, TutorialActivity::class.java)
+            startActivity(intent)
         }
     }
 

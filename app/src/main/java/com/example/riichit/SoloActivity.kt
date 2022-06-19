@@ -28,6 +28,7 @@ import java.lang.Integer.min
 import java.util.*
 
 class SoloActivity : AppCompatActivity() {
+    private var context = this
     private lateinit var ivTsumo: ImageView
     private lateinit var rhand: RecyclerView
     private lateinit var rdiscard: RecyclerView
@@ -48,7 +49,6 @@ class SoloActivity : AppCompatActivity() {
     private lateinit var buttonTsumo: Button
     private var discardTileHeight: Int = 0
     private var discardTileWidth: Int = 0
-    private var context = this
     private var toast: Toast? = null
     private var kanStatus = 0
     private var rinshan = false
