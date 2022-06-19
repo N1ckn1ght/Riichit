@@ -3,14 +3,20 @@ package com.example.riichit
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
+import com.example.riichit.Drawables.flag
+import com.example.riichit.LocaleHelper.changeLocale
+import com.example.riichit.LocaleHelper.getLocale
+import com.example.riichit.LocaleHelper.setLocale
 import com.example.riichit.Utility.toInt
 
 class MainActivity : AppCompatActivity() {
-    // TODO: make RU translation for strings!
+    private val context = this
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setLocale(context)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
@@ -37,6 +43,14 @@ class MainActivity : AppCompatActivity() {
         buttonTutorial.setOnClickListener {
             val intent = Intent(this, TutorialActivity::class.java)
             startActivity(intent)
+        }
+
+        // language icon shall be changed upon a preferenced language
+        val imageViewLang = findViewById<ImageView>(R.id.ivLang)
+        flag[getLocale(context)]?.let { imageViewLang.setImageResource(it) }
+        imageViewLang.setOnClickListener {
+            changeLocale(context)
+            recreate()
         }
     }
 

@@ -6,6 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.riichit.Drawables.tutorial
+import com.example.riichit.LocaleHelper.setLocale
 
 class TutorialActivity : AppCompatActivity() {
     private val context = this
@@ -13,6 +14,7 @@ class TutorialActivity : AppCompatActivity() {
     private lateinit var tvTutorial: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setLocale(context)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tutorial)
         supportActionBar?.hide()

@@ -56,4 +56,9 @@ object Drawables {
         R.drawable.tutorial_6w,
         R.drawable.tutorial_7w
     )
+
+    val flag = mapOf(
+        "en" to R.drawable.en,
+        "ru" to R.drawable.ru
+    )
 }

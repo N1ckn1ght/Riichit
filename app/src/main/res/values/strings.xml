@@ -9,6 +9,8 @@
     <string name="prefs_tempai_training">Tempai training</string>
     <string name="prefs_yaku_training">Yaku training</string>
     <string name="prefs_score_saving">Save scores</string>
+    <!-- Language-dependent images -->
+    <string name="lang">R.drawable.en</string>
     <!-- Main activity buttons -->
     <string name="button_solo_mahjong">Play Solo Mahjong</string>
     <string name="button_solo_man">Play Solo Man Only</string>
@@ -45,7 +47,7 @@
     <string name="tutorial_14">By the way, that situation where you need only one tile to win is called Tempai.</string>
     <string name="tutorial_15">There\'s also another one yaku - Fully Concealed Hand (Menzen Tsumo).\n\nWhile playing with other players, you may make calls from them. This won\'t be covered in Riichit, but you may find this in Riichi-mahjong rules.</string>
     <string name="tutorial_16">If you didn\'t make any calls and win by yourself (by calling Tsumo), you get additional yaku.\n\nYou must know, that the same requirement is for calling Riichi - you cannot do this if you\'ve made calls from other players in this round.</string>
-    <string name="tutorial_17">So in Riichit you may not worry about having yaku in your hand, but…\n\n…the more you\'ve got, the more your hand will be cost.\n\nYou might lose after some consecutive wins if your hands were cheap, so consider having more yaku!</string>
+    <string name="tutorial_17">So in Riichit you may not worry about having yaku in your hand, but…\n\n…the more you\'ve got, the more your hand will be cost.\n\nYou might lose the game after some consecutive round wins if your hands were cheap, so consider having more yaku!</string>
     <string name="tutorial_18">We\'ve almost finished. Now let\'s talk about Riichit game field.\n\nAt the bottom of your screen you have your hand.\n\nAt the bottom right is your tsumo-tile - the new tile in your hand.</string>
     <string name="tutorial_19">You may also call Kan for having a quad of same tiles, Riichi for already discussed yaku, or Tsumo for calling a win by yourself.</string>
     <string name="tutorial_20">At upper left will be your discard, but at upper right you have dora indicator.\n\nDora indicator points at your valuable tiles. For example, if dora indicator is 4 Man, then 5 man is a dora. 9 points at 1, for winds it\'s E -> S -> W -> N -> E, for dragons it\'s Red -> White -> Green -> Red.</string>

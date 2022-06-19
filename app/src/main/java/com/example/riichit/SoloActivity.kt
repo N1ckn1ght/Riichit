@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.riichit.Drawables.tiles
+import com.example.riichit.LocaleHelper.setLocale
 import com.example.riichit.Ruleset.yakuCountedCost
 import com.example.riichit.Ruleset.yakuHanCost
 import com.example.riichit.Ruleset.yakumanHanCost
@@ -67,6 +68,7 @@ class SoloActivity : AppCompatActivity() {
     // TODO: hint button with the best efficiency move based on shanten and uke-ire calculations
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setLocale(context)
         val mode = intent.getIntExtra("mode", 0)
         val ema = intent.getBooleanExtra("ema", false)
         super.onCreate(savedInstanceState)

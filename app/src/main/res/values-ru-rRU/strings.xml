@@ -1,0 +1,147 @@
+<resources>
+    <!-- General strings -->
+    <string name="app_name">Riichit</string>
+    <string name="title_activity_settings">Настройки</string>
+    <string name="ok">Ок</string>
+    <!-- Settings strings -->
+    <string name="prefs_general">Главные настройки</string>
+    <string name="prefs_ema_names">Европейские яку-наименования</string>
+    <string name="prefs_tempai_training">Тренировка видения ожиданий</string>
+    <string name="prefs_yaku_training">Тренировка видения яку</string>
+    <string name="prefs_score_saving">Сохранять результаты</string>
+    <!-- Language-dependent images -->
+    <string name="lang">R.drawable.ru</string>
+    <!-- Main activity buttons -->
+    <string name="button_solo_mahjong">Играть в Маджонг</string>
+    <string name="button_solo_man">Играть в Маны</string>
+    <string name="button_settings">Настройки</string>
+    <string name="button_records">Результаты</string>
+    <string name="button_tutorial">Обучение</string>
+    <!-- Solo activity strings -->
+    <string name="button_cancel">Отмена</string>
+    <string name="button_kan">Кан</string>
+    <string name="button_over">Конец</string>
+    <string name="button_riichi">Риичи</string>
+    <string name="button_tempai">Темпай</string>
+    <string name="button_tsumo">Цумо</string>
+    <string name="illegal_discard">Вы можете скидывать только цумо-тайл</string>
+    <string name="illegal_kan">Неверное объявление</string>
+    <string name="illegal_kan_riichi">Нельзя объявлять кан, меняющий ожидание в риичи</string>
+    <string name="no_tiles_left">Тайлов больше нет!</string>
+    <string name="tempai">Темпай. Ваши ожидания:</string>
+    <!-- Tutorial activity strings -->
+    <string name="tutorial_0" />
+    <string name="tutorial_1">Добро пожаловать в обучение.\n\nПереключайте между экранами, кликая по правой или левой части устройства.</string>
+    <string name="tutorial_2">В риичи-маджонге существует 34 вида тайлов, всего по 4 каждого.\n\nИх можно поделить на Маны, Пины, Соу/Бамбуки (пронумерованные масти), Ветра и Драконы (благородные тайлы). Ветра называются по сторонам света (E - восток, S - юг, W - запад, N - север), драконы по их цветам.</string>
+    <string name="tutorial_3">Главная цель в риичи-маджонге - собрать руку.\n\nУ каждого игрока рука изначально состоит из 13 тайлов. Каждый ход, Вы берёте по тайлу, чтобы их стало 14.</string>
+    <string name="tutorial_4">Затем, если рука не собрана, вы сбрасываете любой ненужный тайл из руки.\n\nТак, пока Вы берёте и сбрасываете по одному тайлу, Ваша рука будет постепенно перестраиваться.</string>
+    <string name="tutorial_5">Есть основные понятия, такие как пара, чи, пон и кан.\n\nПары состоят из двух одинаковых тайлов.\n\nПоны состоят из трёх одинаковых тайлов.\n\nЧи состоят из трёх последовательных тайлов одной пронумерованной группы.</string>
+    <string name="tutorial_6">Будьте осторожны - чи не могут состоять из благородных тайлов, так как те не являются пронумерованными и не могут образовать последовательность.</string>
+    <string name="tutorial_7">Каны состоят из четырёх одинаковых тайлов.\n\nЭто также означает, что если у Вас есть кан, вам понадобится дополнительный тайл для других форм.\n\nЧтобы его получить, Вы должны объявить Кан.</string>
+    <string name="tutorial_8">Имея руку, состояющую из 4 форм (Чи/Пон/Кан) и 1 пары, Вы можете объявить победу!..\n\nНо только если у Вас есть ЯКУ.</string>
+    <string name="tutorial_9">Яку, обычно, определённая комбинация тайлов. Но некоторые из них просто ситуационные.\n\nНапример, если у Вас только пронумерованные тайлы без 1 и 9 - это яку, оно называется Таняо (все простые).</string>
+    <string name="tutorial_10">Три одинаковых чи разных мастей - тоже яку, оно называется Саншоку.\n\nВ риичи-маджонге очень много разных яку, поэтому для тренировки Вам понадобится список всех яку.</string>
+    <string name="tutorial_11">Вы должны знать, что объявление победы имея в руке 4 формы и 1 пару, но не имея яку, может привести к штрафу.\n\nТакой штраф называется чомбо.</string>
+    <string name="tutorial_12">Теперь о яку, не зависящих от тайлов. Например, риичи.\n\nЕсли у Вас почти завершённая рука, и вам больше не нужно её перестраивать - до победы остался 1 тайл, Вы можете объявить Риичи.</string>
+    <string name="tutorial_13">Риичи подразумевает ставку в 1000 очков и потерю возможности перестраивать руку, но за победу Вы получите яку.\n\nВы сможете сбрасывать только новопришедший тайл до победы, или до конца игры.</string>
+    <string name="tutorial_14">Ситуация, когда Вам остался только 1 тайл до победы, называется Темпай.</string>
+    <string name="tutorial_15">Есть ещё одно хорошее яку - Цумо.\n\nИграя с другими игроками, Вы можете совершать объявления с них. В этом приложении нет других игроков, но Вы можете почитать про объявления в правилах игры.</string>
+    <string name="tutorial_16">Если Вы не совершали этих объявлений и выиграли сами, по Цумо, Вы получаете ещё одно яку.\n\nВы должны знать, что для объявления риичи Вы также не должны делать объявлений с других игроков, но выиграть можно и по Рон.</string>
+    <string name="tutorial_17">Так что, тренируясь, Вы можете не думать о наличии яку, но…\n\n…чем больше у Вас яку, тем дороже рука.\n\nВы можете проиграть игру после нескольких собранных рук, если они были дешёвыми!</string>
+    <string name="tutorial_18">Мы почти закончили. Давайте рассмотрим игровое поле.\n\nВнизу экрана отображается Ваша рука.\n\nА внизу справа - цумо-тайл, новопришедший в руку.</string>
+    <string name="tutorial_19">Вы можете объявить кан, имея 4 одинаковых тайла, объявить риичи или победу - полностью собранную руку.</string>
+    <string name="tutorial_20">Вверху слева будет располагаться Ваш сброс, а вверху справа индикатор доры.\n\nИндикатор указывает на ценные тайлы - доры. Например, если индикатор 4 ман, то дора 5 ман; 9 указывает на 1, ветра E -> S -> W -> N -> E, драконы Красный -> Белый -> Зелёный.</string>
+    <string name="tutorial_21">Каждый тайл доры увеличивает стоимость Вашей руки, но не является яку.\n\nКаждый кан открывает новую дору. А выигрыш после риичи откроет дополнительные доры!</string>
+    <string name="tutorial_22">На этом обучение заканчивается.</string>
+    <string name="tutorial_23">Но мы очень рекомендуем почитать правила риичи-маджонга.\n\nБольшая часть правил не была охвачена, а также Вам действительно понадобится яку-лист, т.к. всего в игре их почти 40!</string>
+    <!-- Yaku names, default -->
+    <string name="chantaiayo">Чанта</string>
+    <string name="chiitoitsu">Читоицу</string>
+    <string name="chinitsu">Чиницу</string>
+    <string name="dora">Дора</string>
+    <string name="double_riichi">Дабуру Риичи</string>
+    <string name="iipeikou">Ипеико</string>
+    <string name="ippatsu">Иппацу</string>
+    <string name="ittsu">Иццу</string>
+    <string name="junchan_taiayo">Джунчан</string>
+    <string name="haitei_raoyue">Хайтей</string>
+    <string name="honitsu">Хоницу</string>
+    <string name="honroutou">Хонрото</string>
+    <string name="menzenchin_tsumohou">Мензен Цумо</string>
+    <string name="pinfu">Пинфу</string>
+    <string name="riichi">Риичи</string>
+    <string name="rinshan_kaihou">Риншан Кайхо</string>
+    <string name="ryanpeikou">Рянпейко</string>
+    <string name="sanankou">Сананко</string>
+    <string name="sankantsu">Санканцу</string>
+    <string name="sanshoku_doujun">Саншоку</string>
+    <string name="sanshoku_doukou">Саншоку Доко</string>
+    <string name="shousangen">Шосанген</string>
+    <string name="tanyao">Таняо</string>
+    <string name="yakuhai">Якухай</string>
+    <!-- Yakuman names, default -->
+    <string name="chinroutou">Чинрото</string>
+    <string name="chuuren_poutou">Чуренпото</string>
+    <string name="daisangen">Даисанген</string>
+    <string name="daisuushii">Даисуши</string>
+    <string name="kokushi_musou">Кокуши Мусо</string>
+    <string name="pure_chuuren_poutou">Двойной Чуренпото</string>
+    <string name="ryuuiisou">Рюисоу</string>
+    <string name="shousuushii">Шосуши</string>
+    <string name="suuankou">Суанко</string>
+    <string name="suuankou_tanki">Суанко Танки</string>
+    <string name="suukantsu">Суканцу</string>
+    <string name="tenhou">Тенхо</string>
+    <string name="thirteen_wait_kokushi_musou">Двойной Кокуши Мусо</string>
+    <string name="tsuuiisou">Тсуисо</string>
+    <!-- Yaku names, EMA rules -->
+    <string name="chantaiayo_ema">Half Outside Hand</string>
+    <string name="chiitoitsu_ema">Seven pairs</string>
+    <string name="chinitsu_ema">Full Flush</string>
+    <string name="dora_ema">Dora</string>
+    <string name="double_riichi_ema">Double Riichi</string>
+    <string name="iipeikou_ema">Pure Double Sequence</string>
+    <string name="ippatsu_ema">Ippatsu</string>
+    <string name="ittsu_ema">Pure Straight</string>
+    <string name="junchan_taiayo_ema">Fully Outside Hand</string>
+    <string name="haitei_raoyue_ema">Under the Sea</string>
+    <string name="honitsu_ema">Half Flush</string>
+    <string name="honroutou_ema">All Terminals and Honours</string>
+    <string name="menzenchin_tsumohou_ema">Fully Concealed Hand</string>
+    <string name="pinfu_ema">Pinfu</string>
+    <string name="riichi_ema">Riichi</string>
+    <string name="rinshan_kaihou_ema">After a kan</string>
+    <string name="ryanpeikou_ema">Twice Pure Double Sequence</string>
+    <string name="sanankou_ema">Three Concealed Triplets</string>
+    <string name="sankantsu_ema">Three Quads</string>
+    <string name="sanshoku_doujun_ema">Mixed Triple Sequence</string>
+    <string name="sanshoku_doukou_ema">Triple Triplets</string>
+    <string name="shousangen_ema">Little Three Dragons</string>
+    <string name="tanyao_ema">All Simples</string>
+    <string name="yakuhai_ema">Yakuhai</string>
+    <!-- Yakuman names, EMA rules -->
+    <!-- TODO: EMA rules are dividing yakuhai to Dragons, Seat Wind and Prevalent Wind -->
+    <string name="chinroutou_ema">All Terminals</string>
+    <string name="chuuren_poutou_ema">Nine Gates</string>
+    <string name="daisangen_ema">Big Three Dragons</string>
+    <string name="daisuushii_ema">Big Four Winds</string>
+    <string name="kokushi_musou_ema">Thirteen Orphans</string>
+    <string name="pure_chuuren_poutou_ema">True Nine Gates</string>
+    <string name="ryuuiisou_ema">All Green</string>
+    <string name="shousuushii_ema">Little Four Winds</string>
+    <string name="suuankou_ema">Four Concealed Triplets</string>
+    <string name="suuankou_tanki_ema">Single-wait Four Concealed Triplets</string>
+    <string name="suukantsu_ema">Four Quads</string>
+    <string name="tenhou_ema">Blessing of Heaven</string>
+    <string name="thirteen_wait_kokushi_musou_ema">Thirteen-wait Thirteen Orphans</string>
+    <string name="tsuuiisou_ema">All Honours</string>
+    <!-- Preferences default stuff -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+</resources>
