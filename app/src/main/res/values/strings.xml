@@ -24,11 +24,15 @@
     <string name="button_riichi">Riichi</string>
     <string name="button_tempai">Tempai</string>
     <string name="button_tsumo">Tsumo</string>
+    <string name="button_nagashi">O_O</string>
+    <string name="cost">Dealer cost</string>
+    <string name="fu">fu</string>
+    <string name="han">Han</string>
     <string name="illegal_discard">You can discard only tsumo now</string>
     <string name="illegal_kan">Wrong kan call</string>
     <string name="illegal_kan_riichi">You can\'t declare kan if it breaks your riichi</string>
     <string name="no_tiles_left">No tiles left!</string>
-    <string name="tempai">Tempai. Your waiting tiles:</string>
+    <string name="tempai">Tempai:</string>
     <!-- Tutorial activity strings -->
     <string name="tutorial_0" />
     <string name="tutorial_1">This is the tutorial.\n\nTo navigate through it, click on left and right parts of the screen.</string>
@@ -58,6 +62,7 @@
     <string name="chantaiayo">Chanta</string>
     <string name="chiitoitsu">Chitoitsu</string>
     <string name="chinitsu">Chinitsu</string>
+    <string name="chombo">Chombo</string>
     <string name="dora">Dora</string>
     <string name="double_riichi">Double Riichi</string>
     <string name="iipeikou">Iipeikou</string>
@@ -68,6 +73,7 @@
     <string name="honitsu">Honitsu</string>
     <string name="honroutou">Honroutou</string>
     <string name="menzenchin_tsumohou">Menzen Tsumo</string>
+    <string name="nagashi_mangan">Nagashi Mangan</string>
     <string name="pinfu">Pinfu</string>
     <string name="riichi">Riichi</string>
     <string name="rinshan_kaihou">Rinshan Kaihou</string>
@@ -98,6 +104,7 @@
     <string name="chantaiayo_ema">Half Outside Hand</string>
     <string name="chiitoitsu_ema">Seven pairs</string>
     <string name="chinitsu_ema">Full Flush</string>
+    <string name="chombo_ema">Chombo</string>
     <string name="dora_ema">Dora</string>
     <string name="double_riichi_ema">Double Riichi</string>
     <string name="iipeikou_ema">Pure Double Sequence</string>
@@ -108,6 +115,7 @@
     <string name="honitsu_ema">Half Flush</string>
     <string name="honroutou_ema">All Terminals and Honours</string>
     <string name="menzenchin_tsumohou_ema">Fully Concealed Hand</string>
+    <string name="nagashi_mangan_ema">Nagashi Mangan</string>
     <string name="pinfu_ema">Pinfu</string>
     <string name="riichi_ema">Riichi</string>
     <string name="rinshan_kaihou_ema">After a kan</string>

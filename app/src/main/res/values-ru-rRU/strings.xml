@@ -24,6 +24,10 @@
     <string name="button_riichi">Риичи</string>
     <string name="button_tempai">Темпай</string>
     <string name="button_tsumo">Цумо</string>
+    <string name="button_nagashi">O_O</string>
+    <string name="cost">Стоимость</string>
+    <string name="fu">фу</string>
+    <string name="han">Хан</string>
     <string name="illegal_discard">Вы можете скидывать только цумо-тайл</string>
     <string name="illegal_kan">Неверное объявление</string>
     <string name="illegal_kan_riichi">Нельзя объявлять кан, меняющий ожидание в риичи</string>
@@ -58,6 +62,7 @@
     <string name="chantaiayo">Чанта</string>
     <string name="chiitoitsu">Читоицу</string>
     <string name="chinitsu">Чиницу</string>
+    <string name="chombo">Чомбо</string>
     <string name="dora">Дора</string>
     <string name="double_riichi">Дабуру Риичи</string>
     <string name="iipeikou">Ипеико</string>
@@ -68,6 +73,7 @@
     <string name="honitsu">Хоницу</string>
     <string name="honroutou">Хонрото</string>
     <string name="menzenchin_tsumohou">Мензен Цумо</string>
+    <string name="nagashi_mangan">Нагаши Манган</string>
     <string name="pinfu">Пинфу</string>
     <string name="riichi">Риичи</string>
     <string name="rinshan_kaihou">Риншан Кайхо</string>
@@ -98,6 +104,7 @@
     <string name="chantaiayo_ema">Half Outside Hand</string>
     <string name="chiitoitsu_ema">Seven pairs</string>
     <string name="chinitsu_ema">Full Flush</string>
+    <string name="chombo_ema">Chombo</string>
     <string name="dora_ema">Dora</string>
     <string name="double_riichi_ema">Double Riichi</string>
     <string name="iipeikou_ema">Pure Double Sequence</string>
@@ -108,6 +115,7 @@
     <string name="honitsu_ema">Half Flush</string>
     <string name="honroutou_ema">All Terminals and Honours</string>
     <string name="menzenchin_tsumohou_ema">Fully Concealed Hand</string>
+    <string name="nagashi_mangan_ema">Nagashi Mangan</string>
     <string name="pinfu_ema">Pinfu</string>
     <string name="riichi_ema">Riichi</string>
     <string name="rinshan_kaihou_ema">After a kan</string>
