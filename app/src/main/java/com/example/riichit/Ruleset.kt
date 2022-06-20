@@ -10,6 +10,7 @@ object Ruleset {
         "chantaiayo" to 2,
         "chiitoitsu" to 2,
         "chinitsu" to 6,
+        "chombo" to 0,
         "double_riichi" to 2,
         "iipeikou" to 1,
         "ippatsu" to 1,

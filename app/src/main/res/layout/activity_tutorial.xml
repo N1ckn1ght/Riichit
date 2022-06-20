@@ -8,12 +8,6 @@
     tools:context=".TutorialActivity">
 
     <ImageView
-        android:id="@+id/ivScreen"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        tools:ignore="ContentDescription" />
-
-    <ImageView
         android:id="@+id/ivLeft"
         android:layout_height="match_parent"
         android:layout_width="wrap_content"
@@ -28,6 +22,14 @@
         android:src="@drawable/right"
         app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/ivScreen"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        tools:ignore="ContentDescription"
+        app:layout_constraintStart_toEndOf="@id/ivLeft"
+        app:layout_constraintEnd_toStartOf="@id/ivRight" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"

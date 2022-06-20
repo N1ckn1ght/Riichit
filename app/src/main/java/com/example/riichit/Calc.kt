@@ -22,8 +22,8 @@ class Calc(
     class Meld(val type: Int, val tile: Int)
     // 0 - chii, 1 - pon, 2 - kan
 
-    private var yaku = (yakuHanCost + yakumanHanCost + yakuCountedCost).toMutableMap()
-    private var cost = mutableMapOf("han" to 0, "fu" to 0, "dealer" to 0, "yakumaned" to 0)
+    private var yaku: MutableMap<String, Int> = mutableMapOf()
+    private var cost: MutableMap<String, Int> = mutableMapOf("han" to 0, "fu" to 0, "dealer" to -12000)
 
     // TODO: Han and fu results should be detailed for education purposes
     private val hand = Array(34) { 0 }
@@ -38,15 +38,16 @@ class Calc(
     }
 
     fun calc() {
-        // remove han cost from yaku
-        for ((k, _) in yaku) {
-            yaku[k] = 0
-        }
-
         // simple check in case of invalid hand size
         if (showableHand.size != 13 - kanTiles.size * 3) {
+            yaku["chombo"] = 1
             return
         }
+
+        yaku = (yakuHanCost + yakumanHanCost + yakuCountedCost).toMutableMap()
+        // remove han cost from yaku
+        yaku = yaku.mapValues { 0 } as MutableMap<String, Int>
+        cost["yakumaned"] = 0
 
         // transform hand to a readable form
         tsumo = showableTsumo / 4
@@ -126,6 +127,21 @@ class Calc(
                 }
             }
             handWithNoCalls[pairIndex] += 2
+        }
+
+        // check output yaku validity, remove impossible combinations
+        if (yaku["menzenchin_tsumohou"]!! > 0) {
+            val refinedYaku: MutableMap<String, Int> = mutableMapOf()
+            val yakumaned = cost["yakumaned"]!! > 0
+            for ((k, v) in yaku) {
+                if (v > 0 && (!yakumaned || k in yakumanHanCost)) {
+                    refinedYaku[k] = v
+                }
+            }
+            yaku = refinedYaku
+        } else {
+            yaku = mutableMapOf("chombo" to 1)
+            cost = mutableMapOf("han" to 0, "fu" to 0, "dealer" to -12000)
         }
     }
 
@@ -380,6 +396,9 @@ class Calc(
                         100 -> cost["dealer"] = 4800
                         110 -> cost["dealer"] = 5400
                     }
+                }
+                cost["han"]!! == 0 -> {
+                    cost["dealer"] = -12000
                 }
             }
         }

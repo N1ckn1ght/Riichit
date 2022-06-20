@@ -23,6 +23,7 @@ import com.example.riichit.Ruleset.yakuCountedCost
 import com.example.riichit.Ruleset.yakuHanCost
 import com.example.riichit.Ruleset.yakumanHanCost
 import com.example.riichit.Utility.logicIncrement
+import com.example.riichit.Utility.isEqual
 import com.example.riichit.Utility.setMargin
 import com.example.riichit.Utility.toInt
 import java.lang.Integer.min
@@ -233,7 +234,7 @@ class SoloActivity : AppCompatActivity() {
                     "riichi" to (riichiTile > -1),
                     "double_riichi" to (riichiTile == 0),
                     "ippatsu" to (tilesLeft == openDoras + tilesWall - 2 - riichiTile),
-                    "rinshan" to rinshan,
+                    "rinshan_kaihou" to rinshan,
                     "haitei_raoyue" to (tilesLeft == openDoras),
                     "tenhou" to (tilesLeft == openDoras + tilesWall - 1)
                 )
@@ -249,50 +250,10 @@ class SoloActivity : AppCompatActivity() {
                     27, 27, yakuHanCost, yakumanHanCost, yakuCountedCost
                 )
                 calc.calc()
-                val yakuList = calc.getYaku()
-                val handCost = calc.getCost()
-                val refinedYakuList: MutableList<String> = mutableListOf()
-
-                // check if hand is winning
-                if (yakuList["menzenchin_tsumohou"]!! > 0) {
-                    val yakumaned = handCost["yakumaned"]!! > 0
-                    for ((k, v) in yakuList) {
-                        if (v > 0 && (!yakumaned || k in yakumanHanCost)) {
-                            Log.d("d/logYakuCall", "$k | ${k + postfix} | search in strings...")
-                            val name = context.getString(
-                                context.resources.getIdentifier(
-                                    k + postfix, "string", context.packageName
-                                )
-                            )
-                            if (k in yakuCountedCost) {
-                                refinedYakuList.add("$name $v")
-                            } else {
-                                refinedYakuList.add(name)
-                            }
-                        }
-                    }
-                } else {
-                    refinedYakuList.add("Chombo")
-                    handCost["dealer"] = -12000
-                }
-                Log.d("d/logCalcOutput", refinedYakuList.toString())
-                Log.d("d/logCalcOutput", calc.getCost().toString())
-
-                // make a dialog text
-                var output = ""
-                for (i in refinedYakuList) {
-                    output += "${i}, "
-                }
-                output = output.dropLast(2)
-                output += "\n\n"
-                handCost.remove("yakumaned")
-                for ((k, v) in handCost) {
-                    output += "${k}: ${v}, "
-                }
-                output = output.dropLast(2)
-                showYakuList(output)
-                onGameOver()
+                showYakuList(makeOutput(calc.getYaku(), calc.getCost()))
                 // TODO: make fragment for manual calculations; compare on game over screen
+
+                onGameOver()
             } else {
                 buttonTsumo.text = getString(R.string.button_over)
                 when (overType) {
@@ -304,7 +265,21 @@ class SoloActivity : AppCompatActivity() {
                         overType = 0
                     }
                     2 -> {
-
+                        showYakuList(
+                            makeOutput(
+                                mutableMapOf("chombo" to 1),
+                                mutableMapOf("han" to 0, "fu" to 0, "dealer" to -12000)
+                            )
+                        )
+                        overType = 0
+                    }
+                    3 -> {
+                        showYakuList(
+                            makeOutput(
+                                mutableMapOf("nagashi_mangan" to 1),
+                                mutableMapOf("han" to 0, "fu" to 0, "dealer" to 12000)
+                            )
+                        )
                         overType = 0
                     }
                 }
@@ -318,18 +293,13 @@ class SoloActivity : AppCompatActivity() {
                 rinshan = false
                 if (riichiStatus) {
                     setRiichi()
+                    waitings = findWaitings(hand, getKanTiles())
                 }
                 if (kanStatus > 0) {
-                    var handCopy = hand.toMutableList()
-                    handCopy = handCopy.filterNot {
-                        it / 4 == tsumo / 4
-                    } as MutableList<Int>
-                    if (handCopy.size == hand.size - 3) {
+                    if (countTilesInHand(tsumo) == 3) {
                         if (riichiTile < 0) {
                             buttonRiichi.enable()
                         }
-                        // TODO: else { chombo if kan call changes riichi waiting }
-                        hand = handCopy.toMutableList()
                         getFromDead(tsumo / 4)
                     } else {
                         showToast(baseContext.getString(R.string.illegal_kan))
@@ -381,13 +351,7 @@ class SoloActivity : AppCompatActivity() {
         }
         if (tilesLeft > openDoras - 1) {
             if (kanStatus > 0) {
-                var count = 0
-                for (it in hand) {
-                    if (it / 4 == toRemove / 4) {
-                        count++
-                    }
-                }
-                if (count < 4) {
+                if (countTilesInHand(toRemove) < 4) {
                     showToast(baseContext.getString(R.string.illegal_kan))
                     return
                 }
@@ -415,9 +379,6 @@ class SoloActivity : AppCompatActivity() {
             hand[current] = tsumo
             tsumo = toRemove
             if (kanStatus > 0) {
-                hand = hand.filterNot {
-                    it / 4 == tsumo / 4
-                } as MutableList<Int>
                 getFromDead(toRemove / 4)
                 return
             }
@@ -431,15 +392,43 @@ class SoloActivity : AppCompatActivity() {
         buttonKan.disable()
         buttonRiichi.disable(highlight = (riichiTile > -1))
         if (!gameOver) {
-            // check if player is tempai (1 tile left for a tsumo-win call), overType 1
-            waitings = findWaitings(getKanTiles())
-            if (waitings.size > 0) {
-                buttonTsumo.text = getString(R.string.button_tempai)
-                overType = 1
+            // check if player is tempai (1 tile left for a tsumo-win call)
+            //  if he had tempai, it's overType 1
+            //  if he had riichi and is not tempai, it's overType 2
+            //  waitings check might be already made in setRiichi() function
+            if (riichiTile < 0) {
+                waitings = findWaitings(hand, getKanTiles())
+                if (waitings.size > 0) {
+                    buttonTsumo.text = getString(R.string.button_tempai)
+                    overType = 1
+                    return
+                }
+            } else {
+                if (waitings.size > 0) {
+                    buttonTsumo.text = getString(R.string.button_tempai)
+                    overType = 1
+                } else {
+                    buttonTsumo.text = getString(R.string.chombo)
+                    overType = 2
+                }
                 return
             }
-            // TODO: check for nagashi mangan, overType 2
-            // but if player has nothing, overType 0
+            //  if he had nothing, but discard is nagashi mangan, it's overType 3
+            //  otherwise it's overType 0
+            val nagashiDiscard = arrayOf(0, 8, 9, 17, 18, 26, 27, 28, 29, 30, 31, 32, 33)
+            var nagashiFound = true
+            for (x in discard) {
+                val tile = (x - (x > logicIncrement).toInt() * logicIncrement) / 4
+                if (tile !in nagashiDiscard) {
+                    nagashiFound = false
+                    break
+                }
+            }
+            if (nagashiFound) {
+                buttonTsumo.text = getString(R.string.button_nagashi)
+                overType = 3
+                return
+            }
         }
         buttonTsumo.text = getString(R.string.button_over)
         tsumo = 136
@@ -458,6 +447,22 @@ class SoloActivity : AppCompatActivity() {
     }
 
     private fun getFromDead(kanItem: Int) {
+        val newHand = hand.filterNot {
+            it / 4 == kanItem
+        } as MutableList<Int>
+
+        // abort if under riichi and new kan changes tempai
+        if (riichiTile > -1) {
+            val newKanTiles = getKanTiles()
+            newKanTiles.add(tsumo)
+            val newWaitings = findWaitings(newHand, newKanTiles)
+            if (!isEqual(waitings, newWaitings)) {
+                showToast(getString(R.string.illegal_kan_riichi))
+                return
+            }
+        }
+
+        hand = newHand
         tsumo = indicator[openDoras - 1]
         showableIndicator[openDoras] = indicator[5 + openDoras * 2]
         openDoras++
@@ -498,7 +503,18 @@ class SoloActivity : AppCompatActivity() {
         return kanTiles
     }
 
-    private fun findWaitings(kanTiles: MutableList<Int>): MutableList<Int> {
+    private fun countTilesInHand(tile: Int): Int {
+        var count = 0
+        for (it in hand) {
+            if (it / 4 == tile / 4) {
+                count++
+            }
+        }
+        return count
+    }
+
+    // temporary recurrent solution without changes in Calc class
+    private fun findWaitings(hand: MutableList<Int>, kanTiles: MutableList<Int>): MutableList<Int> {
         val found: MutableList<Int> = mutableListOf()
         for (tile in all.indices step 4) {
             Log.d("d/waitingIterations", "$tile in 0 until ${all.size} step 4")
@@ -516,7 +532,7 @@ class SoloActivity : AppCompatActivity() {
             )
             calc.calc()
             val yakuList = calc.getYaku()
-            if (yakuList["menzenchin_tsumohou"]!! > 0) {
+            if (!yakuList.containsKey("chombo")) {
                 found.add(tile)
             }
         }
@@ -539,6 +555,28 @@ class SoloActivity : AppCompatActivity() {
             this.background.setTint(ContextCompat.getColor(baseContext, R.color.light_gray))
         }
         this.setTextColor(ContextCompat.getColor(baseContext, R.color.white))
+    }
+
+    private fun makeOutput(yaku: MutableMap<String, Int>, cost: MutableMap<String, Int>): String {
+        var output = ""
+        for ((k, v) in yaku) {
+            output += context.getString(
+                context.resources.getIdentifier(
+                    k + postfix,
+                    "string",
+                    context.packageName
+                )
+            )
+            if (v > 1) {
+                output += " $v"
+            }
+            output += ", "
+        }
+        output = "${output.dropLast(2)}\n\n" +
+                "${getString(R.string.han)}: ${cost["han"]}, " +
+                "${getString(R.string.fu)}: ${cost["fu"]}\n" +
+                "${getString(R.string.cost)}: ${cost["dealer"]}"
+        return output
     }
 
     private fun showYakuList(output: String) {
