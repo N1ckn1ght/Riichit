@@ -27,7 +27,7 @@ class DiscardAdapter(
         holder.iv.layoutParams.height = height
         if (x > logicIncrement - 1) {
             // TODO: find a way of rotating tile without changing its size or breaking the grid
-            // holder.iv.rotation += 90F
+            // holder.iv.rotation -= 90F
             x -= logicIncrement
         }
         holder.bindTo(tiles[x / 4], x)

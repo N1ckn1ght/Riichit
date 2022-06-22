@@ -293,7 +293,6 @@ class SoloActivity : AppCompatActivity() {
                 rinshan = false
                 if (riichiStatus) {
                     setRiichi()
-                    waitings = findWaitings(hand, getKanTiles())
                 }
                 if (kanStatus > 0) {
                     if (countTilesInHand(tsumo) == 3) {
@@ -345,9 +344,6 @@ class SoloActivity : AppCompatActivity() {
         if (riichiTile > -1) {
             showToast(baseContext.getString(R.string.illegal_discard))
             return
-        }
-        if (riichiStatus) {
-            setRiichi()
         }
         if (tilesLeft > openDoras - 1) {
             if (kanStatus > 0) {
@@ -401,7 +397,6 @@ class SoloActivity : AppCompatActivity() {
                 if (waitings.size > 0) {
                     buttonTsumo.text = getString(R.string.button_tempai)
                     overType = 1
-                    return
                 }
             } else {
                 if (waitings.size > 0) {
@@ -410,8 +405,8 @@ class SoloActivity : AppCompatActivity() {
                 } else {
                     buttonTsumo.text = getString(R.string.chombo)
                     overType = 2
+                    return
                 }
-                return
             }
             //  if he had nothing, but discard is nagashi mangan, it's overType 3
             //  otherwise it's overType 0
@@ -427,6 +422,8 @@ class SoloActivity : AppCompatActivity() {
             if (nagashiFound) {
                 buttonTsumo.text = getString(R.string.button_nagashi)
                 overType = 3
+            }
+            if (overType > 0) {
                 return
             }
         }
@@ -487,6 +484,7 @@ class SoloActivity : AppCompatActivity() {
     }
 
     private fun setRiichi() {
+        waitings = findWaitings(hand, getKanTiles())
         riichiStatus = false
         riichiTile = tilesWall - tilesLeft + openDoras - 1
         buttonRiichi.disable(highlight = true)
