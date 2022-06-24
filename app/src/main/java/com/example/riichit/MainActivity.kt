@@ -6,15 +6,22 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
+import com.example.riichit.AppDatabase.Companion.instance
 import com.example.riichit.Drawables.flag
 import com.example.riichit.LocaleHelper.changeLocale
 import com.example.riichit.LocaleHelper.getLocale
 import com.example.riichit.LocaleHelper.setLocale
 import com.example.riichit.Utility.toInt
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private val context = this
+    private lateinit var db: AppDatabase
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         setLocale(context)
         super.onCreate(savedInstanceState)
@@ -45,12 +52,18 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // language icon shall be changed upon a preferenced language
+        // language icon shall be changed upon a preferred language
         val imageViewLang = findViewById<ImageView>(R.id.ivLang)
         flag[getLocale(context)]?.let { imageViewLang.setImageResource(it) }
         imageViewLang.setOnClickListener {
             changeLocale(context)
             recreate()
+        }
+
+        // create profile #0 if not exists
+        db = instance(this)
+        GlobalScope.launch(Dispatchers.IO) {
+            Operations.createProfile(db, 0)
         }
     }
 

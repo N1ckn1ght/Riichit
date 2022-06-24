@@ -1,5 +1,7 @@
 package com.example.riichit
 
+import java.lang.Integer.min
+
 object Ruleset {
     val yakuCountedCost = mapOf(
         "dora" to 1,
@@ -48,4 +50,15 @@ object Ruleset {
         "tenhou" to 13,
         "tsuuiisou" to 13
     )
+
+    fun newBalance(currentBalance: Int, change: Int): Int {
+        var balance = currentBalance
+        if (change < 0) {
+            balance = min(0, balance - change)
+        } else {
+            val modif = (100000.0 / (min(25000, balance) + 75000).toDouble())
+            balance += (change * modif).toInt()
+        }
+        return balance
+    }
 }

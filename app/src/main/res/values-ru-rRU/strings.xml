@@ -30,7 +30,8 @@
     <string name="han">Хан</string>
     <string name="illegal_discard">Вы можете скидывать только цумо-тайл</string>
     <string name="illegal_kan">Неверное объявление</string>
-    <string name="illegal_kan_riichi">Нельзя объявлять кан, меняющий ожидание в риичи</string>
+    <string name="illegal_kan_riichi">Нельзя объявить кан, меняющий ожидание в риичи</string>
+    <string name="no_riichi_bet">Нехватает очков для объявления риичи</string>
     <string name="no_tiles_left">Тайлов больше нет!</string>
     <string name="tempai">Темпай. Ваши ожидания:</string>
     <!-- Tutorial activity strings -->

@@ -30,7 +30,8 @@
     <string name="han">Han</string>
     <string name="illegal_discard">You can discard only tsumo now</string>
     <string name="illegal_kan">Wrong kan call</string>
-    <string name="illegal_kan_riichi">You can\'t declare kan if it breaks your riichi</string>
+    <string name="illegal_kan_riichi">Can\'t declare kan if it changes winning tiles under riichi</string>
+    <string name="no_riichi_bet">Can\'t afford riichi, it costs 1000 points to bet</string>
     <string name="no_tiles_left">No tiles left!</string>
     <string name="tempai">Tempai:</string>
     <!-- Tutorial activity strings -->
