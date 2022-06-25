@@ -59,24 +59,18 @@ object Operations {
         when (mode) {
             0 -> {
                 mahjongBalance = newBalance(mahjongBalance, balanceChange)
-                when (streakChange) {
-                    -1 -> {
-                        mahjongStreak = 0
-                    }
-                    1 -> {
-                        mahjongStreak += 1
-                    }
+                mahjongStreak = when {
+                    streakChange < 0 -> 0
+                    streakChange > 0 -> streakChange
+                    else -> mahjongStreak
                 }
             }
             1 -> {
                 manBalance = newBalance(manBalance, balanceChange)
-                when (streakChange) {
-                    -1 -> {
-                        manStreak = 0
-                    }
-                    1 -> {
-                        manStreak += 1
-                    }
+                manStreak = when {
+                    streakChange < 0 -> 0
+                    streakChange > 0 -> streakChange
+                    else -> manStreak
                 }
             }
         }
@@ -119,6 +113,29 @@ object Operations {
         return 0
     }
 
+    fun getStreak(
+        db: AppDatabase,
+        profile: Int,
+        mode: Int
+    ): Int {
+        val data = getProfile(db, profile)
+
+        if (data.isEmpty()) {
+            Log.d("d/operations", "Profile $profile not found in database $db!")
+            return 0
+        }
+
+        when (mode) {
+            0 -> {
+                return data[0].mahjongStreak
+            }
+            1 -> {
+                return data[0].manStreak
+            }
+        }
+        return 0
+    }
+
     private fun getProfile(
         db: AppDatabase,
         profile: Int
@@ -134,6 +151,6 @@ object Operations {
         manBalance: Int,
         manStreak: Int
     ) {
-        db.profilesDao().updateProfile(profile, mahjongBalance, mahjongStreak, manBalance, manStreak)
+        db.profilesDao().updateProfile(profile, mahjongBalance, manBalance, mahjongStreak, manStreak)
     }
 }

@@ -1,6 +1,6 @@
 package com.example.riichit
 
-import java.lang.Integer.min
+import java.lang.Integer.max
 
 object Ruleset {
     val yakuCountedCost = mapOf(
@@ -54,9 +54,9 @@ object Ruleset {
     fun newBalance(currentBalance: Int, change: Int): Int {
         var balance = currentBalance
         if (change < 0) {
-            balance = min(0, balance - change)
+            balance = max(0, balance + change)
         } else {
-            val modif = (100000.0 / (min(25000, balance) + 75000).toDouble())
+            val modif = (100000.0 / (max(25000, balance) + 75000).toDouble())
             balance += (change * modif).toInt()
         }
         return balance

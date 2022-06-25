@@ -34,6 +34,15 @@
     <string name="no_riichi_bet">Can\'t afford riichi, it costs 1000 points to bet</string>
     <string name="no_tiles_left">No tiles left!</string>
     <string name="tempai">Tempai:</string>
+    <!-- Records activity strings -->
+    <string name="profile">Profile %d</string>
+    <string name="gamemode">game mode:</string>
+    <string name="balance">balance:</string>
+    <string name="streak">streak:</string>
+    <string name="solo_mahjong">Solo Mahjong</string>
+    <string name="solo_man">Solo Man</string>
+    <string name="button_back">Back</string>
+    <string name="loading">Loading…</string>
     <!-- Tutorial activity strings -->
     <string name="tutorial_0" />
     <string name="tutorial_1">This is the tutorial.\n\nTo navigate through it, click on left and right parts of the screen.</string>

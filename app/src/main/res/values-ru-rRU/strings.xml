@@ -34,6 +34,15 @@
     <string name="no_riichi_bet">Нехватает очков для объявления риичи</string>
     <string name="no_tiles_left">Тайлов больше нет!</string>
     <string name="tempai">Темпай. Ваши ожидания:</string>
+    <!-- Records activity strings -->
+    <string name="profile">Профиль %d</string>
+    <string name="gamemode">режим игры:</string>
+    <string name="balance">баланс:</string>
+    <string name="streak">серия:</string>
+    <string name="solo_mahjong">Маджонг</string>
+    <string name="solo_man">Маны</string>
+    <string name="button_back">Назад</string>
+    <string name="loading">Загрузка…</string>
     <!-- Tutorial activity strings -->
     <string name="tutorial_0" />
     <string name="tutorial_1">Добро пожаловать в обучение.\n\nПереключайте между экранами, кликая по правой или левой части устройства.</string>

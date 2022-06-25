@@ -2,6 +2,10 @@ package com.example.riichit
 
 import android.app.Dialog
 import android.os.Bundle
+import android.text.Layout
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.AlignmentSpan
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Gravity
@@ -22,12 +26,13 @@ import com.example.riichit.Drawables.tiles
 import com.example.riichit.LocaleHelper.setLocale
 import com.example.riichit.Operations.addGame
 import com.example.riichit.Operations.getBalance
+import com.example.riichit.Operations.getStreak
 import com.example.riichit.Operations.updateProfile
 import com.example.riichit.Ruleset.yakuCountedCost
 import com.example.riichit.Ruleset.yakuHanCost
 import com.example.riichit.Ruleset.yakumanHanCost
-import com.example.riichit.Utility.logicIncrement
 import com.example.riichit.Utility.isEqual
+import com.example.riichit.Utility.logicIncrement
 import com.example.riichit.Utility.setMargin
 import com.example.riichit.Utility.toInt
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -36,6 +41,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.lang.Integer.min
 import java.util.*
+
 
 class SoloActivity : AppCompatActivity() {
     private var context = this
@@ -78,6 +84,8 @@ class SoloActivity : AppCompatActivity() {
     private var yakuConditional: Map<String, Boolean>? = null
     private var mode = 0
     private var balance = 0
+    private var profile = 1
+    private var streak = 0
     // TODO: hint button with the best efficiency move based on shanten and uke-ire calculations
 
     @OptIn(DelicateCoroutinesApi::class)
@@ -105,8 +113,9 @@ class SoloActivity : AppCompatActivity() {
 
         db = instance(this)
         GlobalScope.launch(Dispatchers.IO) {
-            updateProfile(db, 0, mode, -1000, 0)
-            balance = getBalance(db, 0, mode)
+            streak = getStreak(db, profile, mode)
+            updateProfile(db, profile, mode, -1000, -1)
+            balance = getBalance(db, profile, mode)
         }
 
         tilesLeft = tilesWall
@@ -292,7 +301,7 @@ class SoloActivity : AppCompatActivity() {
                         showTempai(waitings)
                         overType = 0
                         GlobalScope.launch(Dispatchers.IO) {
-                            updateProfile(db, 0, mode, 1000, 0)
+                            updateProfile(db, profile, mode, 1000, streak)
                         }
                     }
                     2 -> {
@@ -313,6 +322,10 @@ class SoloActivity : AppCompatActivity() {
                                 true
                             )
                         )
+                        overType = 0
+                    }
+                    4 -> {
+                        // TODO: if tsumo-furiten is active
                         overType = 0
                     }
                 }
@@ -424,7 +437,9 @@ class SoloActivity : AppCompatActivity() {
 
         // the result of the game will be easily calculated from this data later if needed
         GlobalScope.launch(Dispatchers.IO) {
-            addGame(db, 0, hand, tsumo, getKanTiles(), discard, yakuConditional)
+            // TODO: implement good records interface to show this statistics
+            // addGame(db, profile, hand, tsumo, getKanTiles(), discard, yakuConditional)
+            return@launch
         }
 
         if (!gameOver) {
@@ -526,7 +541,7 @@ class SoloActivity : AppCompatActivity() {
     @OptIn(DelicateCoroutinesApi::class)
     private fun setRiichi() {
         GlobalScope.launch(Dispatchers.IO) {
-            updateProfile(db, 0, mode, -1000, 0)
+            updateProfile(db, profile, mode, -1000, 0)
         }
         waitings = findWaitings(hand, getKanTiles())
         riichiStatus = false
@@ -626,13 +641,13 @@ class SoloActivity : AppCompatActivity() {
                 "${getString(R.string.cost)}: ${cost["dealer"]}"
 
         if (saveToProfile) {
-            val balanceChange = cost["han"]?: 0
+            val balanceChange = cost["dealer"]?: 0
             var streakChange = -1
             if (balanceChange > 0) {
-                streakChange = 1
+                streakChange = 1 + streak
             }
             GlobalScope.launch(Dispatchers.IO) {
-                updateProfile(db, 0, mode, balanceChange, streakChange)
+                updateProfile(db, profile, mode, balanceChange, streakChange)
             }
         }
 
@@ -685,9 +700,17 @@ class SoloActivity : AppCompatActivity() {
 
     private fun showToast(text: String) {
         toast?.cancel()
+
+        val centeredText: Spannable = SpannableString(text)
+        centeredText.setSpan(
+            AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
+            0, text.length - 1,
+            Spannable.SPAN_INCLUSIVE_INCLUSIVE
+        )
+
         toast = Toast.makeText(
             baseContext,
-            text,
+            centeredText,
             Toast.LENGTH_SHORT
         )
         toast?.show()

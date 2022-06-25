@@ -45,7 +45,8 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
         buttonRecords.setOnClickListener {
-            // TODO: show records (use ROOM database)
+            val intent = Intent(this, RecordsActivity::class.java)
+            startActivity(intent)
         }
         buttonTutorial.setOnClickListener {
             val intent = Intent(this, TutorialActivity::class.java)
@@ -62,8 +63,10 @@ class MainActivity : AppCompatActivity() {
 
         // create profile #0 if not exists
         db = instance(this)
+        val profile = 1
+
         GlobalScope.launch(Dispatchers.IO) {
-            Operations.createProfile(db, 0)
+            Operations.createProfile(db, profile)
         }
     }
 
