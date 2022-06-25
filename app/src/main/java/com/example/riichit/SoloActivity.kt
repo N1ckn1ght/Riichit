@@ -2,6 +2,10 @@ package com.example.riichit
 
 import android.app.Dialog
 import android.os.Bundle
+import android.text.Layout
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.AlignmentSpan
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Gravity
@@ -17,20 +21,31 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.riichit.AppDatabase.Companion.instance
 import com.example.riichit.Drawables.tiles
 import com.example.riichit.LocaleHelper.setLocale
+import com.example.riichit.Operations.addGame
+import com.example.riichit.Operations.getBalance
+import com.example.riichit.Operations.getStreak
+import com.example.riichit.Operations.updateProfile
 import com.example.riichit.Ruleset.yakuCountedCost
 import com.example.riichit.Ruleset.yakuHanCost
 import com.example.riichit.Ruleset.yakumanHanCost
-import com.example.riichit.Utility.logicIncrement
 import com.example.riichit.Utility.isEqual
+import com.example.riichit.Utility.logicIncrement
 import com.example.riichit.Utility.setMargin
 import com.example.riichit.Utility.toInt
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.lang.Integer.min
 import java.util.*
 
+
 class SoloActivity : AppCompatActivity() {
     private var context = this
+    private lateinit var db: AppDatabase
     private lateinit var ivTsumo: ImageView
     private lateinit var rhand: RecyclerView
     private lateinit var rdiscard: RecyclerView
@@ -66,11 +81,17 @@ class SoloActivity : AppCompatActivity() {
     private var calls: MutableList<Int> = mutableListOf()
     private var waitings: MutableList<Int> = mutableListOf()
     private var postfix: String = ""
+    private var yakuConditional: Map<String, Boolean>? = null
+    private var mode = 0
+    private var balance = 0
+    private var profile = 1
+    private var streak = 0
     // TODO: hint button with the best efficiency move based on shanten and uke-ire calculations
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         setLocale(context)
-        val mode = intent.getIntExtra("mode", 0)
+        mode = intent.getIntExtra("mode", 0)
         val ema = intent.getBooleanExtra("ema", false)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_solo)
@@ -88,6 +109,13 @@ class SoloActivity : AppCompatActivity() {
         }
         if (ema) {
             postfix = "_ema"
+        }
+
+        db = instance(this)
+        GlobalScope.launch(Dispatchers.IO) {
+            streak = getStreak(db, profile, mode)
+            updateProfile(db, profile, mode, -1000, -1)
+            balance = getBalance(db, profile, mode)
         }
 
         tilesLeft = tilesWall
@@ -207,6 +235,10 @@ class SoloActivity : AppCompatActivity() {
             }
         }
         buttonRiichi.setOnClickListener {
+            if (balance < 1000) {
+                showToast(getString(R.string.no_riichi_bet))
+                return@setOnClickListener
+            }
             if (riichiStatus) {
                 riichiStatus = false
                 buttonRiichi.text = getString(R.string.button_riichi)
@@ -230,10 +262,10 @@ class SoloActivity : AppCompatActivity() {
             if (tsumo < 136) {
                 val kanTiles = getKanTiles()
                 val doraIndicators: MutableList<Int> = mutableListOf()
-                val yakuConditional = mapOf(
-                    "riichi" to (riichiTile > -1),
+                yakuConditional = mapOf(
+                    "riichi" to (riichiTile > 0),
                     "double_riichi" to (riichiTile == 0),
-                    "ippatsu" to (tilesLeft == openDoras + tilesWall - 2 - riichiTile),
+                    "ippatsu" to (tilesLeft == tilesWall - 2 - riichiTile + openDoras),
                     "rinshan_kaihou" to rinshan,
                     "haitei_raoyue" to (tilesLeft == openDoras),
                     "tenhou" to (tilesLeft == openDoras + tilesWall - 1)
@@ -246,11 +278,16 @@ class SoloActivity : AppCompatActivity() {
                 }
 
                 val calc = Calc(
-                    hand, tsumo, doraIndicators, kanTiles, yakuConditional,
+                    hand, tsumo, doraIndicators, kanTiles, yakuConditional!!,
                     27, 27, yakuHanCost, yakumanHanCost, yakuCountedCost
                 )
                 calc.calc()
-                showYakuList(makeOutput(calc.getYaku(), calc.getCost()))
+                // this will also update balance points for a profile, if set to true
+                showYakuList(makeOutput(calc.getYaku(), calc.getCost(), true))
+                // however the game itself ill be added to database in onGameOver() function
+                // some other cases of updating balance will be put in when(overType) condition
+                // with the exception of overType == 0 condition, it's updating itself on game start
+                // and riichi bet will be updated in setRiichi() function
                 // TODO: make fragment for manual calculations; compare on game over screen
 
                 onGameOver()
@@ -263,12 +300,16 @@ class SoloActivity : AppCompatActivity() {
                     1 -> {
                         showTempai(waitings)
                         overType = 0
+                        GlobalScope.launch(Dispatchers.IO) {
+                            updateProfile(db, profile, mode, 1000, streak)
+                        }
                     }
                     2 -> {
                         showYakuList(
                             makeOutput(
                                 mutableMapOf("chombo" to 1),
-                                mutableMapOf("han" to 0, "fu" to 0, "dealer" to -12000)
+                                mutableMapOf("han" to 0, "fu" to 0, "dealer" to -12000),
+                                true
                             )
                         )
                         overType = 0
@@ -277,9 +318,14 @@ class SoloActivity : AppCompatActivity() {
                         showYakuList(
                             makeOutput(
                                 mutableMapOf("nagashi_mangan" to 1),
-                                mutableMapOf("han" to 0, "fu" to 0, "dealer" to 12000)
+                                mutableMapOf("han" to 0, "fu" to 0, "dealer" to 12000),
+                                true
                             )
                         )
+                        overType = 0
+                    }
+                    4 -> {
+                        // TODO: if tsumo-furiten is active
                         overType = 0
                     }
                 }
@@ -293,7 +339,6 @@ class SoloActivity : AppCompatActivity() {
                 rinshan = false
                 if (riichiStatus) {
                     setRiichi()
-                    waitings = findWaitings(hand, getKanTiles())
                 }
                 if (kanStatus > 0) {
                     if (countTilesInHand(tsumo) == 3) {
@@ -346,9 +391,6 @@ class SoloActivity : AppCompatActivity() {
             showToast(baseContext.getString(R.string.illegal_discard))
             return
         }
-        if (riichiStatus) {
-            setRiichi()
-        }
         if (tilesLeft > openDoras - 1) {
             if (kanStatus > 0) {
                 if (countTilesInHand(toRemove) < 4) {
@@ -388,20 +430,28 @@ class SoloActivity : AppCompatActivity() {
         ivTsumo.performClick()
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun onGameOver() {
         buttonKan.disable()
         buttonRiichi.disable(highlight = (riichiTile > -1))
+
+        // the result of the game will be easily calculated from this data later if needed
+        GlobalScope.launch(Dispatchers.IO) {
+            // TODO: implement good records interface to show this statistics
+            // addGame(db, profile, hand, tsumo, getKanTiles(), discard, yakuConditional)
+            return@launch
+        }
+
         if (!gameOver) {
             // check if player is tempai (1 tile left for a tsumo-win call)
-            //  if he had tempai, it's overType 1
-            //  if he had riichi and is not tempai, it's overType 2
-            //  waitings check might be already made in setRiichi() function
+            // if he had tempai, it's overType 1
+            // if he had riichi and is not tempai, it's overType 2
+            // waitings check might be already made in setRiichi() function
             if (riichiTile < 0) {
                 waitings = findWaitings(hand, getKanTiles())
                 if (waitings.size > 0) {
                     buttonTsumo.text = getString(R.string.button_tempai)
                     overType = 1
-                    return
                 }
             } else {
                 if (waitings.size > 0) {
@@ -410,11 +460,11 @@ class SoloActivity : AppCompatActivity() {
                 } else {
                     buttonTsumo.text = getString(R.string.chombo)
                     overType = 2
+                    return
                 }
-                return
             }
-            //  if he had nothing, but discard is nagashi mangan, it's overType 3
-            //  otherwise it's overType 0
+            // if he had nothing, but discard is nagashi mangan, it's overType 3
+            // otherwise it's overType 0
             val nagashiDiscard = arrayOf(0, 8, 9, 17, 18, 26, 27, 28, 29, 30, 31, 32, 33)
             var nagashiFound = true
             for (x in discard) {
@@ -427,6 +477,8 @@ class SoloActivity : AppCompatActivity() {
             if (nagashiFound) {
                 buttonTsumo.text = getString(R.string.button_nagashi)
                 overType = 3
+            }
+            if (overType > 0) {
                 return
             }
         }
@@ -486,7 +538,12 @@ class SoloActivity : AppCompatActivity() {
         rinshan = true
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun setRiichi() {
+        GlobalScope.launch(Dispatchers.IO) {
+            updateProfile(db, profile, mode, -1000, 0)
+        }
+        waitings = findWaitings(hand, getKanTiles())
         riichiStatus = false
         riichiTile = tilesWall - tilesLeft + openDoras - 1
         buttonRiichi.disable(highlight = true)
@@ -557,7 +614,13 @@ class SoloActivity : AppCompatActivity() {
         this.setTextColor(ContextCompat.getColor(baseContext, R.color.white))
     }
 
-    private fun makeOutput(yaku: MutableMap<String, Int>, cost: MutableMap<String, Int>): String {
+    @Suppress("SameParameterValue")
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun makeOutput(
+        yaku: MutableMap<String, Int>,
+        cost: MutableMap<String, Int>,
+        saveToProfile: Boolean = false
+    ): String {
         var output = ""
         for ((k, v) in yaku) {
             output += context.getString(
@@ -576,6 +639,18 @@ class SoloActivity : AppCompatActivity() {
                 "${getString(R.string.han)}: ${cost["han"]}, " +
                 "${getString(R.string.fu)}: ${cost["fu"]}\n" +
                 "${getString(R.string.cost)}: ${cost["dealer"]}"
+
+        if (saveToProfile) {
+            val balanceChange = cost["dealer"]?: 0
+            var streakChange = -1
+            if (balanceChange > 0) {
+                streakChange = 1 + streak
+            }
+            GlobalScope.launch(Dispatchers.IO) {
+                updateProfile(db, profile, mode, balanceChange, streakChange)
+            }
+        }
+
         return output
     }
 
@@ -625,9 +700,17 @@ class SoloActivity : AppCompatActivity() {
 
     private fun showToast(text: String) {
         toast?.cancel()
+
+        val centeredText: Spannable = SpannableString(text)
+        centeredText.setSpan(
+            AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
+            0, text.length - 1,
+            Spannable.SPAN_INCLUSIVE_INCLUSIVE
+        )
+
         toast = Toast.makeText(
             baseContext,
-            text,
+            centeredText,
             Toast.LENGTH_SHORT
         )
         toast?.show()

@@ -37,6 +37,10 @@
             android:name=".TutorialActivity"
             android:launchMode="singleTop"
             android:screenOrientation="landscape" />
+        <activity
+            android:name=".RecordsActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="landscape" />
     </application>
 
 </manifest>

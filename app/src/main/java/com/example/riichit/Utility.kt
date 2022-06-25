@@ -5,6 +5,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 
 object Utility {
     const val logicIncrement = 256
+    const val operationsLimit = 10
 
     fun View.setMargin(left: Int, top: Int, right: Int, bottom: Int) {
         val p = this.layoutParams as ConstraintLayout.LayoutParams
