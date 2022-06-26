@@ -6,27 +6,43 @@
         android:title="@string/prefs_general">
 
         <SwitchPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="ema_names"
             android:title="@string/prefs_ema_names"
+            android:summary="@string/prefs_ema_names_summary"
             android:icon="@android:drawable/ic_menu_preferences" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:enabled="true"
+            android:key="score_saving"
+            android:title="@string/prefs_score_saving"
+            android:summary="@string/prefs_score_saving_summary"
+            android:icon="@android:drawable/ic_menu_preferences" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/prefs_game_rules">
+
         <SwitchPreference
             android:defaultValue="false"
             android:enabled="false"
-            android:key="score_saving"
-            android:title="@string/prefs_score_saving"
+            android:key="yaku_training"
+            android:title="@string/prefs_yaku_training"
+            android:summary="@string/prefs_yaku_training_summary"
             android:icon="@android:drawable/ic_menu_preferences" />
         <SwitchPreference
             android:defaultValue="false"
             android:enabled="false"
             android:key="tempai_training"
             android:title="@string/prefs_tempai_training"
+            android:summary="@string/prefs_tempai_training_summary"
             android:icon="@android:drawable/ic_menu_preferences" />
         <SwitchPreference
             android:defaultValue="false"
             android:enabled="false"
-            android:key="yaku_training"
-            android:title="@string/prefs_yaku_training"
+            android:key="tsumo_furiten"
+            android:title="@string/prefs_tsumo_furiten"
+            android:summary="@string/prefs_tsumo_furiten_summary"
             android:icon="@android:drawable/ic_menu_preferences" />
     </PreferenceCategory>
 </PreferenceScreen>

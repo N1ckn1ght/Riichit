@@ -44,7 +44,7 @@
             android:text="@string/gamemode"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.3" />
+            app:layout_constraintWidth_percent="0.25" />
 
         <TextView
             android:id="@+id/row_1_first"
@@ -54,7 +54,7 @@
             android:textSize="24sp"
             android:textColor="@color/black"
             android:text="@string/solo_mahjong"
-            app:layout_constraintStart_toEndOf="@+id/row_1_desc"
+            app:layout_constraintEnd_toStartOf="@+id/row_1_second"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="0.35" />
 
@@ -66,7 +66,7 @@
             android:textSize="24sp"
             android:textColor="@color/black"
             android:text="@string/solo_man"
-            app:layout_constraintStart_toEndOf="@+id/row_1_first"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="0.35" />
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -88,7 +88,7 @@
             android:text="@string/balance"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.3" />
+            app:layout_constraintWidth_percent="0.25" />
 
         <TextView
             android:id="@+id/row_2_first"
@@ -97,7 +97,7 @@
             android:gravity="center"
             android:textSize="24sp"
             android:textColor="@color/black"
-            app:layout_constraintStart_toEndOf="@+id/row_2_desc"
+            app:layout_constraintEnd_toStartOf="@+id/row_2_second"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="0.35" />
 
@@ -108,7 +108,7 @@
             android:gravity="center"
             android:textSize="24sp"
             android:textColor="@color/black"
-            app:layout_constraintStart_toEndOf="@+id/row_2_first"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="0.35" />
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -130,7 +130,7 @@
             android:text="@string/streak"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.3" />
+            app:layout_constraintWidth_percent="0.25" />
 
         <TextView
             android:id="@+id/row_3_first"
@@ -139,7 +139,7 @@
             android:gravity="center"
             android:textSize="24sp"
             android:textColor="@color/black"
-            app:layout_constraintStart_toEndOf="@+id/row_3_desc"
+            app:layout_constraintEnd_toStartOf="@+id/row_3_second"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="0.35" />
 
@@ -150,7 +150,7 @@
             android:gravity="center"
             android:textSize="24sp"
             android:textColor="@color/black"
-            app:layout_constraintStart_toEndOf="@+id/row_3_first"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="0.35" />
     </androidx.constraintlayout.widget.ConstraintLayout>

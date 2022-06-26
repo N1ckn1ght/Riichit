@@ -6,9 +6,16 @@
     <!-- Settings strings -->
     <string name="prefs_general">General preferences</string>
     <string name="prefs_ema_names">European yaku names</string>
-    <string name="prefs_tempai_training">Tempai training</string>
-    <string name="prefs_yaku_training">Yaku training</string>
+    <string name="prefs_ema_names_summary">Yaku names will be changed accordingly to EMA rules</string>
     <string name="prefs_score_saving">Save scores</string>
+    <string name="prefs_score_saving_summary">Your profile will be updating every game</string>
+    <string name="prefs_game_rules">Game rules</string>
+    <string name="prefs_yaku_training">Yaku training</string>
+    <string name="prefs_yaku_training_summary">You\'ll be asked which yaku you have on winning</string>
+    <string name="prefs_tempai_training">Tempai training</string>
+    <string name="prefs_tempai_training_summary">You\'ll be asked which tiles you are waiting on tempai</string>
+    <string name="prefs_tsumo_furiten">Hardcore</string>
+    <string name="prefs_tsumo_furiten_summary">Furiten rule for tsumo</string>
     <!-- Language-dependent images -->
     <string name="lang">R.drawable.en</string>
     <!-- Main activity buttons -->

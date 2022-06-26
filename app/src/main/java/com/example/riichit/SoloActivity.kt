@@ -18,6 +18,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -86,6 +87,7 @@ class SoloActivity : AppCompatActivity() {
     private var balance = 0
     private var profile = 1
     private var streak = 0
+    private var save = false
     // TODO: hint button with the best efficiency move based on shanten and uke-ire calculations
 
     @OptIn(DelicateCoroutinesApi::class)
@@ -111,10 +113,15 @@ class SoloActivity : AppCompatActivity() {
             postfix = "_ema"
         }
 
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        save = sharedPreferences.getBoolean("score_saving", false)
         db = instance(this)
+
         GlobalScope.launch(Dispatchers.IO) {
             streak = getStreak(db, profile, mode)
-            updateProfile(db, profile, mode, -1000, -1)
+            if (save) {
+                updateProfile(db, profile, mode, -1000, -1)
+            }
             balance = getBalance(db, profile, mode)
         }
 
@@ -300,8 +307,10 @@ class SoloActivity : AppCompatActivity() {
                     1 -> {
                         showTempai(waitings)
                         overType = 0
-                        GlobalScope.launch(Dispatchers.IO) {
-                            updateProfile(db, profile, mode, 1000, streak)
+                        if (save) {
+                            GlobalScope.launch(Dispatchers.IO) {
+                                updateProfile(db, profile, mode, 1000, streak)
+                            }
                         }
                     }
                     2 -> {
@@ -436,10 +445,12 @@ class SoloActivity : AppCompatActivity() {
         buttonRiichi.disable(highlight = (riichiTile > -1))
 
         // the result of the game will be easily calculated from this data later if needed
-        GlobalScope.launch(Dispatchers.IO) {
-            // TODO: implement good records interface to show this statistics
-            // addGame(db, profile, hand, tsumo, getKanTiles(), discard, yakuConditional)
-            return@launch
+        if (save) {
+            GlobalScope.launch(Dispatchers.IO) {
+                // TODO: implement good records interface to show this statistics
+                // addGame(db, profile, hand, tsumo, getKanTiles(), discard, yakuConditional)
+                return@launch
+            }
         }
 
         if (!gameOver) {
@@ -540,8 +551,10 @@ class SoloActivity : AppCompatActivity() {
 
     @OptIn(DelicateCoroutinesApi::class)
     private fun setRiichi() {
-        GlobalScope.launch(Dispatchers.IO) {
-            updateProfile(db, profile, mode, -1000, 0)
+        if (save) {
+            GlobalScope.launch(Dispatchers.IO) {
+                updateProfile(db, profile, mode, -1000, 0)
+            }
         }
         waitings = findWaitings(hand, getKanTiles())
         riichiStatus = false
@@ -646,8 +659,10 @@ class SoloActivity : AppCompatActivity() {
             if (balanceChange > 0) {
                 streakChange = 1 + streak
             }
-            GlobalScope.launch(Dispatchers.IO) {
-                updateProfile(db, profile, mode, balanceChange, streakChange)
+            if (save) {
+                GlobalScope.launch(Dispatchers.IO) {
+                    updateProfile(db, profile, mode, balanceChange, streakChange)
+                }
             }
         }
 

@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Nick/AndroidStudioProjects/Riichit/app/src/main/res/layout/activity_main.xml" value="0.23324275362318841" />
+        <entry key="..\:/Users/Nick/AndroidStudioProjects/Riichit/app/src/main/res/layout/activity_records.xml" value="0.22010869565217392" />
         <entry key="..\:/Users/Nick/AndroidStudioProjects/Riichit/app/src/main/res/layout/activity_solo.xml" value="0.23324275362318841" />
         <entry key="..\:/Users/Nick/AndroidStudioProjects/Riichit/app/src/main/res/layout/activity_tutorial.xml" value="0.2276615969581749" />
         <entry key="..\:/Users/Nick/AndroidStudioProjects/Riichit/app/src/main/res/layout/dialog_debug_tempai.xml" value="0.23324275362318841" />
@@ -11,6 +12,7 @@
         <entry key="..\:/Users/Nick/AndroidStudioProjects/Riichit/app/src/main/res/layout/settings_activity.xml" value="0.365625" />
         <entry key="..\:/Users/Nick/AndroidStudioProjects/Riichit/app/src/main/res/layout/tile.xml" value="0.23324275362318841" />
         <entry key="..\:/Users/Nick/AndroidStudioProjects/Riichit/app/src/main/res/xml/prefs.xml" value="0.33" />
+        <entry key="..\:/Users/Nick/AndroidStudioProjects/Riichit/app/src/main/res/xml/root_preferences.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Professional/AndroidStudioProjects/Riichit/app/src/main/res/layout/activity_records.xml" value="0.16" />
         <entry key="..\:/Users/Professional/AndroidStudioProjects/Riichit/app/src/main/res/layout/activity_solo.xml" value="0.1" />
       </map>

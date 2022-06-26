@@ -6,9 +6,16 @@
     <!-- Settings strings -->
     <string name="prefs_general">Главные настройки</string>
     <string name="prefs_ema_names">Европейские яку-наименования</string>
-    <string name="prefs_tempai_training">Тренировка видения ожиданий</string>
-    <string name="prefs_yaku_training">Тренировка видения яку</string>
+    <string name="prefs_ema_names_summary">Названия яку будут изменены в соотетсвии с правилами EMA</string>
     <string name="prefs_score_saving">Сохранять результаты</string>
+    <string name="prefs_score_saving_summary">Ваш профиль будет обновляться каждую игру</string>
+    <string name="prefs_game_rules">Правила игры</string>
+    <string name="prefs_yaku_training">Тренировка видения яку</string>
+    <string name="prefs_yaku_training_summary">Вам нужно будет отметить имеющиеся яку при победе</string>
+    <string name="prefs_tempai_training">Тренировка видения ожиданий</string>
+    <string name="prefs_tempai_training_summary">Вам нужно будет отметить тайли ожиданий при темпае</string>
+    <string name="prefs_tsumo_furiten">Хардкор</string>
+    <string name="prefs_tsumo_furiten_summary">Фуритен правило при цумо</string>
     <!-- Language-dependent images -->
     <string name="lang">R.drawable.ru</string>
     <!-- Main activity buttons -->
@@ -45,8 +52,8 @@
     <string name="loading">Загрузка…</string>
     <!-- Tutorial activity strings -->
     <string name="tutorial_0" />
-    <string name="tutorial_1">Добро пожаловать в обучение.\n\nПереключайте между экранами, кликая по правой или левой части устройства.</string>
-    <string name="tutorial_2">В риичи-маджонге существует 34 вида тайлов, всего по 4 каждого.\n\nИх можно поделить на Маны, Пины, Соу/Бамбуки (пронумерованные масти), Ветра и Драконы (благородные тайлы). Ветра называются по сторонам света (E - восток, S - юг, W - запад, N - север), драконы по их цветам.</string>
+    <string name="tutorial_1">Добро пожаловать в обучение.\n\nПереключайтесь между экранами, кликая по правой или левой части устройства.</string>
+    <string name="tutorial_2">В риичи-маджонге существует 34 вида тайлов, всего по 4 каждого.\n\nИх можно поделить на Маны, Пины, Бамбуки (пронумерованные масти), Ветра и Драконы (благородные тайлы).\n\nВетра называются по сторонам света (E - восток, S - юг, W - запад, N - север), драконы по цветам.</string>
     <string name="tutorial_3">Главная цель в риичи-маджонге - собрать руку.\n\nУ каждого игрока рука изначально состоит из 13 тайлов. Каждый ход, Вы берёте по тайлу, чтобы их стало 14.</string>
     <string name="tutorial_4">Затем, если рука не собрана, вы сбрасываете любой ненужный тайл из руки.\n\nТак, пока Вы берёте и сбрасываете по одному тайлу, Ваша рука будет постепенно перестраиваться.</string>
     <string name="tutorial_5">Есть основные понятия, такие как пара, чи, пон и кан.\n\nПары состоят из двух одинаковых тайлов.\n\nПоны состоят из трёх одинаковых тайлов.\n\nЧи состоят из трёх последовательных тайлов одной пронумерованной группы.</string>
