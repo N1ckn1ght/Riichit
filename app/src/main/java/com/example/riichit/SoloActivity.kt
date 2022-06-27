@@ -654,10 +654,13 @@ class SoloActivity : AppCompatActivity() {
                 "${getString(R.string.cost)}: ${cost["dealer"]}"
 
         if (saveToProfile) {
-            val balanceChange = cost["dealer"]?: 0
+            var balanceChange = cost["dealer"]?: 0
             var streakChange = -1
-            if (balanceChange > 0) {
+            if (balanceChange > 0 && !yaku.containsKey("nagashi_mangan")) {
                 streakChange = 1 + streak
+                if (riichiTile > -1) {
+                    balanceChange += 1000
+                }
             }
             if (save) {
                 GlobalScope.launch(Dispatchers.IO) {
