@@ -51,6 +51,22 @@ object Ruleset {
         "tsuuiisou" to 13
     )
 
+    val achievements = arrayOf(
+        "mentanpin",
+        "chantaiayo",
+        "iipeikou",
+        "tsumo_only",
+        "chiitoitsu",
+        "sanshoku_doujun",
+        "ittsu",
+        "ippatsu_haitei",
+        "sanshoku_doukou",
+        "streak_22",
+        "dora_13",
+        "hand_of_god",
+        "kokushi_musou"
+    )
+
     fun newBalance(currentBalance: Int, change: Int): Int {
         var balance = currentBalance
         if (change < 0) {

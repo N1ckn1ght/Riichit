@@ -1,6 +1,7 @@
 package com.example.riichit
 
 import android.app.Dialog
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Layout
 import android.text.Spannable
@@ -29,6 +30,7 @@ import com.example.riichit.Operations.addGame
 import com.example.riichit.Operations.getBalance
 import com.example.riichit.Operations.getStreak
 import com.example.riichit.Operations.updateProfile
+import com.example.riichit.Ruleset.achievements
 import com.example.riichit.Ruleset.yakuCountedCost
 import com.example.riichit.Ruleset.yakuHanCost
 import com.example.riichit.Ruleset.yakumanHanCost
@@ -42,7 +44,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.lang.Integer.min
 import java.util.*
-
 
 class SoloActivity : AppCompatActivity() {
     private var context = this
@@ -88,6 +89,7 @@ class SoloActivity : AppCompatActivity() {
     private var profile = 1
     private var streak = 0
     private var save = false
+    private var tempaiNagashi = false
     // TODO: hint button with the best efficiency move based on shanten and uke-ire calculations
 
     @OptIn(DelicateCoroutinesApi::class)
@@ -291,7 +293,7 @@ class SoloActivity : AppCompatActivity() {
                 calc.calc()
                 // this will also update balance points for a profile, if set to true
                 showYakuList(makeOutput(calc.getYaku(), calc.getCost(), true))
-                // however the game itself ill be added to database in onGameOver() function
+                // however the game itself will be added to database in onGameOver() function
                 // some other cases of updating balance will be put in when(overType) condition
                 // with the exception of overType == 0 condition, it's updating itself on game start
                 // and riichi bet will be updated in setRiichi() function
@@ -384,8 +386,8 @@ class SoloActivity : AppCompatActivity() {
     }
 
     override fun onPause() {
-        super.onPause()
         toast?.cancel()
+        super.onPause()
     }
 
     private fun discard(toRemove: Int) {
@@ -463,11 +465,13 @@ class SoloActivity : AppCompatActivity() {
                 if (waitings.size > 0) {
                     buttonTsumo.text = getString(R.string.button_tempai)
                     overType = 1
+                    tempaiNagashi = true
                 }
             } else {
                 if (waitings.size > 0) {
                     buttonTsumo.text = getString(R.string.button_tempai)
                     overType = 1
+                    tempaiNagashi = true
                 } else {
                     buttonTsumo.text = getString(R.string.chombo)
                     overType = 2
@@ -654,13 +658,15 @@ class SoloActivity : AppCompatActivity() {
                 "${getString(R.string.cost)}: ${cost["dealer"]}"
 
         if (saveToProfile) {
-            var balanceChange = cost["dealer"]?: 0
+            var balanceChange = cost["dealer"] ?: 0
             var streakChange = -1
-            if (balanceChange > 0 && !yaku.containsKey("nagashi_mangan")) {
+            if (balanceChange > 0 && (!yaku.containsKey("nagashi_mangan") || tempaiNagashi)) {
                 streakChange = 1 + streak
                 if (riichiTile > -1) {
                     balanceChange += 1000
                 }
+
+                findAchievements(yaku, streakChange)
             }
             if (save) {
                 GlobalScope.launch(Dispatchers.IO) {
@@ -732,5 +738,87 @@ class SoloActivity : AppCompatActivity() {
             Toast.LENGTH_SHORT
         )
         toast?.show()
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun findAchievements(yaku: MutableMap<String, Int>, streak: Int) {
+        GlobalScope.launch(Dispatchers.IO) {
+            val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+            for (achievement in achievements) {
+                findAchievement(achievement, sharedPreferences, yaku, streak)
+            }
+        }
+    }
+
+    private fun findAchievement(
+        achievement: String,
+        sharedPreferences: SharedPreferences,
+        yaku: MutableMap<String, Int>,
+        streak: Int
+    ) {
+        val isAlreadyFound = sharedPreferences.getBoolean(achievement, false)
+        if (isAlreadyFound) {
+            return
+        }
+
+        val singleYakuList = arrayOf(
+            "chantaiayo",
+            "chiitoitsu",
+            "iipeikou",
+            "ittsu",
+            "sanshoku_doujun",
+            "sanshoku_doukou"
+        )
+        if (achievement in singleYakuList) {
+            if (yaku.containsKey(achievement)) {
+                setAchievement(achievement, sharedPreferences)
+            }
+        }
+        if (achievement == "mentanpin") {
+            if (yaku.containsKey("tanyao") && yaku.containsKey("pinfu") && yaku.containsKey("riichi")) {
+                setAchievement(achievement, sharedPreferences)
+            }
+        }
+        if (achievement == "tsumo_only") {
+            if (yaku.containsKey("menzenchin_tsumohou") &&
+                yaku.size == 1 + yaku.containsKey("dora").toInt()
+            ) {
+                setAchievement(achievement, sharedPreferences)
+            }
+        }
+        if (achievement == "ippatsu_haitei") {
+            if (yaku.containsKey("ippatsu") && yaku.containsKey("haitei_raoyue")) {
+                setAchievement(achievement, sharedPreferences)
+            }
+        }
+        if (achievement == "streak_22") {
+            if (streak > 21) {
+                setAchievement(achievement, sharedPreferences)
+            }
+        }
+        if (achievement == "dora_13") {
+            if ((yaku["dora"] ?: 0) > 12) {
+                setAchievement(achievement, sharedPreferences)
+            }
+        }
+        if (achievement == "hand_of_god") {
+            if (yaku.containsKey("tenhou")
+                && (yaku.containsKey("chuuren_poutou") || yaku.containsKey("pure_chuuren_poutou"))
+            ) {
+                setAchievement(achievement, sharedPreferences)
+            }
+        }
+        if (achievement == "kokushi_musou") {
+            if (yaku.containsKey("kokushi_musou") || yaku.containsKey("thirteen_wait_kokushi_musou")) {
+                setAchievement(achievement, sharedPreferences)
+            }
+        }
+    }
+
+    private fun setAchievement(achievement: String, sharedPreferences: SharedPreferences) {
+        sharedPreferences.edit().putBoolean(achievement, true).apply()
+        runOnUiThread {
+            showToast("New achievement unlocked!")
+        }
     }
 }

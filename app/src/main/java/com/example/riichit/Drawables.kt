@@ -61,4 +61,21 @@ object Drawables {
         "en" to R.drawable.en,
         "ru" to R.drawable.ru
     )
+
+    val cards = arrayOf(
+        R.drawable.card_locked,
+        R.drawable.card_mentanpin,
+        R.drawable.card_chantaiayo,
+        R.drawable.card_iipeikou,
+        R.drawable.card_tsumo_only,
+        R.drawable.card_chiitoitsu,
+        R.drawable.card_sanshoku_doujun,
+        R.drawable.card_ittsu,
+        R.drawable.card_ippatsu_haitei,
+        R.drawable.card_sanshoku_doukou,
+        R.drawable.card_streak_22,
+        R.drawable.card_dora_13,
+        R.drawable.card_hand_of_god,
+        R.drawable.card_kokushi_musou
+    )
 }

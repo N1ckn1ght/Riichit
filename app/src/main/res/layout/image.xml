@@ -8,12 +8,11 @@
     android:layout_height="wrap_content">
 
     <ImageView
+        android:id="@+id/image"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:src="@drawable/closed"
-        android:id="@+id/tile"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/card_locked"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="ContentDescription" />
 

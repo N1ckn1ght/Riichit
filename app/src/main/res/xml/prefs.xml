@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
         android:title="@string/prefs_general">
@@ -21,7 +22,8 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/prefs_game_rules">
+        android:title="@string/prefs_game_rules"
+        android:summary="@string/prefs_work_in_progress">
 
         <SwitchPreference
             android:defaultValue="false"

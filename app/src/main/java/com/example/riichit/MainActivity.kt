@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         val buttonSettings = findViewById<Button>(R.id.btnSettings)
         val buttonRecords = findViewById<Button>(R.id.btnRecords)
         val buttonTutorial = findViewById<Button>(R.id.btnTutorial)
+        val buttonAchievements = findViewById<Button>(R.id.btnAchievements)
 
         buttonSoloMahjong.setOnClickListener {
             startGame(0)
@@ -50,6 +51,10 @@ class MainActivity : AppCompatActivity() {
         }
         buttonTutorial.setOnClickListener {
             val intent = Intent(this, TutorialActivity::class.java)
+            startActivity(intent)
+        }
+        buttonAchievements.setOnClickListener{
+            val intent = Intent(this, AchievementsActivity::class.java)
             startActivity(intent)
         }
 

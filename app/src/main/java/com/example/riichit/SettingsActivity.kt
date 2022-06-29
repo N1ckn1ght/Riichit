@@ -11,6 +11,7 @@ class SettingsActivity : AppCompatActivity() {
         setLocale(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_activity)
+        supportActionBar?.hide()
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
