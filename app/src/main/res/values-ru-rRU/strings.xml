@@ -4,11 +4,19 @@
     <string name="title_activity_settings">Настройки</string>
     <string name="ok">Ок</string>
     <!-- Settings strings -->
+    <string name="prefs_work_in_progress">В разработке</string>
     <string name="prefs_general">Главные настройки</string>
     <string name="prefs_ema_names">Европейские яку-наименования</string>
-    <string name="prefs_tempai_training">Тренировка видения ожиданий</string>
-    <string name="prefs_yaku_training">Тренировка видения яку</string>
+    <string name="prefs_ema_names_summary">Названия яку будут изменены в соотетсвии с правилами EMA</string>
     <string name="prefs_score_saving">Сохранять результаты</string>
+    <string name="prefs_score_saving_summary">Ваш профиль будет обновляться каждую игру</string>
+    <string name="prefs_game_rules">Правила игры</string>
+    <string name="prefs_yaku_training">Тренировка видения яку</string>
+    <string name="prefs_yaku_training_summary">Вам нужно будет отметить имеющиеся яку при победе</string>
+    <string name="prefs_tempai_training">Тренировка видения ожиданий</string>
+    <string name="prefs_tempai_training_summary">Вам нужно будет отметить тайли ожиданий при темпае</string>
+    <string name="prefs_tsumo_furiten">Хардкор</string>
+    <string name="prefs_tsumo_furiten_summary">Фуритен правило при цумо</string>
     <!-- Language-dependent images -->
     <string name="lang">R.drawable.ru</string>
     <!-- Main activity buttons -->
@@ -17,6 +25,7 @@
     <string name="button_settings">Настройки</string>
     <string name="button_records">Результаты</string>
     <string name="button_tutorial">Обучение</string>
+    <string name="button_achievements">Достижения</string>
     <!-- Solo activity strings -->
     <string name="button_cancel">Отмена</string>
     <string name="button_kan">Кан</string>
@@ -45,8 +54,8 @@
     <string name="loading">Загрузка…</string>
     <!-- Tutorial activity strings -->
     <string name="tutorial_0" />
-    <string name="tutorial_1">Добро пожаловать в обучение.\n\nПереключайте между экранами, кликая по правой или левой части устройства.</string>
-    <string name="tutorial_2">В риичи-маджонге существует 34 вида тайлов, всего по 4 каждого.\n\nИх можно поделить на Маны, Пины, Соу/Бамбуки (пронумерованные масти), Ветра и Драконы (благородные тайлы). Ветра называются по сторонам света (E - восток, S - юг, W - запад, N - север), драконы по их цветам.</string>
+    <string name="tutorial_1">Добро пожаловать в обучение.\n\nПереключайтесь между экранами, кликая по правой или левой части устройства.</string>
+    <string name="tutorial_2">В риичи-маджонге существует 34 вида тайлов, всего по 4 каждого.\n\nИх можно поделить на Маны, Пины, Бамбуки (пронумерованные масти), Ветра и Драконы (благородные тайлы).\n\nВетра называются по сторонам света (E - восток, S - юг, W - запад, N - север), драконы по цветам.</string>
     <string name="tutorial_3">Главная цель в риичи-маджонге - собрать руку.\n\nУ каждого игрока рука изначально состоит из 13 тайлов. Каждый ход, Вы берёте по тайлу, чтобы их стало 14.</string>
     <string name="tutorial_4">Затем, если рука не собрана, вы сбрасываете любой ненужный тайл из руки.\n\nТак, пока Вы берёте и сбрасываете по одному тайлу, Ваша рука будет постепенно перестраиваться.</string>
     <string name="tutorial_5">Есть основные понятия, такие как пара, чи, пон и кан.\n\nПары состоят из двух одинаковых тайлов.\n\nПоны состоят из трёх одинаковых тайлов.\n\nЧи состоят из трёх последовательных тайлов одной пронумерованной группы.</string>
@@ -68,6 +77,21 @@
     <string name="tutorial_21">Каждый тайл доры увеличивает стоимость Вашей руки, но не является яку.\n\nКаждый кан открывает новую дору. А выигрыш после риичи откроет дополнительные доры!</string>
     <string name="tutorial_22">На этом обучение заканчивается.</string>
     <string name="tutorial_23">Но мы очень рекомендуем почитать правила риичи-маджонга.\n\nБольшая часть правил не была охвачена, а также Вам действительно понадобится яку-лист, т.к. всего в игре их почти 40!</string>
+    <!-- Achievement activity strings -->
+    <string name="achievement_0">Заблокировано</string>
+    <string name="achievement_1">Соберите Риичи, Пинфу, Таняо одновременно</string>
+    <string name="achievement_2">Соберите Чанту</string>
+    <string name="achievement_3">Соберите Ипейко</string>
+    <string name="achievement_4">Соберите руку без яку, кроме Мензен Цумо</string>
+    <string name="achievement_5">Собирите Читойцу</string>
+    <string name="achievement_6">Соберите Саншоку</string>
+    <string name="achievement_7">Соберите Иццу</string>
+    <string name="achievement_8">Выиграйте с Хайтей и Иппаццу</string>
+    <string name="achievement_9">Соберите редкое Саншоку Доко</string>
+    <string name="achievement_10">Получите серию побед в 22</string>
+    <string name="achievement_11">Собирите в своей руке от 13 дор</string>
+    <string name="achievement_12">Выиграйте невозможную руку с Тенхо и Чуренпото</string>
+    <string name="achievement_13">Двенадцать из них одиноки</string>
     <!-- Yaku names, default -->
     <string name="chantaiayo">Чанта</string>
     <string name="chiitoitsu">Читоицу</string>

@@ -1,7 +1,6 @@
 package com.example.riichit
 
 import android.content.Context
-import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Entity(tableName = "games")
