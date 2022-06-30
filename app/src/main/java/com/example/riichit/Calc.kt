@@ -23,7 +23,8 @@ class Calc(
     // 0 - chii, 1 - pon, 2 - kan
 
     private var yaku: MutableMap<String, Int> = mutableMapOf()
-    private var cost: MutableMap<String, Int> = mutableMapOf("han" to 0, "fu" to 0, "dealer" to -12000)
+    private var cost: MutableMap<String, Int> =
+        mutableMapOf("han" to 0, "fu" to 0, "dealer" to -12000)
 
     // TODO: Han and fu results should be detailed for education purposes
     private val hand = Array(34) { 0 }
@@ -943,8 +944,20 @@ class Calc(
         var count = 0
         for (tile in hand.indices) {
             for (dora in doraIndicators) {
-                if (tile == (dora / 4 + 1)) {
-                    count += hand[tile]
+                val x = dora / 4
+                when {
+                    x in arrayOf(8, 17, 26) && (x - 8 == tile) -> {
+                        count += hand[tile]
+                    }
+                    x == 30 && tile == 27 -> {
+                        count += hand[tile]
+                    }
+                    x == 33 && tile == 31 -> {
+                        count += hand[tile]
+                    }
+                    x + 1 == tile -> {
+                        count += hand[tile]
+                    }
                 }
             }
         }
